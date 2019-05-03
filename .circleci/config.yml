@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  build_docker_image:
+    working_directory: /root/project
+    docker:
+      - image: quay.io/wework/wek8s-image-builder:0.0.1
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWD
+    environment:
+      - DOCKER_REGISTRY: 'quay.io/wework'
+      - DOCKER_REPOSITORY: 'quay.io/wework/marquez-web'
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Docker Image - Build and Push to Quay
+          command: /app/scripts/build_docker_image.sh
+
+  deploy_to_staging:
+      environment:
+      - INGRESS_HOST: marquez-web.phoenix.dev.wwrk.co
+      working_directory: /root/project
+      docker:
+        - image: quay.io/wework/wek8s-tools:0.2.12
+          auth:
+            username: $DOCKER_USER
+            password: $DOCKER_PASSWD
+      steps:
+        - checkout
+        - run:
+            name: Deploy the service
+            command: |
+              /usr/bin/deploy_helper fetch_reqs -e wek8s-phoenix -n dataplatform && \
+              helmfile --file .deploy/helmfile.yml apply
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_docker_image:
+          context: org-global
+          filters:
+            tags:
+              only:
+              - /^v.*/
+              - /^migrate-staging-.*/
+              - /^migrate-production-.*/
+            branches:
+              only:
+                - master
+
+      - deploy_to_staging:
+          context: org-global
+          requires:
+            - build_docker_image
+          filters:
+            branches:
+              only:
+                - master
