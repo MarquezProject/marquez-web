@@ -10,7 +10,7 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
 
 This project is under active development at the [We Company](https://www.we.co) (in collaboration with many others organizations).
 
-## Running the [App.js](https://github.com/WeConnect/marquez-web/blob/master/src/App.js) 
+## Running [App.js](https://github.com/WeConnect/marquez-web/blob/master/src/App.js) 
 
 1. Install dependencies:
 
