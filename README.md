@@ -15,5 +15,5 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
 2. Run image:
    
    ```
-   $ docker run -p 3000 marquez-web
+   $ docker run -p 3000:3000 -d marquez-web
    ```
