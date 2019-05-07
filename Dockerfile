@@ -1,17 +1,10 @@
-# base image
-FROM node:8.0.0
+FROM node:8
 
-# set working directory
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /usr/src/ap
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+COPY . .
+RUN yarn
+RUN yarn build
 
-# install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install react-scripts@1.1.1 -g
-
-# start app
-CMD ["npm", "start"]
+EXPOSE 3000
+CMD yarn start
