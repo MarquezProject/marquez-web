@@ -18,4 +18,4 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
    $ docker run -p 3000:3000 -d marquez-web
    ```
    
-3. Then browse to http://localhost:3000
+3. Browse to http://localhost:3000
