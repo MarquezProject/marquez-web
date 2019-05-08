@@ -6,6 +6,10 @@ Marquez is an open source **metadata service** for the **collection**, **aggrega
 
 This web UI is used to view metadata collected and cataloged by [Marquez](https://github.com/MarquezProject/marquez).
 
+<figure align="center">
+  <img src="./docs/images/preview.png">
+</figure>
+
 ## Status
 
 This project is under active development at [The We Company](https://www.we.co) (in collaboration with many others organizations).
@@ -24,8 +28,6 @@ This project is under active development at [The We Company](https://www.we.co) 
    $ npm start
    ```
 
-3. Open http://localhost:3000
-
 ## Running with [Docker](./Dockerfile) 
 
 1. Build image:
@@ -40,4 +42,4 @@ This project is under active development at [The We Company](https://www.we.co) 
    $ docker run -p 3000:3000 -d marquez-web
    ```
    
-3. Open http://localhost:3000
+You can open http://localhost:3000 to begin exploring the web UI. 
