@@ -4,6 +4,7 @@ import SimpleTabs from './components/Tabs'
 import NavBar from './components/NavBar'
 import NamespaceSelector from './components/NamespaceSelector'
 import axios from 'axios'
+import ClippedDrawer from './components/Drawer'
 
 class App extends Component {
   constructor(props) {
@@ -42,8 +43,21 @@ class App extends Component {
           />
         </div>
         <div>
+          <ClippedDrawer/>
+        </div>
+
+        {/*
+        <div>
+          <NamespaceSelector 
+            namespaces={this.state.namespaces} 
+            selectedNamespace={this.state.selectedNamespace}
+            onChange={this.nsChangeHandler}
+          />
+        </div>
+        <div>
           <SimpleTabs namespace={this.state.selectedNamespace}/>
         </div>
+        */}
       </div>
     );
   }
