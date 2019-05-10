@@ -15,7 +15,6 @@ import TableChartIcon from '@material-ui/icons/TableChart'
 import LabelIcon from '@material-ui/icons/Label'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import NamespaceSelector from './NamespaceSelector'
-import MUIDataTable from "mui-datatables";
 import { unstable_Box as Box } from '@material-ui/core/Box';
 import axios from 'axios'
 import JobTable from './JobTable'
@@ -159,7 +158,7 @@ class MainContainer extends React.Component {
                   />
               </Box>
             </div>
-            <div style={tagContentStyle} mt={30}>
+            <div style={tagContentStyle}>
                 <Box mt={8}>
                   Tags
                 </Box>
