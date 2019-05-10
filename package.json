@@ -1,11 +1,12 @@
 {
   "name": "marquez-ui",
   "version": "0.1.0",
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:5000",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
+    "@material-ui/styles": "^4.0.0-beta.1",
     "axios": "^0.18.0",
     "mui-datatables": "^2.0.0",
     "react": "^16.8.6",

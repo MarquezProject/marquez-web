@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
@@ -48,10 +47,10 @@ class NamespaceSelector extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if(this.props.namespaces != prevProps.namespaces) {
+    if(this.props.namespaces !== prevProps.namespaces) {
       this.setState({namespaces: this.props.namespaces});
     }
-    if(this.props.selectedNamespace != prevProps.selectedNamespace) {
+    if(this.props.selectedNamespace !== prevProps.selectedNamespace) {
       this.setState({selectedNamespace: this.props.selectedNamespace});
     }
   }

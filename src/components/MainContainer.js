@@ -15,7 +15,10 @@ import TableChartIcon from '@material-ui/icons/TableChart'
 import LabelIcon from '@material-ui/icons/Label'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import NamespaceSelector from './NamespaceSelector'
-import Divider from '@material-ui/core/Divider';
+import MUIDataTable from "mui-datatables";
+import { unstable_Box as Box } from '@material-ui/core/Box';
+import axios from 'axios'
+import JobTable from './JobTable'
 
 const drawerWidth = 240;
 
@@ -40,12 +43,27 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-class ClippedDrawer extends React.Component {
+class MainContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedNamespace: null,
+      namespaces: [],
       selectedContent: "Jobs",
     }
+    this.nsChangeHandler = this.nsChangeHandler.bind(this);
+  }
+
+  componentDidMount() {
+    axios.get('/api/v1/namespaces/').then((response) => {
+      const namespaceList = response.data.namespaces.map(namespace => namespace.name)
+      this.setState({namespaces: namespaceList})
+      this.setState({selectedNamespace: namespaceList[0]})
+    })
+  }
+
+  nsChangeHandler(selectedNs) {
+    this.setState({selectedNamespace: selectedNs})
   }
 
   handleDrawerItemClick(btn) {
@@ -74,6 +92,20 @@ class ClippedDrawer extends React.Component {
     const datasetContentStyle = this.state.selectedContent === 'Datasets' ? {} : {display: 'none'};
     const tagContentStyle = this.state.selectedContent === 'Tags' ? {} : {display: 'none'};
     const namespaceSelectorStyle = {paddingLeft: '10em'};
+    const jobColumns = [
+        "Name",
+        "Description",
+        "Created At"
+    ];
+    const datasetColumns = ["URN", "Created At"];
+
+    const options = {
+        filter: true,
+        filterType: 'dropdown',
+        onRowClick: this.handleJobRowClick,
+        print: false,
+        viewColumns: false,
+    };
 
     return (
         <div className={classes.root}>
@@ -94,12 +126,12 @@ class ClippedDrawer extends React.Component {
           >
             <div className={classes.toolbar} />
             <div>
-                    <NamespaceSelector 
-                      style={namespaceSelectorStyle}
-                      namespaces={this.state.namespaces} 
-                      selectedNamespace={this.state.selectedNamespace}
-                      onChange={this.nsChangeHandler}
-                    />
+                <NamespaceSelector 
+                  style={namespaceSelectorStyle}
+                  namespaces={this.state.namespaces} 
+                  selectedNamespace={this.state.selectedNamespace}
+                  onChange={this.nsChangeHandler}
+                />
             </div>
             <List>
               {['Jobs', 'Datasets', 'Tags'].map((text, index) => (
@@ -112,13 +144,26 @@ class ClippedDrawer extends React.Component {
           </Drawer>
           <main className={classes.content}>
             <div style={jobContentStyle}>
-                Jobs
+              <Box mt={8}>
+                <JobTable
+                  namespace={this.state.selectedNamespace}
+                />
+              </Box>
             </div>
             <div style={datasetContentStyle}>
-                Datasets
+              <Box mt={8}>
+                <MUIDataTable 
+                      title={"Datasets"}
+                      data={this.state.datasets}
+                      columns={datasetColumns}
+                      options={options}
+                  />
+              </Box>
             </div>
-            <div style={tagContentStyle}>
-                Tags
+            <div style={tagContentStyle} mt={30}>
+                <Box mt={10}>
+                  Tags
+                </Box>
             </div>
           </main>
         </div>
@@ -126,8 +171,8 @@ class ClippedDrawer extends React.Component {
     }
 }
 
-ClippedDrawer.propTypes = {
+MainContainer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ClippedDrawer);
+export default withStyles(styles)(MainContainer);
