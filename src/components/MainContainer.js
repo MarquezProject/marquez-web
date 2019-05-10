@@ -19,6 +19,8 @@ import MUIDataTable from "mui-datatables";
 import { unstable_Box as Box } from '@material-ui/core/Box';
 import axios from 'axios'
 import JobTable from './JobTable'
+import DatasetTable from './DatasetTable'
+
 
 const drawerWidth = 240;
 
@@ -152,16 +154,13 @@ class MainContainer extends React.Component {
             </div>
             <div style={datasetContentStyle}>
               <Box mt={8}>
-                <MUIDataTable 
-                      title={"Datasets"}
-                      data={this.state.datasets}
-                      columns={datasetColumns}
-                      options={options}
+                <DatasetTable
+                    namespace={this.state.selectedNamespace}
                   />
               </Box>
             </div>
             <div style={tagContentStyle} mt={30}>
-                <Box mt={10}>
+                <Box mt={8}>
                   Tags
                 </Box>
             </div>
