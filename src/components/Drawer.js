@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import List from '@material-ui/core/List';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -11,7 +14,8 @@ import CodeIcon from '@material-ui/icons/Code';
 import TableChartIcon from '@material-ui/icons/TableChart'
 import LabelIcon from '@material-ui/icons/Label'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
-
+import NamespaceSelector from './NamespaceSelector'
+import Divider from '@material-ui/core/Divider';
 
 const drawerWidth = 240;
 
@@ -69,15 +73,16 @@ class ClippedDrawer extends React.Component {
     const jobContentStyle = this.state.selectedContent === 'Jobs'? {} : {display: 'none'};
     const datasetContentStyle = this.state.selectedContent === 'Datasets' ? {} : {display: 'none'};
     const tagContentStyle = this.state.selectedContent === 'Tags' ? {} : {display: 'none'};
+    const namespaceSelectorStyle = {paddingLeft: '10em'};
 
     return (
         <div className={classes.root}>
           <CssBaseline />
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
-              <Typography variant="h6" color="inherit" noWrap>
-                Clipped drawer
-              </Typography>
+                <Typography variant="h6" color="inherit" noWrap>
+                Marquez
+                </Typography>
             </Toolbar>
           </AppBar>
           <Drawer
@@ -88,6 +93,14 @@ class ClippedDrawer extends React.Component {
             }}
           >
             <div className={classes.toolbar} />
+            <div>
+                    <NamespaceSelector 
+                      style={namespaceSelectorStyle}
+                      namespaces={this.state.namespaces} 
+                      selectedNamespace={this.state.selectedNamespace}
+                      onChange={this.nsChangeHandler}
+                    />
+            </div>
             <List>
               {['Jobs', 'Datasets', 'Tags'].map((text, index) => (
                 <ListItem button key={text} onClick={() => this.handleDrawerItemClick({text})}>

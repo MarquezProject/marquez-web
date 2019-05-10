@@ -33,16 +33,6 @@ class App extends Component {
     return (
       <div>
         <div>
-          <NavBar />
-        </div>
-        <div>
-          <NamespaceSelector 
-            namespaces={this.state.namespaces} 
-            selectedNamespace={this.state.selectedNamespace}
-            onChange={this.nsChangeHandler}
-          />
-        </div>
-        <div>
           <ClippedDrawer/>
         </div>
 
