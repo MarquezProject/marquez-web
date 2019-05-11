@@ -19,7 +19,8 @@ import { unstable_Box as Box } from '@material-ui/core/Box';
 import axios from 'axios'
 import JobTable from './JobTable'
 import DatasetTable from './DatasetTable'
-
+import 'typeface-rajdhani';
+import we_logo from '../we-logo.png';
 
 const drawerWidth = 240;
 
@@ -43,6 +44,8 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
 });
+
+const lightBlue = {main: "#03a9f4"}
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -113,8 +116,11 @@ class MainContainer extends React.Component {
           <CssBaseline />
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
-                <Typography variant="h6" color="inherit" noWrap>
-                Marquez
+                <Box mr={2}>
+                <img src={we_logo} height={50}/>
+                </Box>
+                <Typography variant="h4" color="inherit" noWrap style={{fontFamily: 'rajdhani', fontWeight: 'bold'}}>
+                MARQUEZ
                 </Typography>
             </Toolbar>
           </AppBar>
