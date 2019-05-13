@@ -20,7 +20,7 @@ import axios from 'axios'
 import JobTable from './JobTable'
 import DatasetTable from './DatasetTable'
 import 'typeface-rajdhani';
-import we_logo from '../we-logo.png';
+import we_logo from '../static/images/we-logo.png';
 
 const drawerWidth = 240;
 
