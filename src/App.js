@@ -14,7 +14,6 @@ const theme = createMuiTheme({
     }
   },
 });
-console.log(grey[900])
 
 class App extends Component {
   render() {
