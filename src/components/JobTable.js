@@ -1,67 +1,113 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import axios from 'axios'
+import MUIDataTable from "mui-datatables";
+import JobDetailsDialog from './JobDetailsDialog';
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
   },
 });
 
-let id = 0;
-function createData(name, description, createdAt) {
-  id += 1;
-  return { name, description, createdAt };
+class JobTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      jobs: [],
+      namespace: null,
+      jobDetails: {runs: []}
+    };
 }
 
-const rows = [
-  createData('Job 1', 'Job 1 Description', '2019-01-29T23:19:03+0000'),
-  createData('Job 2', 'Job 2 Description', '2019-01-29T23:19:03+0000'),
-  createData('Job 3', 'Job 3 Description', '2019-01-29T23:19:03+0000')
-];
-
-function SimpleTable(props) {
-  const { classes, jobs } = props;
-
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Created At</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(job => (
-            <TableRow key={job.id}>
-              <TableCell component="th" scope="row">
-                {job.name}
-              </TableCell>
-              <TableCell align="right">{job.description}</TableCell>
-              <TableCell align="right">{job.createdAt}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
+fetchData(namespace) {
+  if(namespace !== undefined){
+    axios.get('/api/v1/namespaces/' + namespace + '/jobs/').then((response) => {
+      const jobData = response.data
+      const jobRows = jobData.jobs.map(job => [job.name, job.description, job.createdAt])
+      this.setState({jobs: jobRows})
+    });
+  }
 }
 
-SimpleTable.propTypes = {
-  classes: PropTypes.object.isRequired,
+componentDidMount(){
+  this.fetchData(this.state.selectedNamespace); 
+}
+
+componentDidUpdate(prevProps) {
+  if(this.props.namespace != prevProps.namespace) {
+    this.setState({namespace: this.props.namespace});
+    this.fetchData(this.props.namespace);
+  }
+}
+
+handleChange = (event, value) => {
+  this.setState({ value });
 };
 
-export default withStyles(styles)(SimpleTable);
+handleJobRowClick = (rowData, rowState) => {
+  const jobName = rowData[0]
+  var jobRuns = []
+  axios.get('/api/v1/namespaces/' + this.state.namespace + '/jobs/' + jobName + '/runs' ).then((response) => {
+    jobRuns = response.data;
+    this.setState(
+      {
+        jobDetails: {
+          runs: jobRuns
+        }
+      })
+    this.setState({showJobDetails: true});
+  });
+}
+
+handleJobDetailsClose = () => {
+  this.setState({showJobDetails: false});
+}
+
+render() {
+  const { classes } = this.props;
+  const { value } = this.state;
+  const jobColumns = [
+    "Name",
+    "Description",
+    "Created At"
+  ];
+  
+  const options = {
+    filter: true,
+    filterType: 'dropdown',
+    onRowClick: this.handleJobRowClick,
+    print: false,
+    viewColumns: false,
+  };
+
+  return (
+    <React.Fragment>
+      <div className={classes.root}>
+        <MUIDataTable 
+            title={"Jobs"}
+            data={this.state.jobs}
+            columns={jobColumns}
+            options={options}
+        />
+      </div>
+      <div>
+        {/* details dialog, hidden by default */}
+        <JobDetailsDialog
+          open={this.state.showJobDetails}
+          onClose={this.handleJobDetailsClose}
+          jobDetails={this.state.jobDetails}
+        />
+      </div>
+    </React.Fragment>
+  );
+}
+}
+
+JobTable.propTypes = {
+  namespace: PropTypes.string
+};
+
+export default withStyles(styles)(JobTable);
