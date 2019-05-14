@@ -26,7 +26,7 @@ fetchData(namespace) {
   if(namespace !== undefined){
     axios.get('/api/v1/namespaces/' + namespace + '/datasets/').then((response) => {
       const datasetData = response.data
-      const datasetRows = datasetData.datasets.map(dataset => [dataset.name, dataset.description, dataset.createdAt])
+      const datasetRows = datasetData.datasets.map(dataset => [dataset.name, dataset.description, dataset.createdAt, dataset.urn, dataset.datasourceUrn])
       this.setState({datasets: datasetRows})
     });
   }
@@ -48,24 +48,41 @@ handleChange = (event, value) => {
 };
 
 handleDatasetRowClick = (rowData, rowState) => {
-  const datasetUrn = rowData[0]
-  axios.get('/api/v1/namespaces/' + this.state.namespace + '/datasets/' + datasetUrn).then((response) => {
-    var datasetDetails = response.data;
-    this.setState({datasetDetails: datasetDetails});
+    this.setState(
+      {
+        datasetDetails: {
+            name: rowData[0],
+            description: rowData[1],
+            createdAt: rowData[2],
+            urn: rowData[3],
+            datasourceUrn: rowData[4]
+          }
+      })
     this.setState({showDatasetDetails: true});
-  });
-}
+};
 
-handledDatasetDetailsClose = () => {
+handleDatasetDetailsClose = () => {
   this.setState({showDatasetDetails: false});
 }
 
 render() {
   const { classes } = this.props;
   const datasetColumns = [
-    "Datasource",
-    "Name",
-    "Created At"
+      "NAME",
+      "DESCRIPTION",
+      "CREATED AT",
+      {
+        name: "URN",
+        options: {
+          display: false,
+        }
+      },
+      {
+        name: "DATASOURCE URN",
+        options: {
+          display: false,
+        }
+      }
   ];
   
   const options = {
@@ -81,15 +98,15 @@ render() {
       <div className={classes.root}>
         <MUIDataTable 
             title={"Datasets"}
-            data={this.state.datasets}
             columns={datasetColumns}
+            data={this.state.datasets}
             options={options}
         />
       </div>
       <div>
         {/* details dialog, hidden by default */}
         <DatasetDetailsDialog
-          open={this.state.showdatasetDetails}
+          open={this.state.showDatasetDetails}
           onClose={this.handleDatasetDetailsClose}
           datasetDetails={this.state.datasetDetails}
         />

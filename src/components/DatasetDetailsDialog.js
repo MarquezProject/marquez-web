@@ -29,7 +29,28 @@ function DatasetDetailsTable(props) {
     const { classes } = props;
     return (
         <Table>
-            {/* build table of dataset details here */}
+            <TableBody>
+                <TableRow>
+                    <TableCell><b>NAME</b></TableCell>
+                    <TableCell>{props.details.name}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>DESCRIPTION</b></TableCell>
+                    <TableCell>{props.details.description}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>URN</b></TableCell>
+                    <TableCell>{props.details.urn}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>DATASOURCE URN</b></TableCell>
+                    <TableCell>{props.details.datasourceUrn}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>CREATED AT</b></TableCell>
+                    <TableCell>{props.details.createdAt}</TableCell>
+                </TableRow>
+            </TableBody>
         </Table>
     )
 }
