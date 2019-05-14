@@ -26,7 +26,7 @@ fetchData(namespace) {
   if(namespace !== undefined){
     axios.get('/api/v1/namespaces/' + namespace + '/datasets/').then((response) => {
       const datasetData = response.data
-      const datasetRows = datasetData.datasets.map(dataset => [dataset.name, dataset.createdAt, dataset.urn, dataset.datasourceUrn, dataset.description])
+      const datasetRows = datasetData.datasets.map(dataset => [dataset.name, dataset.description, dataset.createdAt, dataset.urn, dataset.datasourceUrn])
       this.setState({datasets: datasetRows})
     });
   }
@@ -52,10 +52,10 @@ handleDatasetRowClick = (rowData, rowState) => {
       {
         datasetDetails: {
             name: rowData[0],
-            createdAt: rowData[1],
-            urn: rowData[2],
-            datasourceUrn: rowData[3],
-            description: rowData[4]
+            description: rowData[1],
+            createdAt: rowData[2],
+            urn: rowData[3],
+            datasourceUrn: rowData[4]
           }
       })
     this.setState({showDatasetDetails: true});
@@ -68,8 +68,9 @@ handleDatasetDetailsClose = () => {
 render() {
   const { classes } = this.props;
   const datasetColumns = [
-      "Name",
-      "CreatedAt",
+      "NAME",
+      "DESCRIPTION",
+      "CREATED AT",
       {
         name: "URN",
         options: {
@@ -77,12 +78,11 @@ render() {
         }
       },
       {
-        name: "DatasourceURN",
+        name: "DATASOURCE URN",
         options: {
           display: false,
         }
-      },
-      "Description"
+      }
   ];
   
   const options = {

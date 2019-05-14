@@ -31,24 +31,24 @@ function DatasetDetailsTable(props) {
         <Table>
             <TableBody>
                 <TableRow>
-                    <TableCell><b>Name</b></TableCell>
+                    <TableCell><b>NAME</b></TableCell>
                     <TableCell>{props.details.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell><b>CreatedAt</b></TableCell>
-                    <TableCell>{props.details.createdAt}</TableCell>
+                    <TableCell><b>DESCRIPTION</b></TableCell>
+                    <TableCell>{props.details.description}</TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell><b>URN</b></TableCell>
                     <TableCell>{props.details.urn}</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell><b>DatasourceURN</b></TableCell>
+                    <TableCell><b>DATASOURCE URN</b></TableCell>
                     <TableCell>{props.details.datasourceUrn}</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell><b>Description</b></TableCell>
-                    <TableCell>{props.details.description}</TableCell>
+                    <TableCell><b>CREATED AT</b></TableCell>
+                    <TableCell>{props.details.createdAt}</TableCell>
                 </TableRow>
             </TableBody>
         </Table>
