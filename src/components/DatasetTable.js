@@ -70,7 +70,7 @@ render() {
   const datasetColumns = [
       "NAME",
       "DESCRIPTION",
-      "CREATED AT",
+      "CREATED",
       {
         name: "URN",
         options: {

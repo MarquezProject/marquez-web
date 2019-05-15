@@ -47,7 +47,7 @@ function DatasetDetailsTable(props) {
                     <TableCell>{props.details.datasourceUrn}</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell><b>CREATED AT</b></TableCell>
+                    <TableCell><b>CREATED</b></TableCell>
                     <TableCell>{props.details.createdAt}</TableCell>
                 </TableRow>
             </TableBody>
