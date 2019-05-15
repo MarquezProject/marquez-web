@@ -27,42 +27,78 @@ const styles = theme => ({
 
 function JobRunsTable(props) {
     const { classes } = props;
+    console.log(props);
     return (
         <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>RUN ARGUMENTS</TableCell>
-                    <TableCell align="right">FINAL STATE</TableCell>
-                </TableRow>
-            </TableHead>
             <TableBody>
-                {
-                    props.runs.map(row => (
-                        <TableRow key={row.runId}>
-                            <TableCell component="th" scope="row">
-                                {row.runArgs}
-                            </TableCell>
-                            <TableCell align="right">{row.runState}</TableCell>
-                        </TableRow>
-                    ))
-                }
+                <TableRow>
+                    <TableCell><b>NAME</b></TableCell>
+                    <TableCell>{props.details.name}</TableCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableCell><b>INPUT DATASETS</b></TableCell>
+                    <TableCell>{props.details.inputDatasetUrns}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>OUTPUT DATASETS</b></TableCell>
+                    <TableCell>{props.details.outputDatasetUrns}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>LOCATION</b></TableCell>
+                    <TableCell>{props.details.location}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>DESCRIPTION</b></TableCell>
+                    <TableCell>{props.details.description}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>CREATED</b></TableCell>
+                    <TableCell>{props.details.createdAt}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell><b>UPDATED</b></TableCell>
+                    <TableCell>{props.details.updatedAt}</TableCell>
+                </TableRow>
             </TableBody>
         </Table>
+
+       // TODO: Requires endpoint to 	retrieve job runs 
+       //<Table>
+       //    <TableHead>
+       //        <TableRow>
+       //            <TableCell>RUN ARGUMENTS</TableCell>
+       //            <TableCell align="right">FINAL STATE</TableCell>
+       //        </TableRow>
+       //    </TableHead>
+       //    <TableBody>
+       //        {
+       //            props.runs.map(row => (
+       //                <TableRow key={row.runId}>
+       //                    <TableCell component="th" scope="row">
+       //                        {row.runArgs}
+       //                    </TableCell>
+       //                    <TableCell align="right">{row.runState}</TableCell>
+       //                </TableRow>
+       //            ))
+       //        }
+       //    </TableBody>
+       //</Table>
     )
 }
 
 function JobDetailsDialog(props) {
     return (
         <Dialog
-            fullWidth="sm"
-            maxWidth="sm"
+            fullWidth="md"
+            maxWidth="md"
             open={props.open}
             onClose={props.onClose}
             aria-labelledby="max-width-dialog-title"
         >
             <DialogTitle id="max-width-dialog-title">Job Details</DialogTitle>
             <DialogContent>
-                <JobRunsTable runs={props.jobDetails.runs} />
+                <JobRunsTable details={props.jobDetails} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.onClose} color="primary">

@@ -24,9 +24,9 @@ class JobTable extends React.Component {
 
 fetchData(namespace) {
   if(namespace !== undefined){
-    axios.get('/api/v1/namespaces/' + namespace + '/jobs/').then((response) => {
+    axios.get('/api/v1/namespaces/' + namespace + '/jobs').then((response) => {
       const jobData = response.data
-      const jobRows = jobData.jobs.map(job => [job.name, job.description, job.createdAt])
+      const jobRows = jobData.jobs.map(job => [job.name, job.description, job.createdAt, job.updatedAt, job.inputDatasetUrns, job.outputDatasetUrns, job.location])
       this.setState({jobs: jobRows})
     });
   }
@@ -48,18 +48,40 @@ handleChange = (event, value) => {
 };
 
 handleJobRowClick = (rowData, rowState) => {
-  const jobName = rowData[0]
-  var jobRuns = []
-  axios.get('/api/v1/namespaces/' + this.state.namespace + '/jobs/' + jobName + '/runs' ).then((response) => {
-    jobRuns = response.data;
     this.setState(
       {
         jobDetails: {
-          runs: jobRuns
+          name: rowData[0],
+          description: rowData[1],
+          createdAt: rowData[2],
+          updatedAt: rowData[3],
+          inputDatasetUrns: rowData[4],
+          outputDatasetUrns: rowData[5],
+          location: rowData[6]
         }
       })
     this.setState({showJobDetails: true});
-  });
+
+ // TODO: Requires endpoint to 	retrieve job runs
+ // const jobName = rowData[0]
+ //var jobRuns = []
+ //axios.get('/api/v1/namespaces/' + this.state.namespace + '/jobs/' + jobName + '/runs' ).then((response) => {
+ //  jobRuns = response.data;
+ //  this.setState(
+ //    {
+ //      jobDetails: {
+ //        name: rowData[0],
+ //        description: rowData[1],
+ //        createdAt: rowData[2],
+ //        updatedAt: rowData[3],
+ //        inputDatasetUrns: rowData[4],
+ //        outputDatasetUrns: rowData[5],
+ //        location: rowData[6],
+ //        runs: jobRuns,
+ //      }
+ //    })
+ //  this.setState({showJobDetails: true});
+ //});
 }
 
 handleJobDetailsClose = () => {
@@ -70,9 +92,33 @@ render() {
   const { classes } = this.props;
   const { value } = this.state;
   const jobColumns = [
-    "Name",
-    "Description",
-    "Created At"
+    "NAME",
+    "DESCRIPTION",
+    "CREATED",
+    {
+      name: "UPDATED",
+      options: {
+        display: false,
+      }
+    },
+    {
+      name: "INPUT DATASETS",
+      options: {
+        display: false,
+      }
+    },
+    {
+      name: "OUTPUT DATASETS",
+      options: {
+        display: false,
+      }
+    },
+    {
+      name: "LOCATION",
+      options: {
+        display: false,
+      }
+    }
   ];
   
   const options = {
