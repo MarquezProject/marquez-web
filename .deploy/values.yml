@@ -21,18 +21,21 @@ image:
 service:
   type: ClusterIP
   ports:
-    - port: 3000
+    - port: 80
       containerPort: 3000
       name: http
       protocol: TCP
 
 ingress:
   enabled: true
-  port: 3000
   annotations:
     kubernetes.io/ingress.class: nginx-external
-    nginx.org/server-snippet: "proxy_ssl_verify off;"
+    # restrict ingress traffic to bifrost outbound IPs
+    nginx.ingress.kubernetes.io/whitelist-source-range: 18.235.58.115/32,18.215.224.187/32
   path: /
+  host: {{ Environment.Values.ingressHost }} 
+  serviceName: marquez-web
+  servicePort: 80
 
 monitoring:
   enabled: false

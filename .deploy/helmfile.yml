@@ -11,6 +11,14 @@ helmDefaults:
   args:
     - "--tls"
 
+environments:
+  staging:
+    values:
+      - "environments/staging.yaml"
+  production:
+    values:
+      - "environments/production.yaml"
+
 releases:
   - name: marquez-web
     namespace: dataplatform

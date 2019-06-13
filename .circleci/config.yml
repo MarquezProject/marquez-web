@@ -32,7 +32,24 @@ jobs:
             name: Deploy the service
             command: |
               /usr/bin/deploy_helper fetch_reqs -e wek8s-phoenix -n dataplatform && \
-              helmfile --file .deploy/helmfile.yml apply
+              helmfile --file .deploy/helmfile.yml apply --environment staging
+
+  deploy_to_prod:
+      environment:
+      - INGRESS_HOST: marquez-web.kraken.wwrk.co
+      working_directory: /root/project
+      docker:
+        - image: quay.io/wework/wek8s-tools:0.2.12
+          auth:
+            username: $DOCKER_USER
+            password: $DOCKER_PASSWD
+      steps:
+        - checkout
+        - run:
+            name: Deploy the service
+            command: |
+              /usr/bin/deploy_helper fetch_reqs -e wek8s-kraken -n dataplatform && \
+              helmfile --file .deploy/helmfile.yml apply --environment production
 
 workflows:
   version: 2
@@ -54,6 +71,20 @@ workflows:
           context: org-global
           requires:
             - build_docker_image
+          filters:
+            branches:
+              only:
+                - master
+      
+      - deploy_to_prod_approval:
+          type: approval
+          requires:
+            - deploy_to_staging
+
+      - deploy_to_prod:
+          context: org-global
+          requires:
+            - deploy_to_prod_approval
           filters:
             branches:
               only:
