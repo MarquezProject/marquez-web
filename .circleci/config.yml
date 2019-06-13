@@ -32,7 +32,7 @@ jobs:
             name: Deploy the service
             command: |
               /usr/bin/deploy_helper fetch_reqs -e wek8s-phoenix -n dataplatform && \
-              helmfile --file .deploy/helmfile.yml apply --environment staging
+              helmfile --file .deploy/helmfile.yml --environment staging apply
 
   deploy_to_prod:
       environment:
@@ -49,7 +49,7 @@ jobs:
             name: Deploy the service
             command: |
               /usr/bin/deploy_helper fetch_reqs -e wek8s-kraken -n dataplatform && \
-              helmfile --file .deploy/helmfile.yml apply --environment production
+              helmfile --file .deploy/helmfile.yml --environment production apply
 
 workflows:
   version: 2
