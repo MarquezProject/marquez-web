@@ -19,6 +19,7 @@ import { unstable_Box as Box } from '@material-ui/core/Box';
 import axios from 'axios'
 import JobTable from './JobTable'
 import DatasetTable from './DatasetTable'
+import DatasetTagger from './DatasetTagger'
 import 'typeface-rajdhani';
 import we_logo from '../static/images/we-logo.png';
 
@@ -166,7 +167,7 @@ class MainContainer extends React.Component {
             </div>
             <div style={tagContentStyle}>
                 <Box mt={8}>
-                  Tags
+                  <DatasetTagger/>
                 </Box>
             </div>
           </main>
