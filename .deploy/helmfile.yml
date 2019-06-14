@@ -25,7 +25,7 @@ releases:
     chart: wework/wek8s-generic-service
     version: ~0.4.0
     values:
-      - "../.deploy/values.yml"
+      - "../.deploy/values.yml.gotmpl"
     set:
       - name: image.tag
         value: {{ env "CIRCLE_TAG" | default (env "CIRCLE_SHA1") }}
