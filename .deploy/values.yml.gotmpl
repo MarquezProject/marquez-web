@@ -33,7 +33,7 @@ ingress:
     # restrict ingress traffic to bifrost outbound IPs
     nginx.ingress.kubernetes.io/whitelist-source-range: 18.235.58.115/32,18.215.224.187/32
   path: /
-  host: {{ Environment.Values.ingressHost }} 
+  host: {{ .Environment.Values.ingressHost }} 
   serviceName: marquez-web
   servicePort: 80
 
