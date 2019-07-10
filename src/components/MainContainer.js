@@ -23,7 +23,6 @@ import DatasetTagger from "./DatasetTagger";
 import "typeface-rajdhani";
 import we_logo from "../static/images/we-logo.png";
 import { connect } from "react-redux";
-import { isClassExpression } from "@babel/types";
 
 const drawerWidth = 240;
 
@@ -60,12 +59,10 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-const lightBlue = { main: "#03a9f4" };
-
 class MainContainer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   componentDidMount() {
     axios.get("/api/v1/namespaces/").then(response => {
@@ -139,8 +136,6 @@ class MainContainer extends React.Component {
     const tagContentStyle =
       this.props.selectedContent === "Tags" ? {} : { display: "none" };
     const namespaceSelectorStyle = { paddingLeft: "10em" };
-    const jobColumns = ["Name", "Description", "Created At"];
-    const datasetColumns = ["URN", "Created At"];
 
     return (
       <div className={classes.root}>
@@ -148,7 +143,7 @@ class MainContainer extends React.Component {
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Box mr={2}>
-              <img src={we_logo} height={50} />
+              <img src={we_logo} height={50} alt="WeWork Logo" />
             </Box>
             <Typography
               variant="h4"
@@ -159,7 +154,11 @@ class MainContainer extends React.Component {
               MARQUEZ
             </Typography>
             <div className={classes.rightToolbar}>
-              <a href="https://forms.gle/gWj8fn8iYiTsKEPD6" target="_blank">
+              <a
+                href="https://forms.gle/gWj8fn8iYiTsKEPD6"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <button className={classes.feedbackButton}> Feedback </button>
               </a>
             </div>

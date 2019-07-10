@@ -18,9 +18,10 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
+  var newInfo = null;
   switch (action.type) {
     case "GraphReset":
-      var newInfo = buildTableDetails(state, state.defaultNode);
+      newInfo = buildTableDetails(state, state.defaultNode);
       return Object.assign({}, state, {
         nodeSelected: state.defaultNode,
         nodeSelectedType: newInfo.selectedType,
@@ -40,7 +41,7 @@ const reducer = (state = initialState, action) => {
         graphType: "Jobs and Datasets"
       });
     case "RowClick": {
-      var newInfo = buildRowData(state, action.rowData);
+      newInfo = buildRowData(state, action.rowData);
       return Object.assign({}, state, {
         nodeSelected: newInfo.nodeSelected,
         tableDetails: newInfo.tableDetails,

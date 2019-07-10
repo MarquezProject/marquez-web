@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import Graph, { selectNodes } from "react-graph-vis";
+import Graph from "react-graph-vis";
 import { unstable_Box as Box } from "@material-ui/core/Box";
 import ItemSelector from "./ItemSelector";
 import {

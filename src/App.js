@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./App.css";
 import MainContainer from "./components/MainContainer";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import grey from "@material-ui/core/colors/grey";
 import { Helmet } from "react-helmet";
 import store from "./components/store";
 

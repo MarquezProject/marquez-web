@@ -27,7 +27,6 @@ const styles = theme => ({
 });
 
 function JobRunsTable(props) {
-  const { classes } = props;
   return (
     <Table>
       <TableBody>
@@ -80,8 +79,6 @@ function JobRunsTable(props) {
 }
 
 function DatasetDetailsTable(props) {
-  const { classes } = props;
-
   return (
     <Table>
       <TableBody>

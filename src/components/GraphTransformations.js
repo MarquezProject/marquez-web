@@ -16,6 +16,9 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
     nodes: [],
     edges: []
   };
+  var jobEntryObject = null;
+  var jobEntrySubject = null;
+  var datasetEntry = null;
   data.map(entry => {
     const { subject, subjectType, object, objectType } = entry;
     if (!stored.has(subject)) {
@@ -64,18 +67,18 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
     }
     if (subjectType === "job") {
       if (jobs.includes(subject)) {
-        var jobEntry = jobMap.get(subject);
-        jobEntry.output.push(object);
-        jobMap.set(subject, jobEntry);
+        jobEntrySubject = jobMap.get(subject);
+        jobEntrySubject.output.push(object);
+        jobMap.set(subject, jobEntrySubject);
       } else {
         jobMap.set(subject, { jobId: subject, input: [], output: [object] });
         jobs.push(subject);
       }
     } else {
       if (jobs.includes(object)) {
-        var jobEntry = jobMap.get(object);
-        jobEntry.input.push(subject);
-        jobMap.set(object, jobEntry);
+        jobEntryObject = jobMap.get(object);
+        jobEntryObject.input.push(subject);
+        jobMap.set(object, jobEntryObject);
       } else {
         jobMap.set(object, { jobId: object, input: [subject], output: [] });
         jobs.push(object);
@@ -83,7 +86,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
     }
     if (subjectType === "dataset") {
       if (datasets.includes(subject)) {
-        var datasetEntry = datasetMap.get(subject);
+        datasetEntry = datasetMap.get(subject);
         datasetEntry.outputJob.push(object);
         datasetMap.set(subject, datasetEntry);
       } else {
@@ -96,7 +99,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       }
     } else {
       if (datasets.includes(object)) {
-        var datasetEntry = datasetMap.get(object);
+        datasetEntry = datasetMap.get(object);
         datasetEntry.inputJob.push(subject);
         datasetMap.set(object, datasetEntry);
       } else {
@@ -110,6 +113,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
     }
 
     graph.edges.push({ from: subject, to: object });
+    return null;
   });
   for (var hh = 0; hh < datasets.length; hh++) {
     var datasetEntry = datasetMap.get(datasets[hh]);
@@ -156,10 +160,15 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       graph.edges.sort();
       graph.nodes.sort();
       return graph;
+    default:
+      graph.edges.sort();
+      graph.nodes.sort();
+      return graph;
   }
 }
 
 function buildAdjList(graph) {
+  var relatives = null;
   var adjList = new Map();
   var stored = new Set();
   var { edges } = graph;
@@ -178,7 +187,7 @@ function buildAdjList(graph) {
       adjList.set(to, { name: to, parents: [from], children: [] });
       stored.add(to);
     } else {
-      var relatives = adjList.get(to);
+      relatives = adjList.get(to);
       relatives.parents.push(from);
       adjList.set(to, relatives);
     }
