@@ -51,8 +51,9 @@ const styles = theme => ({
     fontSize: 15,
     borderWidth: 1.2,
     "&:hover": {
-      backgroundColor: "grey",
-      cursor: "pointer"
+      color: "#71ddbf",
+      cursor: "pointer",
+      borderColor: "#71ddbf"
     }
   },
   content: {
