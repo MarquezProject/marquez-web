@@ -27,6 +27,16 @@ class DatasetTable extends React.Component {
       )
       .then(response => {
         this.props.onRowClick(rowData, response.data.result);
+      })
+      .catch(error => {
+        this.props.onErrorClick({
+          id: rowData[0],
+          label: rowData[0],
+          borderWidth: 3,
+          title: "dataset",
+          color: { background: "cyan", highlight: { border: "black" } }
+        });
+        this.props.onRowClick(rowData, []);
       });
   };
 
@@ -102,6 +112,10 @@ function mapDispatchToProps(dispatch) {
         rowData: rowData,
         graphData: newGraphData
       };
+      dispatch(action);
+    },
+    onErrorClick: node => {
+      const action = { type: "ErrorClick", node: node };
       dispatch(action);
     }
   };

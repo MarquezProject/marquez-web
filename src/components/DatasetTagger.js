@@ -70,7 +70,6 @@ class DatasetTagger extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { value } = this.state;
     const datasetColumns = [
       "NAME",
       "HAS PII?",

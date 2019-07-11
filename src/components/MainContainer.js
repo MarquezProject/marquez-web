@@ -49,8 +49,11 @@ const styles = theme => ({
     backgroundColor: "#2B2B33",
     color: "white",
     fontSize: 15,
-    borderColor: "white",
-    borderWidth: 1.2
+    borderWidth: 1.2,
+    "&:hover": {
+      backgroundColor: "grey",
+      cursor: "pointer"
+    }
   },
   content: {
     flexGrow: 1,
@@ -60,10 +63,6 @@ const styles = theme => ({
 });
 
 class MainContainer extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
   componentDidMount() {
     axios.get("/api/v1/namespaces/").then(response => {
       const namespaceList = response.data.namespaces.map(
@@ -74,7 +73,7 @@ class MainContainer extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _) {
     if (this.props.selectedNamespace !== prevProps.selectedNamespace) {
       this.fetchData(this.props.selectedNamespace);
     }
@@ -226,7 +225,8 @@ function mapStateToProps(state) {
     namespaces: state.namespaces,
     selectedContent: state.selectedContent,
     jobs: state.jobs,
-    datasets: state.datasets
+    datasets: state.datasets,
+    borderWidth: 1.2
   };
 }
 

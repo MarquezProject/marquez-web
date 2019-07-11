@@ -15,18 +15,27 @@ const styles = theme => ({
 
 class JobTable extends React.Component {
   handleRowClick = rowData => {
-    const datasetFetch =
-      this.props.tableType === "Datasets" ? rowData[3] : rowData[4][0];
     axios
       .get(
         " /api/v1/namespaces/" +
           this.props.namespace +
-          "/datasets/" +
-          datasetFetch +
+          "/jobs/" +
+          rowData[0] +
           "/lineage"
       )
       .then(response => {
         this.props.onRowClick(rowData, response.data.result);
+        this.props.onErrorClick(null);
+      })
+      .catch(error => {
+        this.props.onErrorClick({
+          id: rowData[0],
+          label: rowData[0],
+          borderWidth: 3,
+          title: "job",
+          color: { background: "orange", highlight: { border: "black" } }
+        });
+        this.props.onRowClick(rowData, []);
       });
   };
 
@@ -115,6 +124,10 @@ function mapDispatchToProps(dispatch) {
         rowData: rowData,
         graphData: newGraphData
       };
+      dispatch(action);
+    },
+    onErrorClick: node => {
+      const action = { type: "ErrorClick", node: node };
       dispatch(action);
     }
   };

@@ -18,7 +18,8 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
   };
   var jobEntryObject = null;
   var jobEntrySubject = null;
-  var datasetEntry = null;
+  var datasetEntrySubject = null;
+  var datasetEntryObject = null;
   data.map(entry => {
     const { subject, subjectType, object, objectType } = entry;
     if (!stored.has(subject)) {
@@ -86,9 +87,9 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
     }
     if (subjectType === "dataset") {
       if (datasets.includes(subject)) {
-        datasetEntry = datasetMap.get(subject);
-        datasetEntry.outputJob.push(object);
-        datasetMap.set(subject, datasetEntry);
+        datasetEntrySubject = datasetMap.get(subject);
+        datasetEntrySubject.outputJob.push(object);
+        datasetMap.set(subject, datasetEntrySubject);
       } else {
         datasetMap.set(subject, {
           datasetId: subject,
@@ -99,9 +100,9 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       }
     } else {
       if (datasets.includes(object)) {
-        datasetEntry = datasetMap.get(object);
-        datasetEntry.inputJob.push(subject);
-        datasetMap.set(object, datasetEntry);
+        datasetEntryObject = datasetMap.get(object);
+        datasetEntryObject.inputJob.push(subject);
+        datasetMap.set(object, datasetEntryObject);
       } else {
         datasetMap.set(object, {
           datasetId: object,
@@ -168,7 +169,8 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
 }
 
 function buildAdjList(graph) {
-  var relatives = null;
+  var relativesFrom = null;
+  var relativesTo = null;
   var adjList = new Map();
   var stored = new Set();
   var { edges } = graph;
@@ -179,17 +181,17 @@ function buildAdjList(graph) {
       adjList.set(from, { name: from, parents: [], children: [to] });
       stored.add(from);
     } else {
-      var relatives = adjList.get(from);
-      relatives.children.push(to);
-      adjList.set(from, relatives);
+      relativesFrom = adjList.get(from);
+      relativesFrom.children.push(to);
+      adjList.set(from, relativesFrom);
     }
     if (!stored.has(to)) {
       adjList.set(to, { name: to, parents: [from], children: [] });
       stored.add(to);
     } else {
-      relatives = adjList.get(to);
-      relatives.parents.push(from);
-      adjList.set(to, relatives);
+      relativesTo = adjList.get(to);
+      relativesTo.parents.push(from);
+      adjList.set(to, relativesTo);
     }
   }
   return adjList;

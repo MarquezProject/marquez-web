@@ -14,7 +14,8 @@ const initialState = {
   nodeSelectedType: null,
   defaultNode: null,
   graphData: [],
-  open: false
+  open: false,
+  errorNode: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -51,6 +52,10 @@ const reducer = (state = initialState, action) => {
         defaultNode: newInfo.nodeSelected
       });
     }
+    case "ErrorClick":
+      return Object.assign({}, state, {
+        errorNode: action.node
+      });
     case "DrawerItemClick":
       return Object.assign({}, state, {
         selectedContent: action.text,
@@ -70,7 +75,8 @@ const reducer = (state = initialState, action) => {
       });
     case "InitiateNamespaces":
       return Object.assign({}, state, {
-        namespaces: action.namespaces
+        namespaces: action.namespaces,
+        namespace: action.namespaces[0]
       });
     default:
       return state;

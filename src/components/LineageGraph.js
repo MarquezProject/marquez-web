@@ -96,28 +96,32 @@ function LineageGraph(props) {
     }
     return maxLength;
   }
-  var graph = !graphState.filterGraph
-    ? transformDataToGraph(
-        props.graphData,
-        props.nodeSelected,
-        graphState.graphType,
-        graphState.showEdgeLabel
-      )
-    : graphState.directLineage
-    ? findDirectLineage(
-        props.graphData,
-        props.nodeSelected,
-        graphState.selectedNodeDestination,
-        graphState.graphType,
-        graphState.showEdgeLabel
-      )
-    : filterGraph(
-        props.graphData,
-        props.nodeSelected,
-        graphState.filterGraphDirection,
-        graphState.graphType,
-        graphState.showEdgeLabel
-      );
+
+  var graph =
+    props.graphData.length === 0
+      ? { nodes: [props.errorNode], edges: [] }
+      : !graphState.filterGraph
+      ? transformDataToGraph(
+          props.graphData,
+          props.nodeSelected,
+          graphState.graphType,
+          graphState.showEdgeLabel
+        )
+      : graphState.directLineage
+      ? findDirectLineage(
+          props.graphData,
+          props.nodeSelected,
+          graphState.selectedNodeDestination,
+          graphState.graphType,
+          graphState.showEdgeLabel
+        )
+      : filterGraph(
+          props.graphData,
+          props.nodeSelected,
+          graphState.filterGraphDirection,
+          graphState.graphType,
+          graphState.showEdgeLabel
+        );
 
   var nodeList = graph.nodes.map(node => node.id);
   var maxLength = findMaxLengthString(nodeList);
@@ -135,7 +139,7 @@ function LineageGraph(props) {
   var options = {
     autoResize: true,
     width: "100%",
-    height: "460px",
+    height: "400px",
     physics: {
       enabled: false
     },
@@ -224,13 +228,25 @@ function LineageGraph(props) {
         selectedItem={props.nodeSelected}
         onChange={props.onSelectedNode}
       />
-      <Button onClick={onFilterGraphParents} color="primary">
+      <Button
+        onClick={onFilterGraphParents}
+        color="primary"
+        disabled={props.errorNode !== null}
+      >
         Filter Upstream
       </Button>
-      <Button onClick={onFilterGraphChildren} color="primary">
+      <Button
+        onClick={onFilterGraphChildren}
+        color="primary"
+        disabled={props.errorNode !== null}
+      >
         Filter Downstream
       </Button>
-      <Button onClick={onGraphReset} color="primary">
+      <Button
+        onClick={onGraphReset}
+        color="primary"
+        disabled={props.errorNode !== null}
+      >
         Reset Graph
       </Button>
       <ItemSelector
@@ -240,7 +256,11 @@ function LineageGraph(props) {
         selectedItem={graphState.selectedNodeDestination}
         onChange={onChangeSelectedNodeDestination}
       />
-      <Button onClick={onDirectLineage} color="primary">
+      <Button
+        onClick={onDirectLineage}
+        color="primary"
+        disabled={props.errorNode !== null}
+      >
         Direct Lineage
       </Button>
       <Button
@@ -259,7 +279,8 @@ function mapStateToProps(state) {
     tableDetails: state.tableDetails,
     namespace: state.namespace,
     nodeSelected: state.nodeSelected,
-    graphData: state.graphData
+    graphData: state.graphData,
+    errorNode: state.errorNode
   };
 }
 
