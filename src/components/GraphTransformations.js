@@ -22,11 +22,13 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
   var datasetEntryObject = null;
   data.map(entry => {
     const { subject, subjectType, object, objectType } = entry;
-    if (!stored.has(subject)) {
+    var subjectId = subject + ":,:" + subjectType;
+    var objectId = object + ":,:" + objectType;
+    if (!stored.has(subjectId)) {
       var subjectNode = {
-        id: subject,
+        id: subjectId,
         label: subject,
-        borderWidth: subject === name ? 3 : 1,
+        borderWidth: subjectId === name ? 3 : 1,
         title: subjectType,
         color: {
           background: subjectType === "job" ? "orange" : "cyan",
@@ -42,13 +44,13 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       if (subjectType !== "dataset") {
         graphNoDatasets.nodes.push(subjectNode);
       }
-      stored.add(subject);
+      stored.add(subjectId);
     }
-    if (!stored.has(object)) {
+    if (!stored.has(objectId)) {
       var objectNode = {
-        id: object,
+        id: objectId,
         label: object,
-        borderWidth: object === name ? 3 : 1,
+        borderWidth: objectId === name ? 3 : 1,
         title: objectType,
         color: {
           background: objectType === "job" ? "orange" : "cyan",
@@ -64,96 +66,103 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       if (objectType !== "dataset") {
         graphNoDatasets.nodes.push(objectNode);
       }
-      stored.add(object);
+      stored.add(objectId);
     }
     if (subjectType === "job") {
-      if (jobs.includes(subject)) {
-        jobEntrySubject = jobMap.get(subject);
-        jobEntrySubject.output.push(object);
-        jobMap.set(subject, jobEntrySubject);
+      if (jobs.includes(subjectId)) {
+        jobEntrySubject = jobMap.get(subjectId);
+        jobEntrySubject.output.push(objectId);
+        jobMap.set(subjectId, jobEntrySubject);
       } else {
-        jobMap.set(subject, { jobId: subject, input: [], output: [object] });
-        jobs.push(subject);
+        jobMap.set(subjectId, {
+          jobId: subjectId,
+          input: [],
+          output: [objectId]
+        });
+        jobs.push(subjectId);
       }
     } else {
-      if (jobs.includes(object)) {
-        jobEntryObject = jobMap.get(object);
-        jobEntryObject.input.push(subject);
-        jobMap.set(object, jobEntryObject);
+      if (jobs.includes(objectId)) {
+        jobEntryObject = jobMap.get(objectId);
+        jobEntryObject.input.push(subjectId);
+        jobMap.set(objectId, jobEntryObject);
       } else {
-        jobMap.set(object, { jobId: object, input: [subject], output: [] });
-        jobs.push(object);
+        jobMap.set(objectId, {
+          jobId: objectId,
+          input: [subjectId],
+          output: []
+        });
+        jobs.push(objectId);
       }
     }
     if (subjectType === "dataset") {
-      if (datasets.includes(subject)) {
-        datasetEntrySubject = datasetMap.get(subject);
-        datasetEntrySubject.outputJob.push(object);
-        datasetMap.set(subject, datasetEntrySubject);
+      if (datasets.includes(subjectId)) {
+        datasetEntrySubject = datasetMap.get(subjectId);
+        datasetEntrySubject.outputJob.push(objectId);
+        datasetMap.set(subjectId, datasetEntrySubject);
       } else {
-        datasetMap.set(subject, {
-          datasetId: subject,
+        datasetMap.set(subjectId, {
+          datasetId: subjectId,
           inputJob: [],
-          outputJob: [object]
+          outputJob: [objectId]
         });
-        datasets.push(subject);
+        datasets.push(subjectId);
       }
     } else {
-      if (datasets.includes(object)) {
-        datasetEntryObject = datasetMap.get(object);
-        datasetEntryObject.inputJob.push(subject);
-        datasetMap.set(object, datasetEntryObject);
+      if (datasets.includes(objectId)) {
+        datasetEntryObject = datasetMap.get(objectId);
+        datasetEntryObject.inputJob.push(subjectId);
+        datasetMap.set(objectId, datasetEntryObject);
       } else {
-        datasetMap.set(object, {
-          datasetId: object,
-          inputJob: [subject],
+        datasetMap.set(objectId, {
+          datasetId: objectId,
+          inputJob: [subjectId],
           outputJob: []
         });
-        datasets.push(object);
+        datasets.push(objectId);
       }
     }
 
-    graph.edges.push({ from: subject, to: object });
+    graph.edges.push({ from: subjectId, to: objectId });
     return null;
   });
-  for (var hh = 0; hh < datasets.length; hh++) {
-    var datasetEntry = datasetMap.get(datasets[hh]);
-    var { datasetId, inputJob, outputJob } = datasetEntry;
-    if (inputJob.length !== 0 && outputJob.length !== 0) {
-      for (var i = 0; i < inputJob.length; i++) {
-        for (var j = 0; j < outputJob.length; j++) {
-          graphNoDatasets.edges.push({
-            from: inputJob[i],
-            to: outputJob[j],
-            label: showEdgeLabel ? datasetId : ""
-          });
-        }
-      }
-    }
-  }
-
-  for (var ii = 0; ii < jobs.length; ii++) {
-    var jobEntry = jobMap.get(jobs[ii]);
-    var { jobId, input, output } = jobEntry;
-    if (input.length !== 0 && output.length !== 0) {
-      for (var jj = 0; jj < input.length; jj++) {
-        for (var kk = 0; kk < output.length; kk++) {
-          graphNoJobs.edges.push({
-            from: input[jj],
-            to: output[kk],
-            label: showEdgeLabel ? jobId : ""
-          });
-        }
-      }
-    }
-  }
 
   switch (graphType) {
     case "Jobs":
+      for (var hh = 0; hh < datasets.length; hh++) {
+        var datasetEntry = datasetMap.get(datasets[hh]);
+        var { datasetId, inputJob, outputJob } = datasetEntry;
+        if (inputJob.length !== 0 && outputJob.length !== 0) {
+          for (var i = 0; i < inputJob.length; i++) {
+            for (var j = 0; j < outputJob.length; j++) {
+              graphNoDatasets.edges.push({
+                from: inputJob[i],
+                to: outputJob[j],
+                label: showEdgeLabel ? datasetId : ""
+              });
+            }
+          }
+        }
+      }
       graphNoDatasets.edges.sort();
       graphNoDatasets.nodes.sort();
       return graphNoDatasets;
     case "Datasets":
+      for (var ii = 0; ii < jobs.length; ii++) {
+        var jobEntry = jobMap.get(jobs[ii]);
+        var { jobId, input, output } = jobEntry;
+        if (input.length !== 0 && output.length !== 0) {
+          for (var jj = 0; jj < input.length; jj++) {
+            for (var kk = 0; kk < output.length; kk++) {
+              graphNoJobs.edges.push({
+                from: input[jj],
+                to: output[kk],
+                label: showEdgeLabel ? jobId : ""
+              });
+            }
+          }
+        }
+      }
       graphNoJobs.edges.sort();
       graphNoJobs.nodes.sort();
       return graphNoJobs;
@@ -161,11 +170,31 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       graph.edges.sort();
       graph.nodes.sort();
       return graph;
+    case "simpleGraph":
+      return buildSimpleGraph(graph, name);
     default:
       graph.edges.sort();
       graph.nodes.sort();
       return graph;
   }
+}
+
+function buildSimpleGraph(graph, nodeName) {
+  var sGraph = { nodes: [], edges: [] };
+  var adjList = buildAdjList(graph);
+  var parentGraph = BFSgetAll(graph, adjList, "parents", nodeName);
+  var childrenGraph = BFSgetAll(graph, adjList, "children", nodeName);
+  parentGraph.nodes.map(node => sGraph.nodes.push(node));
+  parentGraph.edges.map(edge => sGraph.edges.push(edge));
+  var filteredChildrenGraphNodes = childrenGraph.nodes.filter(
+    node => !parentGraph.nodes.includes(node)
+  );
+  var filteredChildrenGraphEdges = childrenGraph.edges.filter(
+    edge => !parentGraph.edges.includes(edge)
+  );
+  filteredChildrenGraphNodes.map(node => sGraph.nodes.push(node));
+  filteredChildrenGraphEdges.map(edge => sGraph.edges.push(edge));
+  return sGraph;
 }
 
 function buildAdjList(graph) {
@@ -206,7 +235,12 @@ export function filterGraph(
 ) {
   var graph = transformDataToGraph(data, datasetName, graphType, showEdgeLabel);
   var adjList = buildAdjList(graph);
+  return BFSgetAll(graph, adjList, relative, datasetName);
+}
+
+function BFSgetAll(graph, adjList, relative, datasetName) {
   var nodeList = graph.nodes.map(node => node.id);
+  console.log(nodeList);
   var fGraph = {
     nodes: [],
     edges: []
@@ -258,9 +292,9 @@ export function findDirectLineage(
   ) {
     return fGraph;
   }
-  var path = BFS(adjList, origin, dest, "parents");
+  var path = BFSfindPath(adjList, origin, dest, "parents");
   if (path.length === 0) {
-    path = BFS(adjList, origin, dest, "children");
+    path = BFSfindPath(adjList, origin, dest, "children");
   }
   fGraph.nodes = graph.nodes.filter(node => path.includes(node.id)).sort();
   fGraph.edges = graph.edges
@@ -269,7 +303,7 @@ export function findDirectLineage(
   return fGraph;
 }
 
-function BFS(adjList, origin, dest, relative) {
+function BFSfindPath(adjList, origin, dest, relative) {
   if (origin === dest) {
     return [origin];
   }

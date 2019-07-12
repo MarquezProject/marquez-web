@@ -15,7 +15,8 @@ const initialState = {
   defaultNode: null,
   graphData: [],
   open: false,
-  errorNode: null
+  errorNode: null,
+  fullGraph: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -77,6 +78,10 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         namespaces: action.namespaces,
         namespace: action.namespaces[0]
+      });
+    case "FullGraph":
+      return Object.assign({}, state, {
+        fullGraph: !state.fullGraph
       });
     default:
       return state;

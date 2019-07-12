@@ -10,7 +10,7 @@ import {
 } from "./GraphTransformations";
 import { connect } from "react-redux";
 
-function LineageGraph(props) {
+function FullLineageGraph(props) {
   const [graphState, setGraphState] = useState({
     graphType: "Jobs and Datasets",
     filterGraph: false,
@@ -97,33 +97,35 @@ function LineageGraph(props) {
     return maxLength;
   }
 
+  var localSelectedType =
+    Object.keys(props.tableDetails).length === 7 ? "job" : "dataset";
   var graph =
     props.graphData.length === 0
       ? { nodes: [props.errorNode], edges: [] }
       : !graphState.filterGraph
       ? transformDataToGraph(
           props.graphData,
-          props.nodeSelected,
+          props.nodeSelected + ":,:" + localSelectedType,
           graphState.graphType,
           graphState.showEdgeLabel
         )
       : graphState.directLineage
       ? findDirectLineage(
           props.graphData,
-          props.nodeSelected,
+          props.nodeSelected + ":,:" + localSelectedType,
           graphState.selectedNodeDestination,
           graphState.graphType,
           graphState.showEdgeLabel
         )
       : filterGraph(
           props.graphData,
-          props.nodeSelected,
+          props.nodeSelected + ":,:" + localSelectedType,
           graphState.filterGraphDirection,
           graphState.graphType,
           graphState.showEdgeLabel
         );
 
-  var nodeList = graph.nodes.map(node => node.id);
+  var nodeList = graph.nodes.map(node => node.label);
   var maxLength = findMaxLengthString(nodeList);
 
   if (
@@ -182,9 +184,10 @@ function LineageGraph(props) {
     selectNode: function(event) {
       var { nodes } = event;
       var id = nodes[0];
+      var nodeName = id.split(":,:");
       let { nodeSelected } = props;
-      props.onSelectedNode(id);
-      if (nodeSelected === null || nodeSelected !== id) {
+      props.onSelectedNode(nodeName[0]);
+      if (nodeSelected === null || nodeSelected !== nodeName[0]) {
         this.unselectAll();
       }
     }
@@ -195,7 +198,7 @@ function LineageGraph(props) {
   };
   const itemSelectorStyle = { paddingLeft: "10em" };
   const nodes = graph.nodes.map(node => {
-    return node.id;
+    return node.label;
   });
   const EdgeLabelTitle = graphState.showEdgeLabel
     ? "Hide Edge Labels"
@@ -249,13 +252,13 @@ function LineageGraph(props) {
       >
         Reset Graph
       </Button>
-      <ItemSelector
+      {/* <ItemSelector
         title="Node Destination"
         style={itemSelectorStyle}
         itemList={nodes}
         selectedItem={graphState.selectedNodeDestination}
         onChange={onChangeSelectedNodeDestination}
-      />
+      /> */}
       <Button
         onClick={onDirectLineage}
         color="primary"
@@ -280,7 +283,8 @@ function mapStateToProps(state) {
     namespace: state.namespace,
     nodeSelected: state.nodeSelected,
     graphData: state.graphData,
-    errorNode: state.errorNode
+    errorNode: state.errorNode,
+    nodeSelectedType: state.nodeSelectedType
   };
 }
 
@@ -300,4 +304,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LineageGraph);
+)(FullLineageGraph);
