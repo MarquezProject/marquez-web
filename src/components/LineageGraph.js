@@ -44,14 +44,18 @@ function LineageGraph(props) {
     );
   };
 
-  const onGraphReset = () => {
+  const onGraphReset = nodeList => {
     setGraphState(
       Object.assign({}, graphState, {
         filterGraph: false,
         directLineage: false
       })
     );
-    props.onGraphReset();
+    if (nodeList.includes(props.defaultNode + ":,:" + props.defaultNodeType)) {
+      props.onGraphReset(props.defaultNode);
+    } else {
+      props.onGraphReset(props.nodeSelected);
+    }
   };
 
   function findMaxLengthString(list) {
@@ -83,7 +87,7 @@ function LineageGraph(props) {
           graphState.graphType,
           props.nodeSelected + ":,:" + localSelectedType
         );
-
+  var nodeListIds = graph.nodes.map(node => node.id);
   var nodeList = graph.nodes.map(node => node.label);
   var maxLength = findMaxLengthString(nodeList);
 
@@ -120,12 +124,7 @@ function LineageGraph(props) {
     },
     nodes: {
       shape: "box",
-      size: 20,
-      chosen: {
-        node: function(values, id, selected, hovering) {
-          values.borderWith = 3;
-        }
-      }
+      size: 20
     },
     interaction: {
       selectConnectedEdges: true,
@@ -139,6 +138,9 @@ function LineageGraph(props) {
       var id = nodes[0];
       var nodeName = id.split(":,:");
       props.onSelectedNode(nodeName[0]);
+      if (props.nodeSelected === null || props.nodeSelected !== id) {
+        this.unselectAll();
+      }
     }
   };
 
@@ -146,9 +148,6 @@ function LineageGraph(props) {
     fit: { nodes: nodeList, animation: false }
   };
   const itemSelectorStyle = { paddingLeft: "10em" };
-  const nodes = graph.nodes.map(node => {
-    return node.label;
-  });
 
   const graphTypes = ["Jobs", "Datasets", "Jobs and Datasets"];
 
@@ -185,7 +184,7 @@ function LineageGraph(props) {
         Filter Downstream
       </Button>
       <Button
-        onClick={onGraphReset}
+        onClick={() => onGraphReset(nodeListIds)}
         color="primary"
         disabled={props.errorNode !== null}
       >
@@ -214,8 +213,8 @@ function mapDispatchToProps(dispatch) {
       const action = { type: "SelectedNode", newNode: nodeName };
       dispatch(action);
     },
-    onGraphReset: () => {
-      const action = { type: "GraphReset" };
+    onGraphReset: nodeSelected => {
+      const action = { type: "GraphReset", node: nodeSelected };
       dispatch(action);
     }
   };

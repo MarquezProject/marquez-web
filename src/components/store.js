@@ -10,8 +10,8 @@ const initialState = {
   showTableDetails: false,
   namespace: null,
   tableDetails: {},
-  nodeSelected: null,
-  nodeSelectedType: null,
+  nodeSelected: "",
+  nodeSelectedType: "",
   defaultNode: null,
   defaultNodeType: null,
   graphData: [],
@@ -24,9 +24,9 @@ const reducer = (state = initialState, action) => {
   var newInfo = null;
   switch (action.type) {
     case "GraphReset":
-      newInfo = buildTableDetails(state, state.defaultNode);
+      newInfo = buildTableDetails(state, action.node);
       return Object.assign({}, state, {
-        nodeSelected: state.defaultNode,
+        nodeSelected: action.node,
         nodeSelectedType: newInfo.selectedType,
         tableDetails: newInfo.tableDetails
       });
