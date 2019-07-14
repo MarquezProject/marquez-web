@@ -1,4 +1,4 @@
-export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
+export function transformDataToGraph(data, name, graphType, nodeSelected) {
   var jobMap = new Map();
   var datasetMap = new Map();
   var datasets = [];
@@ -28,7 +28,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       var subjectNode = {
         id: subjectId,
         label: subject,
-        borderWidth: subjectId === name ? 3 : 1,
+        borderWidth: subjectId === nodeSelected ? 3 : 1,
         title: subjectType,
         color: {
           background: subjectType === "job" ? "orange" : "cyan",
@@ -50,7 +50,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       var objectNode = {
         id: objectId,
         label: object,
-        borderWidth: objectId === name ? 3 : 1,
+        borderWidth: objectId === nodeSelected ? 3 : 1,
         title: objectType,
         color: {
           background: objectType === "job" ? "orange" : "cyan",
@@ -126,7 +126,8 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
     graph.edges.push({ from: subjectId, to: objectId });
     return null;
   });
-
+  var simpleGraph = buildSimpleGraph(graph, name);
+  var nodeList = simpleGraph.nodes.map(node => node.id);
   switch (graphType) {
     case "Jobs":
       for (var hh = 0; hh < datasets.length; hh++) {
@@ -137,8 +138,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
             for (var j = 0; j < outputJob.length; j++) {
               graphNoDatasets.edges.push({
                 from: inputJob[i],
-                to: outputJob[j],
-                label: showEdgeLabel ? datasetId : ""
+                to: outputJob[j]
               });
             }
           }
@@ -146,6 +146,9 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       }
       graphNoDatasets.edges.sort();
       graphNoDatasets.nodes.sort();
+      graphNoDatasets.nodes = graphNoDatasets.nodes.filter(node =>
+        nodeList.includes(node.id)
+      );
       return graphNoDatasets;
     case "Datasets":
       for (var ii = 0; ii < jobs.length; ii++) {
@@ -156,8 +159,7 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
             for (var kk = 0; kk < output.length; kk++) {
               graphNoJobs.edges.push({
                 from: input[jj],
-                to: output[kk],
-                label: showEdgeLabel ? jobId : ""
+                to: output[kk]
               });
             }
           }
@@ -165,13 +167,14 @@ export function transformDataToGraph(data, name, graphType, showEdgeLabel) {
       }
       graphNoJobs.edges.sort();
       graphNoJobs.nodes.sort();
+      graphNoJobs.nodes = graphNoJobs.nodes.filter(node =>
+        nodeList.includes(node.id)
+      );
       return graphNoJobs;
     case "Jobs and Datasets":
-      graph.edges.sort();
-      graph.nodes.sort();
-      return graph;
-    case "simpleGraph":
-      return buildSimpleGraph(graph, name);
+      simpleGraph.edges.sort();
+      simpleGraph.nodes.sort();
+      return simpleGraph;
     default:
       graph.edges.sort();
       graph.nodes.sort();
@@ -228,19 +231,18 @@ function buildAdjList(graph) {
 
 export function filterGraph(
   data,
-  datasetName,
+  defaultNode,
   relative,
   graphType,
-  showEdgeLabel
+  nodeSelected
 ) {
-  var graph = transformDataToGraph(data, datasetName, graphType, showEdgeLabel);
+  var graph = transformDataToGraph(data, defaultNode, graphType, nodeSelected);
   var adjList = buildAdjList(graph);
-  return BFSgetAll(graph, adjList, relative, datasetName);
+  return BFSgetAll(graph, adjList, relative, nodeSelected);
 }
 
 function BFSgetAll(graph, adjList, relative, datasetName) {
   var nodeList = graph.nodes.map(node => node.id);
-  console.log(nodeList);
   var fGraph = {
     nodes: [],
     edges: []
@@ -268,76 +270,6 @@ function BFSgetAll(graph, adjList, relative, datasetName) {
     .filter(edge => seen.has(edge.to) && seen.has(edge.from))
     .sort();
   return fGraph;
-}
-
-export function findDirectLineage(
-  data,
-  origin,
-  dest,
-  graphType,
-  showEdgeLabel
-) {
-  var graph = transformDataToGraph(data, origin, graphType, showEdgeLabel);
-  var adjList = buildAdjList(graph);
-  var nodeList = graph.nodes.map(node => node.id);
-  var fGraph = {
-    nodes: [],
-    edges: []
-  };
-  if (
-    origin === null ||
-    dest === null ||
-    !nodeList.includes(origin) ||
-    !nodeList.includes(dest)
-  ) {
-    return fGraph;
-  }
-  var path = BFSfindPath(adjList, origin, dest, "parents");
-  if (path.length === 0) {
-    path = BFSfindPath(adjList, origin, dest, "children");
-  }
-  fGraph.nodes = graph.nodes.filter(node => path.includes(node.id)).sort();
-  fGraph.edges = graph.edges
-    .filter(edge => path.includes(edge.to) && path.includes(edge.from))
-    .sort();
-  return fGraph;
-}
-
-function BFSfindPath(adjList, origin, dest, relative) {
-  if (origin === dest) {
-    return [origin];
-  }
-  var coming = [];
-  var seen = new Set();
-  var relativeMap = new Map();
-  relativeMap.set(origin, null);
-  coming.push(origin);
-  while (coming.length > 0) {
-    var nodeName = coming.shift();
-    if (!seen.has(nodeName)) {
-      seen.add(nodeName);
-      var node = adjList.get(nodeName);
-      var relatives = relative === "parents" ? node.parents : node.children;
-      for (var i = 0; i < relatives.length; i++) {
-        relativeMap.set(relatives[i], nodeName);
-        coming.push(relatives[i]);
-        if (relatives[i] === dest) {
-          return buildPath(relatives[i], relativeMap);
-        }
-      }
-    }
-  }
-  return [];
-}
-
-function buildPath(origin, relativeMap) {
-  var path = [];
-  var currNode = origin;
-  while (currNode !== null) {
-    path.unshift(currNode);
-    currNode = relativeMap.get(currNode);
-  }
-  return path;
 }
 
 export function transformDatasetList(datasets) {

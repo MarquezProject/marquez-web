@@ -3,14 +3,11 @@ import Button from "@material-ui/core/Button";
 import Graph from "react-graph-vis";
 import { unstable_Box as Box } from "@material-ui/core/Box";
 import ItemSelector from "./ItemSelector";
-import {
-  transformDataToGraph,
-  filterGraph,
-  findDirectLineage
-} from "./GraphTransformations";
+import { transformDataToGraph, filterGraph } from "./GraphTransformations";
 import { connect } from "react-redux";
+import { node } from "prop-types";
 
-function FullLineageGraph(props) {
+function LineageGraph(props) {
   const [graphState, setGraphState] = useState({
     graphType: "Jobs and Datasets",
     filterGraph: false,
@@ -47,31 +44,6 @@ function FullLineageGraph(props) {
     );
   };
 
-  const onChangeSelectedNodeDestination = nodeName => {
-    setGraphState(
-      Object.assign({}, graphState, {
-        selectedNodeDestination: nodeName
-      })
-    );
-  };
-
-  const onDirectLineage = () => {
-    setGraphState(
-      Object.assign({}, graphState, {
-        filterGraph: true,
-        directLineage: true
-      })
-    );
-  };
-
-  const onShowEdgeLabels = () => {
-    setGraphState(
-      Object.assign({}, graphState, {
-        showEdgeLabel: !graphState.showEdgeLabel
-      })
-    );
-  };
-
   const onGraphReset = () => {
     setGraphState(
       Object.assign({}, graphState, {
@@ -81,10 +53,6 @@ function FullLineageGraph(props) {
     );
     props.onGraphReset();
   };
-
-  function nodeClick(values, id, selected, hovering) {
-    values.borderWith = 3;
-  }
 
   function findMaxLengthString(list) {
     var maxLength = 0;
@@ -96,7 +64,6 @@ function FullLineageGraph(props) {
     }
     return maxLength;
   }
-
   var localSelectedType =
     Object.keys(props.tableDetails).length === 7 ? "job" : "dataset";
   var graph =
@@ -105,37 +72,21 @@ function FullLineageGraph(props) {
       : !graphState.filterGraph
       ? transformDataToGraph(
           props.graphData,
-          props.nodeSelected + ":,:" + localSelectedType,
+          props.defaultNode + ":,:" + props.defaultNodeType,
           graphState.graphType,
-          graphState.showEdgeLabel
-        )
-      : graphState.directLineage
-      ? findDirectLineage(
-          props.graphData,
-          props.nodeSelected + ":,:" + localSelectedType,
-          graphState.selectedNodeDestination,
-          graphState.graphType,
-          graphState.showEdgeLabel
+          props.nodeSelected + ":,:" + localSelectedType
         )
       : filterGraph(
           props.graphData,
-          props.nodeSelected + ":,:" + localSelectedType,
+          props.defaultNode + ":,:" + props.defaultNodeType,
           graphState.filterGraphDirection,
           graphState.graphType,
-          graphState.showEdgeLabel
+          props.nodeSelected + ":,:" + localSelectedType
         );
 
   var nodeList = graph.nodes.map(node => node.label);
   var maxLength = findMaxLengthString(nodeList);
 
-  if (
-    graphState.graphType !== "Jobs and Datasets" &&
-    graphState.showEdgeLabel
-  ) {
-    var edgeList = graph.edges.map(edge => edge.label);
-    var maxEdgeLength = findMaxLengthString(edgeList);
-    maxLength = maxLength > maxEdgeLength ? maxLength : maxEdgeLength;
-  }
   maxLength = maxLength >= 15 ? maxLength : 15;
 
   var options = {
@@ -171,7 +122,9 @@ function FullLineageGraph(props) {
       shape: "box",
       size: 20,
       chosen: {
-        node: nodeClick
+        node: function(values, id, selected, hovering) {
+          values.borderWith = 3;
+        }
       }
     },
     interaction: {
@@ -185,11 +138,7 @@ function FullLineageGraph(props) {
       var { nodes } = event;
       var id = nodes[0];
       var nodeName = id.split(":,:");
-      let { nodeSelected } = props;
       props.onSelectedNode(nodeName[0]);
-      if (nodeSelected === null || nodeSelected !== nodeName[0]) {
-        this.unselectAll();
-      }
     }
   };
 
@@ -200,9 +149,6 @@ function FullLineageGraph(props) {
   const nodes = graph.nodes.map(node => {
     return node.label;
   });
-  const EdgeLabelTitle = graphState.showEdgeLabel
-    ? "Hide Edge Labels"
-    : "Show Edge Labels";
 
   const graphTypes = ["Jobs", "Datasets", "Jobs and Datasets"];
 
@@ -223,13 +169,6 @@ function FullLineageGraph(props) {
         itemList={graphTypes}
         selectedItem={graphState.graphType}
         onChange={onChangeGraphType}
-      />
-      <ItemSelector
-        title="Node Selected"
-        style={itemSelectorStyle}
-        itemList={nodes}
-        selectedItem={props.nodeSelected}
-        onChange={props.onSelectedNode}
       />
       <Button
         onClick={onFilterGraphParents}
@@ -252,27 +191,6 @@ function FullLineageGraph(props) {
       >
         Reset Graph
       </Button>
-      {/* <ItemSelector
-        title="Node Destination"
-        style={itemSelectorStyle}
-        itemList={nodes}
-        selectedItem={graphState.selectedNodeDestination}
-        onChange={onChangeSelectedNodeDestination}
-      /> */}
-      <Button
-        onClick={onDirectLineage}
-        color="primary"
-        disabled={props.errorNode !== null}
-      >
-        Direct Lineage
-      </Button>
-      <Button
-        onClick={onShowEdgeLabels}
-        color="primary"
-        disabled={graphState.graphType === "Jobs and Datasets"}
-      >
-        {EdgeLabelTitle}
-      </Button>
     </Box>
   );
 }
@@ -284,7 +202,9 @@ function mapStateToProps(state) {
     nodeSelected: state.nodeSelected,
     graphData: state.graphData,
     errorNode: state.errorNode,
-    nodeSelectedType: state.nodeSelectedType
+    nodeSelectedType: state.nodeSelectedType,
+    defaultNode: state.defaultNode,
+    defaultNodeType: state.defaultNodeType
   };
 }
 
@@ -304,4 +224,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FullLineageGraph);
+)(LineageGraph);

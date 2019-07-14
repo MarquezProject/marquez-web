@@ -111,7 +111,6 @@ JobTable.propTypes = {
 function mapStateToProps(state) {
   return {
     jobs: state.jobs,
-    tableType: state.tableType,
     namespace: state.namespace
   };
 }
@@ -122,7 +121,8 @@ function mapDispatchToProps(dispatch) {
       const action = {
         type: "RowClick",
         rowData: rowData,
-        graphData: newGraphData
+        graphData: newGraphData,
+        tableType: "job"
       };
       dispatch(action);
     },

@@ -110,7 +110,8 @@ function mapDispatchToProps(dispatch) {
       const action = {
         type: "RowClick",
         rowData: rowData,
-        graphData: newGraphData
+        graphData: newGraphData,
+        tableType: "dataset"
       };
       dispatch(action);
     },

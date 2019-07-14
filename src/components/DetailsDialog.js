@@ -12,8 +12,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { unstable_Box as Box } from "@material-ui/core/Box";
-import FullLineageGraph from "./FullLineageGraph";
-import SimpleLineageGraph from "./SimpleLineageGraph";
+import LineageGraph from "./LineageGraph";
 import { connect } from "react-redux";
 
 const styles = theme => ({
@@ -54,7 +53,16 @@ function JobRunsTable(props) {
           <TableCell>
             <b>LOCATION</b>
           </TableCell>
-          <TableCell>{props.details.location}</TableCell>
+          <TableCell>
+            <a
+              href={props.details.location}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {props.details.location}
+            </a>
+            />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>
@@ -135,17 +143,6 @@ function DetailsDialog(props) {
     return title;
   }
 
-  function LineageSelection(props) {
-    if (props.fullGraph) {
-      return <FullLineageGraph store={props.store} />;
-    } else {
-      return <SimpleLineageGraph store={props.store} />;
-    }
-  }
-
-  function FullGraphTitleSelector(props) {
-    return props.fullGraph ? "Show Simple Graph" : "Show Full Graph";
-  }
   return (
     <Dialog
       fullWidth="md"
@@ -158,10 +155,7 @@ function DetailsDialog(props) {
         <DialogTitleSelector nodeSelectedType={props.nodeSelectedType} />
       </DialogTitle>
       <DialogContent>
-        <LineageSelection store={props.store} fullGraph={props.fullGraph} />
-        <Button onClick={props.onFullGraph} color="primary">
-          <FullGraphTitleSelector fullGraph={props.fullGraph} />
-        </Button>
+        <LineageGraph store={props.store} />
         <Box>
           Properties
           <TableType

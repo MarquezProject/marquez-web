@@ -13,6 +13,7 @@ const initialState = {
   nodeSelected: null,
   nodeSelectedType: null,
   defaultNode: null,
+  defaultNodeType: null,
   graphData: [],
   open: false,
   errorNode: null,
@@ -48,9 +49,10 @@ const reducer = (state = initialState, action) => {
         nodeSelected: newInfo.nodeSelected,
         tableDetails: newInfo.tableDetails,
         showTableDetails: newInfo.showTableDetails,
-        nodeSelectedType: newInfo.nodeSelectedType,
+        nodeSelectedType: action.tableType,
         graphData: action.graphData,
-        defaultNode: newInfo.nodeSelected
+        defaultNode: newInfo.nodeSelected,
+        defaultNodeType: action.tableType
       });
     }
     case "ErrorClick":
@@ -78,10 +80,6 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         namespaces: action.namespaces,
         namespace: action.namespaces[0]
-      });
-    case "FullGraph":
-      return Object.assign({}, state, {
-        fullGraph: !state.fullGraph
       });
     default:
       return state;
@@ -143,8 +141,7 @@ function buildRowData(state, rowData) {
             outputDatasetUrns: transformDatasetList(rowData[5]),
             location: rowData[6]
           },
-    showTableDetails: true,
-    nodeSelectedType: state.tableType
+    showTableDetails: true
   };
   return newInfo;
 }
