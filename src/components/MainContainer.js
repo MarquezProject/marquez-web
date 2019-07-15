@@ -26,42 +26,44 @@ import { connect } from "react-redux";
 
 const drawerWidth = 240;
 
-const styles = theme => ({
-  root: {
-    display: "flex"
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0
-  },
-  drawerPaper: {
-    width: drawerWidth
-  },
-  rightToolbar: {
-    marginLeft: "auto",
-    marginRight: 2.5
-  },
-  feedbackButton: {
-    padding: theme.spacing.unit,
-    backgroundColor: "#2B2B33",
-    color: "white",
-    fontSize: 15,
-    borderWidth: 1.2,
-    "&:hover": {
-      color: "#71ddbf",
-      cursor: "pointer",
-      borderColor: "#71ddbf"
-    }
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 3
-  },
-  toolbar: theme.mixins.toolbar
-});
+const styles = theme => {
+  return {
+    root: {
+      display: "flex"
+    },
+    appBar: {
+      zIndex: theme.zIndex.drawer + 1
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0
+    },
+    drawerPaper: {
+      width: drawerWidth
+    },
+    rightToolbar: {
+      marginLeft: "auto",
+      marginRight: 2.5
+    },
+    feedbackButton: {
+      padding: theme.spacing.unit,
+      backgroundColor: "#2B2B33",
+      color: "white",
+      fontSize: 15,
+      borderWidth: 1.2,
+      "&:hover": {
+        color: "#71ddbf",
+        cursor: "pointer",
+        borderColor: "#71ddbf"
+      }
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing.unit * 3
+    },
+    toolbar: theme.mixins.toolbar
+  };
+};
 
 class MainContainer extends React.Component {
   componentDidMount() {
@@ -197,12 +199,18 @@ class MainContainer extends React.Component {
         <main className={classes.content}>
           <div style={jobContentStyle}>
             <Box mt={8}>
-              <JobTable store={this.props.store} />
+              <JobTable
+                store={this.props.store}
+                classes={classes.feedbackButton}
+              />
             </Box>
           </div>
           <div style={datasetContentStyle}>
             <Box mt={8}>
-              <DatasetTable store={this.props.store} />
+              <DatasetTable
+                store={this.props.store}
+                classes={classes.feedbackButton}
+              />
             </Box>
           </div>
           <div style={tagContentStyle}>

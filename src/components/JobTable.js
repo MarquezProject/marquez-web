@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import DetailsDialog from "./DetailsDialog";
@@ -10,6 +14,17 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper
+  }
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#2B2B33"
+    },
+    secondary: {
+      main: "#006BA0"
+    }
   }
 });
 
@@ -97,7 +112,9 @@ class JobTable extends React.Component {
         </div>
         <div>
           {/* details dialog, hidden by default */}
-          <DetailsDialog store={this.props.store} />
+          <MuiThemeProvider theme={theme}>
+            <DetailsDialog store={this.props.store} />
+          </MuiThemeProvider>
         </div>
       </React.Fragment>
     );

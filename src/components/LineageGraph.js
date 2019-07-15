@@ -5,7 +5,33 @@ import { unstable_Box as Box } from "@material-ui/core/Box";
 import ItemSelector from "./ItemSelector";
 import { transformDataToGraph, filterGraph } from "./GraphTransformations";
 import { connect } from "react-redux";
-import { node } from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import { isClassExpression } from "@babel/types";
+
+const styles = theme => {
+  return {
+    feedbackButton: {
+      padding: theme.spacing.unit,
+      backgroundColor: "#white",
+      color: "black",
+      fontSize: 11.5,
+      borderWidth: 1.2,
+      borderColor: "black",
+      "&:hover": {
+        color: "#71ddbf",
+        cursor: "pointer",
+        borderColor: "#71ddbf"
+      },
+      margin: 8
+    },
+    lineageBox: {
+      height: "1000px"
+    },
+    graphBox: {
+      height: "300px"
+    }
+  };
+};
 
 function LineageGraph(props) {
   const [graphState, setGraphState] = useState({
@@ -151,10 +177,12 @@ function LineageGraph(props) {
 
   const graphTypes = ["Jobs", "Datasets", "Jobs and Datasets"];
 
+  const { classes } = props;
+
   return (
-    <Box height="1000">
+    <Box>
       Lineage
-      <Box border={1}>
+      <Box border={1} className={classes.graphBox}>
         <Graph
           graph={graph}
           options={options}
@@ -170,22 +198,25 @@ function LineageGraph(props) {
         onChange={onChangeGraphType}
       />
       <Button
+        variant="outlined"
+        className={classes.feedbackButton}
         onClick={onFilterGraphParents}
-        color="primary"
         disabled={props.errorNode !== null}
       >
         Filter Upstream
       </Button>
       <Button
+        variant="outlined"
+        className={classes.feedbackButton}
         onClick={onFilterGraphChildren}
-        color="primary"
         disabled={props.errorNode !== null}
       >
         Filter Downstream
       </Button>
       <Button
+        variant="outlined"
+        className={classes.feedbackButton}
         onClick={() => onGraphReset(nodeListIds)}
-        color="primary"
         disabled={props.errorNode !== null}
       >
         Reset Graph
@@ -223,4 +254,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LineageGraph);
+)(withStyles(styles)(LineageGraph));

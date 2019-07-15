@@ -14,17 +14,33 @@ import TableRow from "@material-ui/core/TableRow";
 import { unstable_Box as Box } from "@material-ui/core/Box";
 import LineageGraph from "./LineageGraph";
 import { connect } from "react-redux";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import AppBar from "@material-ui/core/AppBar";
+import we_logo from "../static/images/we-logo.png";
 
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  },
-  table: {
-    minWidth: 700
-  }
-});
+const styles = theme => {
+  return {
+    feedbackButton: {
+      padding: theme.spacing.unit,
+      backgroundColor: "#white",
+      color: "black",
+      fontSize: 11.5,
+      borderWidth: 1.2,
+      borderColor: "black",
+      "&:hover": {
+        color: "#71ddbf",
+        cursor: "pointer",
+        borderColor: "#71ddbf"
+      },
+      margin: 8
+    },
+    box: {
+      backgroundColor: "#2B2B33"
+    }
+  };
+};
 
 function JobRunsTable(props) {
   return (
@@ -125,24 +141,31 @@ function DatasetDetailsTable(props) {
     </Table>
   );
 }
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#2B2B33"
+    },
+    secondary: {
+      main: "#006BA0"
+    }
+  }
+});
 
 function DetailsDialog(props) {
-  function TableType(props) {
-    const table =
-      props.nodeSelectedType === "Datasets" ? (
-        <DatasetDetailsTable details={props.tableDetails} />
-      ) : (
-        <JobRunsTable details={props.tableDetails} />
-      );
-    return table;
-  }
+  const table =
+    props.nodeSelectedType === "Datasets" ? (
+      <DatasetDetailsTable details={props.tableDetails} />
+    ) : (
+      <JobRunsTable details={props.tableDetails} />
+    );
 
-  function DialogTitleSelector(props) {
-    const title =
-      props.nodeSelectedType === "Job" ? "Job Details" : "Dataset Details";
-    return title;
-  }
+  const title =
+    props.nodeSelectedType === "Job" || props.nodeSelectedType === "job"
+      ? "Job Details"
+      : "Dataset Details";
 
+  const { classes } = props;
   return (
     <Dialog
       fullWidth="md"
@@ -150,22 +173,40 @@ function DetailsDialog(props) {
       open={props.showTableDetails}
       onClose={props.onClose}
       aria-labelledby="max-width-dialog-title"
+      scroll="paper"
     >
       <DialogTitle id="max-width-dialog-title">
-        <DialogTitleSelector nodeSelectedType={props.nodeSelectedType} />
+        <Box className={classes.box}>
+          <Toolbar>
+            <Box mr={2}>
+              <img src={we_logo} height={50} alt="WeWork Logo" />
+            </Box>
+            <Typography
+              variant="h4"
+              color="inherit"
+              noWrap
+              style={{ color: "white", fontWeight: "bold" }}
+            >
+              MARQUEZ | {title}
+            </Typography>
+          </Toolbar>
+        </Box>
       </DialogTitle>
       <DialogContent>
-        <LineageGraph store={props.store} />
+        <MuiThemeProvider theme={theme}>
+          <LineageGraph store={props.store} />
+        </MuiThemeProvider>
         <Box>
           Properties
-          <TableType
-            nodeSelectedType={props.nodeSelectedType}
-            tableDetails={props.tableDetails}
-          />
+          {table}
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose} color="primary">
+        <Button
+          onClick={props.onClose}
+          variant="outlined"
+          className={classes.feedbackButton}
+        >
           Close
         </Button>
       </DialogActions>

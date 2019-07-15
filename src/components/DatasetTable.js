@@ -5,11 +5,23 @@ import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import DetailsDialog from "./DetailsDialog";
 import { connect } from "react-redux";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper
+  }
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#2B2B33"
+    },
+    secondary: {
+      main: "#006BA0"
+    }
   }
 });
 
@@ -85,7 +97,9 @@ class DatasetTable extends React.Component {
         </div>
         <div>
           {/* details dialog, hidden by default */}
-          <DetailsDialog store={this.props.store} />
+          <MuiThemeProvider theme={theme}>
+            <DetailsDialog store={this.props.store} />
+          </MuiThemeProvider>
         </div>
       </React.Fragment>
     );
