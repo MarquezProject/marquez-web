@@ -97,7 +97,9 @@ class JobTable extends React.Component {
       filterType: "dropdown",
       onRowClick: this.handleRowClick,
       print: false,
-      viewColumns: false
+      viewColumns: false,
+      selectableRows: "none",
+      download: false
     };
 
     return (
