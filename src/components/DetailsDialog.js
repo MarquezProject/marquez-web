@@ -17,7 +17,6 @@ import { connect } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import AppBar from "@material-ui/core/AppBar";
 import we_logo from "../static/images/we-logo.png";
 
 const styles = theme => {
@@ -77,7 +76,6 @@ function JobRunsTable(props) {
             >
               {props.details.location}
             </a>
-            />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -154,7 +152,8 @@ const theme = createMuiTheme({
 
 function DetailsDialog(props) {
   const table =
-    props.nodeSelectedType === "Datasets" ? (
+    props.nodeSelectedType === "Datasets" ||
+    props.nodeSelectedType === "dataset" ? (
       <DatasetDetailsTable details={props.tableDetails} />
     ) : (
       <JobRunsTable details={props.tableDetails} />

@@ -1,21 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  withStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import DetailsDialog from "./DetailsDialog";
 import { connect } from "react-redux";
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
-  }
-});
 
 const theme = createMuiTheme({
   palette: {
@@ -39,6 +28,7 @@ class JobTable extends React.Component {
           "/lineage"
       )
       .then(response => {
+        console.log(response);
         this.props.onRowClick(rowData, response.data.result);
         this.props.onErrorClick(null);
       })
@@ -55,7 +45,6 @@ class JobTable extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     const jobColumns = [
       "NAME",
       "DESCRIPTION",
@@ -104,7 +93,7 @@ class JobTable extends React.Component {
 
     return (
       <React.Fragment>
-        <div className={classes.root}>
+        <div>
           <MUIDataTable
             title={"Jobs"}
             data={this.props.jobs}
@@ -155,4 +144,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(JobTable));
+)(JobTable);

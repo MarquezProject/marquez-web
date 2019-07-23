@@ -242,7 +242,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onDrawerItemClick: btn => {
-      console.log(btn);
+      console.log(btn.text);
       const action = { type: "DrawerItemClick", text: btn.text };
       dispatch(action);
     },

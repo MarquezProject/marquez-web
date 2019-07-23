@@ -1,18 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import DetailsDialog from "./DetailsDialog";
 import { connect } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
-  }
-});
 
 const theme = createMuiTheme({
   palette: {
@@ -27,18 +19,17 @@ const theme = createMuiTheme({
 
 class DatasetTable extends React.Component {
   handleRowClick = rowData => {
-    const datasetFetch =
-      this.props.tableType === "Datasets" ? rowData[3] : rowData[4][0];
     axios
       .get(
         " /api/v1/namespaces/" +
           this.props.namespace +
           "/datasets/" +
-          datasetFetch +
+          rowData[3] +
           "/lineage"
       )
       .then(response => {
         this.props.onRowClick(rowData, response.data.result);
+        this.props.onErrorClick(null);
       })
       .catch(error => {
         this.props.onErrorClick({
@@ -53,7 +44,6 @@ class DatasetTable extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     const datasetColumns = [
       "NAME",
       "DESCRIPTION",
@@ -89,7 +79,7 @@ class DatasetTable extends React.Component {
     };
     return (
       <React.Fragment>
-        <div className={classes.root}>
+        <div>
           <MUIDataTable
             title={"Datasets"}
             columns={datasetColumns}
@@ -141,4 +131,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(DatasetTable));
+)(DatasetTable);

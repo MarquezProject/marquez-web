@@ -1,4 +1,10 @@
-export function transformDataToGraph(data, name, graphType, nodeSelected) {
+export function transformDataToGraph(
+  data,
+  nodeSelected,
+  graphType,
+  currNamespace
+) {
+  const TYPE_SEPARATOR = "\u241F";
   var jobMap = new Map();
   var datasetMap = new Map();
   var datasets = [];
@@ -21,17 +27,31 @@ export function transformDataToGraph(data, name, graphType, nodeSelected) {
   var datasetEntrySubject = null;
   var datasetEntryObject = null;
   data.map(entry => {
-    const { subject, subjectType, object, objectType } = entry;
-    var subjectId = subject + ":,:" + subjectType;
-    var objectId = object + ":,:" + objectType;
+    const {
+      subject,
+      subjectType,
+      subjectNamespace,
+      object,
+      objectType,
+      objectNamespace
+    } = entry;
+    var subjectId = subject + TYPE_SEPARATOR + subjectType;
+    var objectId = object + TYPE_SEPARATOR + objectType;
     if (!stored.has(subjectId)) {
       var subjectNode = {
         id: subjectId,
         label: subject,
         borderWidth: subjectId === nodeSelected ? 3 : 1,
-        title: subjectType,
+        title: subjectNamespace,
         color: {
-          background: subjectType === "job" ? "orange" : "cyan",
+          background:
+            currNamespace === subjectNamespace
+              ? subjectType === "job"
+                ? "orange"
+                : "cyan"
+              : subjectType === "job"
+              ? "salmon"
+              : "lightseagreen",
           highlight: {
             border: "black"
           }
@@ -51,9 +71,16 @@ export function transformDataToGraph(data, name, graphType, nodeSelected) {
         id: objectId,
         label: object,
         borderWidth: objectId === nodeSelected ? 3 : 1,
-        title: objectType,
+        title: objectNamespace,
         color: {
-          background: objectType === "job" ? "orange" : "cyan",
+          background:
+            currNamespace === objectNamespace
+              ? objectType === "job"
+                ? "orange"
+                : "cyan"
+              : objectType === "job"
+              ? "salmon"
+              : "lightseagreen",
           highlight: {
             border: "black"
           }
@@ -126,13 +153,11 @@ export function transformDataToGraph(data, name, graphType, nodeSelected) {
     graph.edges.push({ from: subjectId, to: objectId });
     return null;
   });
-  var simpleGraph = buildSimpleGraph(graph, name);
-  var nodeList = simpleGraph.nodes.map(node => node.id);
   switch (graphType) {
     case "Jobs":
       for (var hh = 0; hh < datasets.length; hh++) {
         var datasetEntry = datasetMap.get(datasets[hh]);
-        var { datasetId, inputJob, outputJob } = datasetEntry;
+        var { inputJob, outputJob } = datasetEntry;
         if (inputJob.length !== 0 && outputJob.length !== 0) {
           for (var i = 0; i < inputJob.length; i++) {
             for (var j = 0; j < outputJob.length; j++) {
@@ -146,14 +171,11 @@ export function transformDataToGraph(data, name, graphType, nodeSelected) {
       }
       graphNoDatasets.edges.sort();
       graphNoDatasets.nodes.sort();
-      graphNoDatasets.nodes = graphNoDatasets.nodes.filter(node =>
-        nodeList.includes(node.id)
-      );
       return graphNoDatasets;
     case "Datasets":
       for (var ii = 0; ii < jobs.length; ii++) {
         var jobEntry = jobMap.get(jobs[ii]);
-        var { jobId, input, output } = jobEntry;
+        var { input, output } = jobEntry;
         if (input.length !== 0 && output.length !== 0) {
           for (var jj = 0; jj < input.length; jj++) {
             for (var kk = 0; kk < output.length; kk++) {
@@ -167,37 +189,16 @@ export function transformDataToGraph(data, name, graphType, nodeSelected) {
       }
       graphNoJobs.edges.sort();
       graphNoJobs.nodes.sort();
-      graphNoJobs.nodes = graphNoJobs.nodes.filter(node =>
-        nodeList.includes(node.id)
-      );
       return graphNoJobs;
     case "Jobs and Datasets":
-      simpleGraph.edges.sort();
-      simpleGraph.nodes.sort();
-      return simpleGraph;
+      graph.edges.sort();
+      graph.nodes.sort();
+      return graph;
     default:
       graph.edges.sort();
       graph.nodes.sort();
       return graph;
   }
-}
-
-function buildSimpleGraph(graph, nodeName) {
-  var sGraph = { nodes: [], edges: [] };
-  var adjList = buildAdjList(graph);
-  var parentGraph = BFSgetAll(graph, adjList, "parents", nodeName);
-  var childrenGraph = BFSgetAll(graph, adjList, "children", nodeName);
-  parentGraph.nodes.map(node => sGraph.nodes.push(node));
-  parentGraph.edges.map(edge => sGraph.edges.push(edge));
-  var filteredChildrenGraphNodes = childrenGraph.nodes.filter(
-    node => !parentGraph.nodes.includes(node)
-  );
-  var filteredChildrenGraphEdges = childrenGraph.edges.filter(
-    edge => !parentGraph.edges.includes(edge)
-  );
-  filteredChildrenGraphNodes.map(node => sGraph.nodes.push(node));
-  filteredChildrenGraphEdges.map(edge => sGraph.edges.push(edge));
-  return sGraph;
 }
 
 function buildAdjList(graph) {
@@ -231,14 +232,20 @@ function buildAdjList(graph) {
 
 export function filterGraph(
   data,
-  defaultNode,
+  nodeSelected,
   relative,
   graphType,
-  nodeSelected
+  currNamespace,
+  filterOrigin
 ) {
-  var graph = transformDataToGraph(data, defaultNode, graphType, nodeSelected);
+  var graph = transformDataToGraph(
+    data,
+    nodeSelected,
+    graphType,
+    currNamespace
+  );
   var adjList = buildAdjList(graph);
-  return BFSgetAll(graph, adjList, relative, nodeSelected);
+  return BFSgetAll(graph, adjList, relative, filterOrigin);
 }
 
 function BFSgetAll(graph, adjList, relative, datasetName) {

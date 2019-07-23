@@ -17,27 +17,37 @@ const initialState = {
   graphData: [],
   open: false,
   errorNode: null,
-  fullGraph: false
+  graph: null
 };
 
 const reducer = (state = initialState, action) => {
   var newInfo = null;
   switch (action.type) {
     case "GraphReset":
-      newInfo = buildTableDetails(state, action.node);
+      var details = buildTableDetails(state, action.node, action.nodeType);
       return Object.assign({}, state, {
         nodeSelected: action.node,
-        nodeSelectedType: newInfo.selectedType,
-        tableDetails: newInfo.tableDetails
+        nodeSelectedType: action.nodeType,
+        tableDetails: details
       });
     case "SelectedNode": {
-      const details = buildTableDetails(state, action.newNode);
+      const details = buildTableDetails(
+        state,
+        action.newNode,
+        action.newNodeType
+      );
       return Object.assign({}, state, {
         nodeSelected: action.newNode,
-        nodeSelectedType: details.selectedType,
-        tableDetails: details.tableDetails
+        nodeSelectedType: action.newNodeType,
+        tableDetails: details
       });
     }
+    case "SelectedNodeDifferentNamespace":
+      return Object.assign({}, state, {
+        nodeSelected: action.tableDetails.name,
+        nodeSelectedType: action.nodeType,
+        tableDetails: action.tableDetails
+      });
     case "Close":
       return Object.assign({}, state, {
         showTableDetails: false,
@@ -81,23 +91,22 @@ const reducer = (state = initialState, action) => {
         namespaces: action.namespaces,
         namespace: action.namespaces[0]
       });
+    case "onChangeGraph":
+      return Object.assign({}, state, {
+        graph: action.graph
+      });
     default:
       return state;
   }
 };
 
-function buildTableDetails(state, nodeName) {
-  var localSelectedType = null;
-  var dataSelected = state.datasets.filter(dataset => dataset[0] === nodeName);
-  if (dataSelected.length === 0) {
-    dataSelected = state.jobs.filter(job => job[0] === nodeName);
-    localSelectedType = "Job";
-  } else {
-    localSelectedType = "Datasets";
-  }
-  let rowData = dataSelected[0];
+function buildTableDetails(state, nodeName, nodeType) {
+  var rowData =
+    nodeType === "dataset"
+      ? state.datasets.filter(dataset => dataset[0] === nodeName)[0]
+      : state.jobs.filter(job => job[0] === nodeName)[0];
   var localTableDetails =
-    localSelectedType === "Datasets"
+    nodeType === "dataset"
       ? {
           name: rowData[0],
           description: rowData[1],
@@ -114,10 +123,7 @@ function buildTableDetails(state, nodeName) {
           outputDatasetUrns: transformDatasetList(rowData[5]),
           location: rowData[6]
         };
-  return {
-    tableDetails: localTableDetails,
-    selectedType: localSelectedType
-  };
+  return localTableDetails;
 }
 
 function buildRowData(state, rowData) {
