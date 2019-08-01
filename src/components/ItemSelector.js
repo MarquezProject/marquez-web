@@ -73,7 +73,7 @@ class ItemSelector extends React.Component {
             onChange={this.handleChange}
             input={
               <Input
-                labelWidth={this.state.labelWidth}
+                labelwidth={this.state.labelWidth}
                 name="namespace"
                 id="outlined-namespace"
               />

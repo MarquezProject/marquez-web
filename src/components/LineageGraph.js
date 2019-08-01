@@ -7,6 +7,7 @@ import { transformDataToGraph, filterGraph } from "./GraphTransformations";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import LineageGraphLegend from "./LineageGraphLegend";
 
 const styles = theme => {
   return {
@@ -144,66 +145,12 @@ function LineageGraph(props) {
   var nodeListIds = graph.nodes.map(node => node.id);
   var nodeListLabels = graph.nodes.map(node => node.label);
   var maxLength = findMaxLengthString(nodeListLabels);
-  var legend = { nodes: [], edges: [] };
-  legend.nodes.push({
-    id: "||Legend1||",
-    label: "Job in Namespace",
-    color: "orange",
-    fixed: true
-  });
-  legend.nodes.push({
-    id: "||Legend2||",
-    label: "Dataset in Namespace",
-    color: "cyan"
-  });
-  legend.nodes.push({
-    id: "||Legend3||",
-    label: "Job not in Namespace",
-    color: "salmon"
-  });
-  legend.nodes.push({
-    id: "||Legend4||",
-    label: "Dataset not in Namespace",
-    color: "lightseagreen"
-  });
-  legend.edges.push({
-    from: "||Legend1||",
-    to: "||Legend2||",
-    color:{color: "white" }
-  });
-  legend.edges.push({ from: "||Legend2||", to: "||Legend3||", color:{color: "white" }});
-  legend.edges.push({ from: "||Legend3||", to: "||Legend4||",  color:{color: "white" }});
 
   useEffect(() => {
     props.onChangeGraph(graph);
   }, []);
 
   maxLength = maxLength >= 15 ? maxLength : 15;
-  var optionsLegend = {
-    autoResize: true,
-    width: "100%",
-    height: "30px",
-    physics: {
-      enabled: false
-    },
-    layout: {
-      hierarchical: {
-        sortMethod: "directed",
-        levelSeparation: 200,
-        direction: "LR",
-        nodeSpacing: 70
-      }
-    },
-    nodes: {
-      shape: "box",
-      fixed: true
-    },
-    clickToUse: false,
-    interaction: {
-      dragView: false,
-      zoomView: false
-    }
-  };
 
   var options = {
     autoResize: true,
@@ -248,33 +195,26 @@ function LineageGraph(props) {
     selectNode: function(event) {
       var { nodes } = event;
       var id = nodes[0];
-      if (
-        id !== "||Legend1||" &&
-        id !== "||Legend2||" &&
-        id !== "||Legend3||" &&
-        id !== "||Legend4||"
-      ) {
-        var node = props.graph.nodes.filter(node => node.id === id)[0];
-        var nodeName = id.split(TYPE_SEPARATOR);
-        var nodeType = nodeName[1];
-        var nodeNamespace = node.title;
-        if (nodeNamespace === props.namespace) {
-          props.onSelectedNode(node.label, nodeType);
-        } else {
-          const fetchType = nodeType === "job" ? "jobs" : "datasets";
-          axios
-            .get(" /api/v1/namespaces/" + nodeNamespace + "/" + fetchType + "/")
-            .then(response => {
-              const objects = response.data;
-              var tableDetails = objects[fetchType].filter(
-                object => object.name === node.label
-              )[0];
-              props.onSelectedNodeDifferentNamespace(tableDetails, nodeType);
-            });
-        }
-        if (props.nodeSelected === null || props.nodeSelected !== id) {
-          this.unselectAll();
-        }
+      var node = props.graph.nodes.filter(node => node.id === id)[0];
+      var nodeName = id.split(TYPE_SEPARATOR);
+      var nodeType = nodeName[1];
+      var nodeNamespace = node.title;
+      if (nodeNamespace === props.namespace) {
+        props.onSelectedNode(node.label, nodeType);
+      } else {
+        const fetchType = nodeType === "job" ? "jobs" : "datasets";
+        axios
+          .get(" /api/v1/namespaces/" + nodeNamespace + "/" + fetchType + "/")
+          .then(response => {
+            const objects = response.data;
+            var tableDetails = objects[fetchType].filter(
+              object => object.name === node.label
+            )[0];
+            props.onSelectedNodeDifferentNamespace(tableDetails, nodeType);
+          });
+      }
+      if (props.nodeSelected === null || props.nodeSelected !== id) {
+        this.unselectAll();
       }
     }
   };
@@ -291,7 +231,7 @@ function LineageGraph(props) {
   return (
     <Box>
       Lineage
-      <Graph graph={legend} options={optionsLegend} />
+      <LineageGraphLegend />
       <Box border={1} className={classes.graphBox}>
         <Graph
           graph={graph}
@@ -345,7 +285,8 @@ function mapStateToProps(state) {
     nodeSelectedType: state.nodeSelectedType,
     defaultNode: state.defaultNode,
     defaultNodeType: state.defaultNodeType,
-    graph: state.graph
+    graph: state.graph,
+    lineageUrl: state.url
   };
 }
 

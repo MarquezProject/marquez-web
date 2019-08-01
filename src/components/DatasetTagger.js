@@ -42,13 +42,16 @@ class DatasetTagger extends React.Component {
   }
 
   fetchDatasets() {
-    axios.get("/governance/api/v1/datasets").then(response => {
-      const datasetsData = response.data;
-      const datasets = datasetsData.datasets.map(dataset =>
-        this.datasetRow(dataset)
-      );
-      this.setState({ datasets: datasets });
-    });
+    axios
+      .get("/governance/api/v1/datasets")
+      .then(response => {
+        const datasetsData = response.data;
+        const datasets = datasetsData.datasets.map(dataset =>
+          this.datasetRow(dataset)
+        );
+        this.setState({ datasets: datasets });
+      })
+      .catch(error => {});
   }
 
   componentDidMount() {

@@ -17,7 +17,8 @@ const initialState = {
   graphData: [],
   open: false,
   errorNode: null,
-  graph: null
+  graph: null,
+  url: ""
 };
 
 const reducer = (state = initialState, action) => {
@@ -94,6 +95,10 @@ const reducer = (state = initialState, action) => {
     case "onChangeGraph":
       return Object.assign({}, state, {
         graph: action.graph
+      });
+    case "UrlChange":
+      return Object.assign({}, state, {
+        url: action.url
       });
     default:
       return state;

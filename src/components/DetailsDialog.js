@@ -141,6 +141,9 @@ function DatasetDetailsTable(props) {
 }
 const theme = createMuiTheme({
   palette: {
+    typography: {
+      useNextVariants: true
+    },
     primary: {
       main: "#2B2B33"
     },
@@ -167,7 +170,7 @@ function DetailsDialog(props) {
   const { classes } = props;
   return (
     <Dialog
-      fullWidth="md"
+      // fullWidth="true"
       maxWidth="md"
       open={props.showTableDetails}
       onClose={props.onClose}

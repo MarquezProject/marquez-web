@@ -8,6 +8,9 @@ import { connect } from "react-redux";
 
 const theme = createMuiTheme({
   palette: {
+    typography: {
+      useNextVariants: true
+    },
     primary: {
       main: "#2B2B33"
     },
@@ -19,14 +22,15 @@ const theme = createMuiTheme({
 
 class JobTable extends React.Component {
   handleRowClick = rowData => {
+    var lineageUrl =
+      " /api/v1/namespaces/" +
+      this.props.namespace +
+      "/jobs/" +
+      rowData[0] +
+      "/lineage";
+    this.props.onLineageUrlChange(lineageUrl);
     axios
-      .get(
-        " /api/v1/namespaces/" +
-          this.props.namespace +
-          "/jobs/" +
-          rowData[0] +
-          "/lineage"
-      )
+      .get(lineageUrl)
       .then(response => {
         console.log(response);
         this.props.onRowClick(rowData, response.data.result);
@@ -136,6 +140,10 @@ function mapDispatchToProps(dispatch) {
     },
     onErrorClick: node => {
       const action = { type: "ErrorClick", node: node };
+      dispatch(action);
+    },
+    onLineageUrlChange: url => {
+      const action = { type: "UrlChange", url: url };
       dispatch(action);
     }
   };

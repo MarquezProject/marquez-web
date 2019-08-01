@@ -7,6 +7,9 @@ import { connect } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
     primary: {
       main: "#2B2B33"
@@ -19,14 +22,15 @@ const theme = createMuiTheme({
 
 class DatasetTable extends React.Component {
   handleRowClick = rowData => {
+    var lineageUrl =
+      " /api/v1/namespaces/" +
+      this.props.namespace +
+      "/datasets/" +
+      rowData[3] +
+      "/lineage";
+    this.props.onLineageUrlChange(lineageUrl);
     axios
-      .get(
-        " /api/v1/namespaces/" +
-          this.props.namespace +
-          "/datasets/" +
-          rowData[3] +
-          "/lineage"
-      )
+      .get(lineageUrl)
       .then(response => {
         this.props.onRowClick(rowData, response.data.result);
         this.props.onErrorClick(null);
@@ -123,6 +127,10 @@ function mapDispatchToProps(dispatch) {
     },
     onErrorClick: node => {
       const action = { type: "ErrorClick", node: node };
+      dispatch(action);
+    },
+    onLineageUrlChange: url => {
+      const action = { type: "UrlChange", url: url };
       dispatch(action);
     }
   };

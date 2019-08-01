@@ -7,6 +7,9 @@ import store from "./components/store";
 
 const theme = createMuiTheme({
   palette: {
+    typography: {
+      useNextVariants: true
+    },
     primary: {
       main: "#2B2B33"
     },
