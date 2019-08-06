@@ -96,24 +96,26 @@ class MainContainer extends React.Component {
 
   fetchData(namespace) {
     if (namespace !== undefined) {
-      axios.get("/api/v1/namespaces/" + namespace + "/jobs").then(response => {
-        const jobData = response.data;
-        const jobRows = jobData.jobs.map(job => [
-          job.name,
-          job.description,
-          job.createdAt,
-          job.updatedAt,
-          job.inputDatasetUrns,
-          job.outputDatasetUrns,
-          job.location,
-          namespace
-        ]);
-        this.props.onChangeJobs(jobRows);
-      });
+      axios
+        .get("/api/v1/namespaces/" + namespace + "/jobs?limit=1000")
+        .then(response => {
+          const jobData = response.data;
+          const jobRows = jobData.jobs.map(job => [
+            job.name,
+            job.description,
+            job.createdAt,
+            job.updatedAt,
+            job.inputDatasetUrns,
+            job.outputDatasetUrns,
+            job.location,
+            namespace
+          ]);
+          this.props.onChangeJobs(jobRows);
+        });
     }
     if (namespace !== undefined) {
       axios
-        .get("/api/v1/namespaces/" + namespace + "/datasets/")
+        .get("/api/v1/namespaces/" + namespace + "/datasets?limit=1000")
         .then(response => {
           const datasetData = response.data;
           const datasetRows = datasetData.datasets.map(dataset => [
