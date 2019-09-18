@@ -43,3 +43,7 @@ This project is under active development at [The We Company](https://www.we.co) 
    ```
    
 You can open http://localhost:3000 to begin exploring the web UI. 
+
+## Contributing
+
+See [CONTRIBUTING.md](https://github.com/MarquezProject/marquez-web/blob/master/CONTRIBUTING.md) for more details about how to contribute.
