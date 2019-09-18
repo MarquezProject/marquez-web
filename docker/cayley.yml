@@ -1,0 +1,14 @@
+store:
+  backend: postgres
+  address: "postgres://buendia:macondo@db:5432/marquez?sslmode=disable"
+  read_only: false
+  options:
+    nosync: false
+
+query:
+  timeout: 30s
+
+load:
+  ignore_duplicates: false
+  ignore_missing: false
+  batch: 10000
