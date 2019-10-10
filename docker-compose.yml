@@ -11,7 +11,7 @@ services:
       - MARQUEZ_USER=buendia
       - MARQUEZ_PASSWORD=macondo
     volumes:
-      - ./docker/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - ./docker/db/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
   marquez:
     image: quay.io/wework/marquez:0.4.0.20190821.66dbae0
@@ -53,6 +53,14 @@ services:
     restart: always
     volumes:
       - ./docker/cayley.yml:/data/cayley.yml
+    depends_on:
+      marquez:
+        condition: service_healthy 
+
+  seed_marquez_db:
+    build: ./docker/db
+    environment:
+      - MARQUEZ_HOST=marquez
     depends_on:
       marquez:
         condition: service_healthy 
