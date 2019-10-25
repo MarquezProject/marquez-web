@@ -1,4 +1,4 @@
-[Like to JIRA ticket](https://...)
+[Link to JIRA ticket](https://...)
 
 ### Description
 
