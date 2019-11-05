@@ -12,9 +12,9 @@ db:
   user: ${POSTGRES_USER}
   password: ${POSTGRES_PASSWORD}
 
-cayley:
-  host: ${CAYLEY_HOST:-localhost}
-  port: ${CAYLEY_PORT:-64210}
+# cayley:
+#   host: ${CAYLEY_HOST:-localhost}
+#   port: ${CAYLEY_PORT:-64210}
 
 logging:
   level: ${LOG_LEVEL:-INFO}

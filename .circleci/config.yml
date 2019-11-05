@@ -1,5 +1,25 @@
 version: 2
 jobs:
+  test:
+    docker:
+      - image: circleci/node:11.9.0
+    environment:
+      TZ: 'America/New_York'
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: npm run test
+
   build_docker_image:
     working_directory: /root/project
     docker:
@@ -18,54 +38,50 @@ jobs:
           command: /app/scripts/build_docker_image.sh
 
   deploy_to_staging:
-      environment:
+    environment:
       - INGRESS_HOST: marquez-web.phoenix.dev.wwrk.co
-      working_directory: /root/project
-      docker:
-        - image: quay.io/wework/wek8s-tools:0.2.12
-          auth:
-            username: $DOCKER_USER
-            password: $DOCKER_PASSWD
-      steps:
-        - checkout
-        - run:
-            name: Deploy the service
-            command: |
-              /usr/bin/deploy_helper fetch_reqs -e wek8s-phoenix -n dataplatform && \
-              helmfile --file .deploy/helmfile.yml --environment staging apply
+    working_directory: /root/project
+    docker:
+      - image: quay.io/wework/wek8s-tools:0.2.12
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWD
+    steps:
+      - checkout
+      - run:
+          name: Deploy the service
+          command: |
+            /usr/bin/deploy_helper fetch_reqs -e wek8s-phoenix -n dataplatform && \
+            helmfile --file .deploy/helmfile.yml --environment staging apply
 
   deploy_to_prod:
-      environment:
+    environment:
       - INGRESS_HOST: marquez-web.kraken.wwrk.co
-      working_directory: /root/project
-      docker:
-        - image: quay.io/wework/wek8s-tools:0.2.12
-          auth:
-            username: $DOCKER_USER
-            password: $DOCKER_PASSWD
-      steps:
-        - checkout
-        - run:
-            name: Deploy the service
-            command: |
-              /usr/bin/deploy_helper fetch_reqs -e wek8s-kraken -n dataplatform && \
-              helmfile --file .deploy/helmfile.yml --environment production apply
+    working_directory: /root/project
+    docker:
+      - image: quay.io/wework/wek8s-tools:0.2.12
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWD
+    steps:
+      - checkout
+      - run:
+          name: Deploy the service
+          command: |
+            /usr/bin/deploy_helper fetch_reqs -e wek8s-kraken -n dataplatform && \
+            helmfile --file .deploy/helmfile.yml --environment production apply
 
 workflows:
   version: 2
-  build_and_deploy:
+  build-test-deploy:
     jobs:
       - build_docker_image:
           context: org-global
-          filters:
-            tags:
-              only:
-              - /^v.*/
-              - /^migrate-staging-.*/
-              - /^migrate-production-.*/
-            branches:
-              only:
-                - master
+
+      - test:
+          context: org-global
+          requires:
+            - build_docker_image
 
       - deploy_to_staging:
           context: org-global
@@ -75,7 +91,7 @@ workflows:
             branches:
               only:
                 - master
-      
+
       - deploy_to_prod_approval:
           type: approval
           requires:

@@ -1,88 +1,65 @@
 #!/bin/bash
 #
-# Usage: $ ./seed-db.sh
+# Usage: $ ./seed-db.sh 
 
-# DATA SOURCE (SHARED)
+set -eu
 
-curl -X POST http://${MARQUEZ_HOST}:5000/api/v1/datasources \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "name": "analytics_db",
-        "connectionUrl": "jdbc:postgresql://${MARQUEZ_HOST}:5431/analytics"
-      }' 
+# NAMESPACES
 
-# DATAENG META
+cat ./data/namespaces.json | jq -c '.[]' | \
+  while read -r i; do
+    namespace=$(echo "$i" | jq -r '.name')
+    payload=$(echo "$i" | jq -c '{ownerName: .ownerName, description: .description}')  
 
-curl -X PUT http://${MARQUEZ_HOST}:5000/api/v1/namespaces/dataeng \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "owner": "dataplatform",
-        "description": "Contains data pipelines for data enrichment, etc."
-      }'
+    curl --silent -X PUT "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/namespaces/${namespace}" \
+      -H 'Content-Type: application/json' \
+      -d "${payload}" \
+    | jq .
 
-curl -X POST http://${MARQUEZ_HOST}:5000/api/v1/namespaces/dataeng/datasets \
-  -H 'Content-Type: application/json' \
-  -d '{ 
-        "name": "public.raw_office_room_bookings",
-        "datasourceUrn": "urn:datasource:postgresql:analytics_db",
-        "description": "Raw room bookings for each office."
-      }'
+  done
 
-curl -X POST http://${MARQUEZ_HOST}:5000/api/v1/namespaces/dataeng/datasets \
-  -H 'Content-Type: application/json' \
-  -d '{ 
-        "name": "public.office_room_bookings",
-        "datasourceUrn": "urn:datasource:postgresql:analytics_db",
-        "description": "All room bookings for each office."
-      }'
+# SOURCES
 
-curl -X PUT http://${MARQUEZ_HOST}:5000/api/v1/namespaces/dataeng/jobs/etl_room_bookings \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "inputDatasetUrns": ["urn:dataset:analytics_db:public.raw_office_room_bookings"],
-        "outputDatasetUrns": ["urn:dataset:analytics_db:public.office_room_bookings"],
-        "location": "https://github.com/wework/jobs/commit/124f6089ad4c5fcbb1d7b33cbb5d3a9521c5d32c",
-        "description": "Raw room booking ETL."
-      }'
+cat ./data/sources.json | jq -c '.[]' | \
+  while read -r i; do
+    source=$(echo "$i" | jq -r '.name')
+    payload=$(echo "$i" | jq -c '{type: .type, connectionUrl: .connectionUrl, description: .description}')  
 
-# DATASCIENCE META
+    curl --silent -X PUT "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/sources/${source}" \
+      -H 'Content-Type: application/json' \
+      -d "${payload}" \
+    | jq .
 
-curl -X PUT http://${MARQUEZ_HOST}:5000/api/v1/namespaces/datascience \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "owner": "cda",
-        "description": "Contains datasets such as room bookings for each office."
-      }'
+  done
 
-curl -X POST http://${MARQUEZ_HOST}:5000/api/v1/namespaces/datascience/datasets \
-  -H 'Content-Type: application/json' \
-  -d '{ 
-        "name": "public.locations",
-        "datasourceUrn": "urn:datasource:postgresql:analytics_db",
-        "description": "All office locations."
-      }'
+# DATASETS
 
-curl -X POST http://${MARQUEZ_HOST}:5000/api/v1/namespaces/datascience/datasets \
-  -H 'Content-Type: application/json' \
-  -d '{ 
-        "name": "public.members",
-        "datasourceUrn": "urn:datasource:postgresql:analytics_db",
-        "description": "All wework members."
-      }'
+cat ./data/datasets.json | jq -c '.[]' | \
+  while read -r i; do
+    namespace=$(echo "$i" | jq -r '.namespace')
+    dataset=$(echo "$i" | jq -r '.name')
+    payload=$(echo "$i" | jq -c '{type: .type, physicalName: .physicalName, sourceName: .sourceName, description: .description}')  
 
-curl -X POST http://${MARQUEZ_HOST}:5000/api/v1/namespaces/datascience/datasets \
-  -H 'Content-Type: application/json' \
-  -d '{ 
-        "name": "public.weekly_office_room_bookings",
-        "datasourceUrn": "urn:datasource:postgresql:analytics_db",
-        "description": "Weekly room bookings by location."
-      }'
+    curl --silent -X PUT "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/namespaces/${namespace}/datasets/${dataset}" \
+      -H 'Content-Type: application/json' \
+      -d "${payload}" \
+    | jq .
 
-curl -X PUT http://${MARQUEZ_HOST}:5000/api/v1/namespaces/datascience/jobs/room_bookings_7_days \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "inputDatasetUrns": ["urn:dataset:analytics_db:public.members", "urn:dataset:analytics_db:public.locations", "urn:dataset:analytics_db:public.office_room_bookings"],
-        "outputDatasetUrns": ["urn:dataset:analytics_db:public.weekly_office_room_bookings"],
-        "location": "https://github.com/wework/jobs/commit/124f6089ad4c5fcbb1d7b33cbb5d3a9521c5d32c",
-        "description": "Determine weekly room booking occupancy patterns."
-      }'
+  done
+
+# JOBS
+
+cat ./data/jobs.json | jq -c '.[]' | \
+  while read -r i; do
+    namespace=$(echo "$i" | jq -r '.namespace')
+    job=$(echo "$i" | jq -r '.name')
+    payload=$(echo "$i" | jq -c '{type: .type, inputs: .inputs, outputs: .outputs, location: .location, description: .description}')  
+
+    curl --silent -X PUT "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/namespaces/${namespace}/jobs/${job}" \
+      -H 'Content-Type: application/json' \
+      -d "${payload}" \
+    | jq .
+
+  done
+
+echo "DONE!"
