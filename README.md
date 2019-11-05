@@ -1,12 +1,5 @@
 # Marquez Web UI
 
-To-do:
-Replace screenshot
-The We Company --> WeWork???
-Ask Willy about docker-compose in Running with Docker
-Replace deployment section -- do they still run docker-compose?
-What about API_URL
-
 [![status](https://img.shields.io/badge/status-WIP-yellow.svg)](#status)
 
 Marquez is an open source **metadata service** for the **collection**, **aggregation**, and **visualization** of a data ecosystem's metadata.
@@ -19,7 +12,7 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
 
 ### Status
 
-This project is under active development at [The We Company](https://www.we.co) (in collaboration with many others organizations).
+This project is under active development at [WeWork](https://www.we.co) (in collaboration with many others organizations).
 
 ### Requirements
 
