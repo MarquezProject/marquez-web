@@ -6,6 +6,9 @@ import {
   WithStyles as IWithStyles,
   Theme
 } from '@material-ui/core/styles'
+
+import Legend from './Legend'
+
 import { createNetworkData } from '../helpers'
 import { IDatasetAPI, IJobAPI, INodeNetwork, INetworkLink } from '../types/api'
 import { select } from 'd3-selection'
@@ -33,6 +36,11 @@ const styles = ({ palette }: Theme) => {
       borderRadius: '2px',
       pointerEvents: 'none',
       opacity: 0.8
+    },
+    legend: {
+      position: 'absolute',
+      bottom: '59vh',
+      right: '6%'
     }
   })
 }
@@ -233,6 +241,7 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
             <g id='datasetNodes'></g>
           </g>
         </svg>
+        <Legend customClassName={classes.legend}></Legend>
       </div>
     )
   }

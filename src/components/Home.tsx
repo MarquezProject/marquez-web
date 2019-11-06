@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import * as RRD from 'react-router-dom'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 
 import {
   withStyles,
@@ -21,6 +21,9 @@ import { findMatchingEntities } from '../actionCreators'
 
 const styles = (_theme: ITheme) => {
   return createStyles({
+    header: {
+      padding: '0% 0% 0% 1%'
+    },
     column: {
       flex: 1
     },
@@ -75,6 +78,9 @@ class Home extends React.Component<IAllProps, IState> {
         ></CustomSearchBar>
         <div className={classes.row}>
           <Box className={classes.column}>
+            <Typography className={classes.header} color='secondary' variant='h3'>
+              {!this.state.showJobs ? 'Popular Datasets' : 'Matching Datasets'}
+            </Typography>
             {datasets.matching.map(d => (
               <DatasetPreviewCard
                 key={d.name}
@@ -86,6 +92,9 @@ class Home extends React.Component<IAllProps, IState> {
           </Box>
           {this.state.showJobs ? (
             <Box className={classes.column}>
+              <Typography className={classes.header} color='secondary' variant='h3'>
+                Matching Jobs
+              </Typography>
               {jobs.matching.map(d => (
                 <JobPreviewCard
                   /* should change to unique identifier */

@@ -54,7 +54,7 @@ const StyledTypography = withStyles({
 
 class JobPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const { classes, name, description, updatedAt = 'error', status = 'failed' } = this.props
+    const { classes, name, description, updatedAt = '', status = 'failed' } = this.props
 
     return (
       <Box p={2} m={1} bgcolor='white' boxShadow={3} display='flex' justifyContent='space-between'>
