@@ -26,15 +26,7 @@ const webpackProd = {
       __ROLLBAR__: JSON.stringify(true)
     })
     //new BundleAnalyzerPlugin(),
-  ],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true
-      })
-    ]
-  }
+  ]
 }
 
 module.exports = merge.smart(webpackShared, webpackProd)
