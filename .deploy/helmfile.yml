@@ -1,6 +1,6 @@
 repositories:
   - name: stable
-    url: https://kubernetes-charts.storage.googleapis.com/
+    url: https://kubernetes-charts.storage.googleapis.com
   - name: wework
     url: https://wework.jfrog.io/wework/helm
     username: {{ requiredEnv "ARTIFACTORY_USER" }}
@@ -11,14 +11,6 @@ helmDefaults:
   args:
     - "--tls"
 
-environments:
-  staging:
-    values:
-      - "environments/staging.yaml"
-  production:
-    values:
-      - "environments/production.yaml"
-
 releases:
   - name: marquez-web
     namespace: dataplatform
@@ -27,10 +19,7 @@ releases:
     values:
       - "../.deploy/values.yml.gotmpl"
     set:
-      - name: image.tag
-        value: {{ env "CIRCLE_TAG" | default (env "CIRCLE_SHA1") }}
       - name: ingress.hosts[0]
         value: {{ requiredEnv "INGRESS_HOST" }}
       - name: ingress.tls[0].hosts[0]
         value: {{ requiredEnv "INGRESS_HOST" }}
-

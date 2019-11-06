@@ -1,107 +1,83 @@
 version: 2
+
+cache: &cache
+
+
+deploy_context: &deploy_context
+  context: org-global
+  filters:
+    tags:
+      only: /^[0-9]+(\.[0-9]+){2}\.([0-9]){4}([0-9]){2}([0-9]){2}\.([0-9a-f]){7}$/ # X.Y.Z.YYYMMDD.SHA-1
+    branches:
+      ignore: /.*/
+
+wek8s_deploy: &wek8s_deploy
+  docker:
+    - image: quay.io/wework/wek8s-tools:0.2
+      auth:
+        username: $DOCKER_USER
+        password: $DOCKER_PASSWD
+  working_directory: ~/marquez-web
+
 jobs:
   test:
     docker:
       - image: circleci/node:11.9.0
-    environment:
-      TZ: 'America/New_York'
+    working_directory: ~/marquez-web
     steps:
       - checkout
-      # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-deps-{{ .Branch }}-{{ .Revision }}
+            - v1-deps-{{ .Branch }}
       - run: npm install
+      - run: npm run test
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run test
+          key: v1-deps-{{ .Branch }}-{{ .Revision }}
 
-  build_docker_image:
-    working_directory: /root/project
-    docker:
-      - image: quay.io/wework/wek8s-image-builder:0.0.1
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASSWD
-    environment:
-      - DOCKER_REGISTRY: 'quay.io/wework'
-      - DOCKER_REPOSITORY: 'quay.io/wework/marquez-web'
+  release:
+    machine: true
+    working_directory: ~/marquez-web
     steps:
       - checkout
-      - setup_remote_docker
-      - run:
-          name: Docker Image - Build and Push to Quay
-          command: /app/scripts/build_docker_image.sh
+      - run: .circleci/get-docker.sh
+      - run: ./docker/login.sh
+      - run: ./docker/build-and-push.sh $CIRCLE_TAG
 
-  deploy_to_staging:
-    environment:
-      - INGRESS_HOST: marquez-web.phoenix.dev.wwrk.co
-    working_directory: /root/project
-    docker:
-      - image: quay.io/wework/wek8s-tools:0.2.12
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASSWD
+  wek8s_phoenix:
+    <<: *wek8s_deploy
     steps:
       - checkout
-      - run:
-          name: Deploy the service
-          command: |
-            /usr/bin/deploy_helper fetch_reqs -e wek8s-phoenix -n dataplatform && \
-            helmfile --file .deploy/helmfile.yml --environment staging apply
+      - run: ./.circleci/deploy.sh -v $CIRCLE_TAG
 
-  deploy_to_prod:
-    environment:
-      - INGRESS_HOST: marquez-web.kraken.wwrk.co
-    working_directory: /root/project
-    docker:
-      - image: quay.io/wework/wek8s-tools:0.2.12
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASSWD
+  wek8s_kraken:
+    <<: *wek8s_deploy
     steps:
       - checkout
-      - run:
-          name: Deploy the service
-          command: |
-            /usr/bin/deploy_helper fetch_reqs -e wek8s-kraken -n dataplatform && \
-            helmfile --file .deploy/helmfile.yml --environment production apply
+      - run: ./.circleci/deploy.sh -p -v $CIRCLE_TAG
 
 workflows:
   version: 2
-  build-test-deploy:
+  marquez_web:
     jobs:
-      - build_docker_image:
-          context: org-global
+      - test
 
-      - test:
-          context: org-global
+  deploy:
+    jobs:
+      - release:
+          <<: *deploy_context
+      - wek8s_phoenix:
           requires:
-            - build_docker_image
-
-      - deploy_to_staging:
-          context: org-global
-          requires:
-            - build_docker_image
-          filters:
-            branches:
-              only:
-                - master
-
-      - deploy_to_prod_approval:
+            - release
+          <<: *deploy_context
+      - wek8s_kraken_approval:
           type: approval
           requires:
-            - deploy_to_staging
-
-      - deploy_to_prod:
-          context: org-global
+            - wek8s_phoenix
+          <<: *deploy_context
+      - wek8s_kraken:
           requires:
-            - deploy_to_prod_approval
-          filters:
-            branches:
-              only:
-                - master
+            - wek8s_kraken_approval
+          <<: *deploy_context
