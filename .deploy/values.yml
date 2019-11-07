@@ -29,7 +29,7 @@ image:
   repository: quay.io/wework/marquez-web
 
 command:
-  - npm
+  - node
 args:
   - /home/build/setupProxy.js
 
