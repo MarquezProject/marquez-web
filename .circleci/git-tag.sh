@@ -19,35 +19,11 @@ if [[ "${branch}" != "master" ]]; then
   exit 1;
 fi
 
-# Get snapshot version (format: X.Y.Z-SNAPSHOT)
-snapshot=$(grep 'version' ../gradle.properties | cut -d'=' -f2)
-
 # Get upstream release tags only (descending order)
 RELEASES=( $(git tag --sort=-creatordate | awk '/^[0-9]+(\.[0-9]+){2}$/') ) # X.Y.Z
 
-# Get latest tagged release upstream and next release (snapshot)
-latest_release="${RELEASES[0]}"
-next_release="${snapshot%-*}" # Remove -SNAPSHOT
-
-# To ensure we are referencing the latest stable release of Marquez Web upstream
-# in relation to our mirrored repo, we perform the following checks when setting
-# the version in our tag (i.e. VERSION.*):
-#   (1) Default VERSION to latest stable version (ex: 0.1.0)
-#   (2) Set VERSION to previous release iff latest and unreleased version are
-#       equal (ex: 0.2.0 is equal to the unreleased version 0.2.0-SNAPSHOT,
-#       therefore fallback to 0.1.0)
-#   (3) Set VERSION to immediate preceding release relative to unreleased version
-#       (ex: 0.3.0 is newer than 0.2.0-SNAPSHOT, therefore loop until we find 0.1.0)
-release="${latest_release}"                             # (1)
-if [[ "${release}" == "${next_release}" ]]; then        # (2)
-  release="${RELEASES[1]}"
-elif [[ "${release}" > "${next_release}" ]]; then       # (3)
-  for i in "${!RELEASES[@]}"; do
-   if [[ "${next_release}" == "${RELEASES[i]}" ]]; then
-     release="${RELEASES[i + 1]}"
-   fi
-  done
-fi
+# Get latest tagged release upstream
+release="${RELEASES[0]}"
 
 date=$(date +%Y%m%d)
 sha=$(git log --pretty=format:'%h' -n 1)
