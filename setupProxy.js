@@ -2,7 +2,7 @@ const proxy = require('http-proxy-middleware')
 const express = require('express')
 
 var apiOptions = {
-  target: `http://${process.env.MARQUEZ_SERVICE_HOST}:${process.env.MARQUEZ_SERVICE_SERVICE_PORT}/`
+  target: `http://${process.env.MARQUEZ_HOST}:${process.env.MARQUEZ_PORT}/`
 }
 
 var app = express()
