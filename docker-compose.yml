@@ -1,9 +1,9 @@
-version: '2.1'
+version: "2.1"
 services:
   marquez_db:
-    image: 'postgres:9.6'
+    image: "postgres:9.6"
     ports:
-      - '5432:5432'
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -16,8 +16,8 @@ services:
   marquez:
     image: quay.io/wework/marquez:0.4.0.20191022.221aa8e
     ports:
-      - '5000:5000'
-      - '5001:5001'
+      - "5000:5000"
+      - "5001:5001"
     environment:
       - MARQUEZ_PORT=5000
       - MARQUEZ_ADMIN_PORT=5001
@@ -35,7 +35,7 @@ services:
     depends_on:
       - marquez_db
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:5001/ping']
+      test: ["CMD", "curl", "-f", "http://localhost:5001/ping"]
       interval: 30s
       timeout: 2s
       retries: 5
@@ -72,6 +72,6 @@ services:
       - MARQUEZ_SERVICE_SERVICE_PORT=5000
       - MARQUEZ_SERVICE_HOST=marquez
     ports:
-      - '3000:3000'
+      - "3000:3000"
     depends_on:
       - marquez

@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import 'typeface-rajdhani'
+import '../img/we-logo.png'
 
 const styles = ({ spacing, zIndex }: ITheme) => {
   return createStyles({
