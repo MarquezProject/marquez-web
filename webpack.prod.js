@@ -23,7 +23,7 @@ const webpackProd = {
       __NODE_ENV__: JSON.stringify('production'),
       __API_URL__: JSON.stringify('/api/v1'),
       __TEMP_ACTOR_STR__: JSON.stringify('me'),
-      __ROLLBAR__: JSON.stringify(false)
+      __ROLLBAR__: JSON.stringify(true)
     })
     //new BundleAnalyzerPlugin(),
   ]

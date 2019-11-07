@@ -69,8 +69,8 @@ services:
   marquez_web:
     build: .
     environment:
-      - MARQUEZ_SERVICE_SERVICE_PORT=5000
-      - MARQUEZ_SERVICE_HOST=marquez
+      - MARQUEZ_PORT=5000
+      - MARQUEZ_HOST=marquez
     ports:
       - "3000:3000"
     depends_on:
