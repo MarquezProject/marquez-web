@@ -38,3 +38,5 @@ envVars:
     Value: marquez-service
   - Name: MARQUEZ_PORT
     Value: 5000
+  - Name: ROLLBAR_API_KEY
+    Value: "vault:secret/dataplatform/marquez#ROLLBAR_API_KEY"
