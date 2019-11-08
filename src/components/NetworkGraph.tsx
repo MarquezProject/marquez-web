@@ -136,6 +136,7 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
       '#datasetNodes'
     )
 
+    const datasetNodeDimension = 10
     const datasetNodeSelection = datasetNodeContainer
       .selectAll('.datasetNode')
       .data(
@@ -150,8 +151,8 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
           return enter
             .append('rect')
             .attr('class', 'datasetNode')
-            .attr('width', 10)
-            .attr('height', 10)
+            .attr('width', datasetNodeDimension)
+            .attr('height', datasetNodeDimension)
             .attr('fill', '#7d7d7d')
         },
         update => update,
@@ -197,17 +198,17 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
 
     function updateLink(link: d3.Selection<SVGElement, any, any, any>) {
       link
-        .attr('x1', function(d) {
-          return d.source.x
+        .attr('x1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
+          return d.offset == 'source' ? d.source.x + datasetNodeDimension / 2 : d.source.x
         })
         .attr('y1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.source.y
+          return d.offset == 'source' ? d.source.y + datasetNodeDimension / 2 : d.source.y
         })
         .attr('x2', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.target.x
+          return d.offset == 'target' ? d.target.x + datasetNodeDimension / 2 : d.target.x
         })
         .attr('y2', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.target.y
+          return d.offset == 'target' ? d.target.y + datasetNodeDimension / 2 : d.target.y
         })
     }
 

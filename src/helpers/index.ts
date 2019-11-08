@@ -27,10 +27,12 @@ export const createNetworkData = (datasets: IDatasetAPI[], jobs: IJobAPI[]): INe
 
   const links = jobs.reduce((links, singleJob) => {
     const inLinks = singleJob.inputs.map(input => ({
+      offset: 'source',
       source: input,
       target: singleJob.name
     }))
     const outLinks = singleJob.outputs.map(output => ({
+      offset: 'target',
       source: singleJob.name,
       target: output
     }))

@@ -1,4 +1,5 @@
 export interface INetworkLink {
+  offset: string
   source: string
   target: string
 }
