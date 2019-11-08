@@ -37,6 +37,18 @@ const styles = (_theme: ITheme) => {
       bottom: '52vh',
       width: '90%',
       left: '5%'
+    },
+    noDatasets: {
+      color: '#9e9e9e',
+      position: 'absolute',
+      bottom: '21vh',
+      left: '21%'
+    },
+    noJobs: {
+      color: '#9e9e9e',
+      position: 'absolute',
+      bottom: '21vh',
+      right: '21%'
     }
   })
 }
@@ -77,9 +89,13 @@ class Home extends React.Component<IAllProps, IState> {
         ></CustomSearchBar>
         <div className={classes.row}>
           <Box className={classes.column}>
-            <Typography className={classes.header} color='secondary' variant='h3'>
-              {!this.state.showJobs ? 'Popular Datasets' : 'Matching Datasets'}
-            </Typography>
+            {matchingDatasets.length > 0 ? (
+              <Typography className={classes.header} color='secondary' variant='h3'>
+                {!this.state.showJobs ? 'Popular Datasets' : 'Matching Datasets'}
+              </Typography>
+            ) : (
+              <Typography className={classes.noDatasets}>no datasets found!</Typography>
+            )}
             {matchingDatasets.map(d => (
               <DatasetPreviewCard
                 key={d.name}
@@ -91,9 +107,13 @@ class Home extends React.Component<IAllProps, IState> {
           </Box>
           {this.state.showJobs ? (
             <Box className={classes.column}>
-              <Typography className={classes.header} color='secondary' variant='h3'>
-                Matching Jobs
-              </Typography>
+              {matchingJobs.length > 0 ? (
+                <Typography className={classes.header} color='secondary' variant='h3'>
+                  Matching Jobs
+                </Typography>
+              ) : (
+                <Typography className={classes.noJobs}>no jobs found!</Typography>
+              )}
               {matchingJobs.map(d => (
                 <JobPreviewCard
                   /* should change to unique identifier */

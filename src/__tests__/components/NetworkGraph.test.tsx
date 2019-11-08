@@ -5,7 +5,7 @@ const jobs = require('../../../docker/db/data/jobs.json')
 const datasets = require('../../../docker/db/data/datasets.json')
 
 describe('NetworkGraph Component', () => {
-  // const wrapper = mount(<NetworkGraph jobs={jobs} datasets={datasets} />)
+  // const wrapper = mount(<NetworkGraph jobs={jobs} datasets={datasets} classes={{}} />)
   test.skip('Should render', () => {
     expect(wrapper.exists()).toBe(true)
   })

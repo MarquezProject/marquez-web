@@ -20,7 +20,7 @@ describe('datasets reducer', () => {
 
   const searchTerms = ['', 'absoluteBogus', datasets[0].name]
   searchTerms.forEach(s => {
-    it('should handle FIND_MATCHING_ENTITIES action if it finds no matches', () => {
+    it('should handle FIND_MATCHING_ENTITIES action if it finds all matches, no matches, and some matches (respectively)', () => {
       const action = {
         type: actionTypes.FIND_MATCHING_ENTITIES,
         payload: {
