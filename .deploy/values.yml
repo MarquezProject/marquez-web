@@ -29,9 +29,8 @@ image:
   repository: quay.io/wework/marquez-web
 
 command:
-  - node
+  - /usr/src/app/entrypoint.sh
 args:
-  - /home/build/setupProxy.js
 
 envVars:
   - Name: MARQUEZ_HOST
