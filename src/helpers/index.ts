@@ -1,4 +1,5 @@
-import { IDatasetAPI, IJobAPI, INetworkData, INodeNetwork } from '../types/api'
+import { IDataset, IJob, INetworkData, INodeNetwork } from '../types/'
+import _find from 'lodash/find'
 
 export const createRollbarMessage = (
   functionName: string,
@@ -12,30 +13,43 @@ export const createRollbarMessage = (
   }
 }
 
-export const createNetworkData = (datasets: IDatasetAPI[], jobs: IJobAPI[]): INetworkData => {
-  console.log('jobs', jobs.length)
-  console.log('What to do if there are matching jobs but no matching datasets?')
+export const createNetworkData = (datasets: IDataset[], jobs: IJob[]): INetworkData => {
   const datasetNodes: INodeNetwork[] = datasets.map(d => ({
     id: d.name,
-    tag: 'dataset'
+    tag: 'dataset',
+    matches: d.matches
   }))
 
   const jobNodes: INodeNetwork[] = jobs.map(j => ({
     id: j.name,
-    tag: 'job'
+    tag: 'job',
+    matches: j.matches
   }))
 
   const links = jobs.reduce((links, singleJob) => {
-    const inLinks = singleJob.inputs.map(input => ({
-      offset: 'source',
-      source: input,
-      target: singleJob.name
-    }))
-    const outLinks = singleJob.outputs.map(output => ({
-      offset: 'target',
-      source: singleJob.name,
-      target: output
-    }))
+    const inLinks = singleJob.inputs.map(input => {
+      const matchingDataset = _find(datasets, d => d.name === input)
+      const connectsToMatchingDataset = matchingDataset && matchingDataset.matches
+      const connectsToMatchingJob = singleJob.matches
+      return {
+        offset: 'source',
+        source: input,
+        target: singleJob.name,
+        connectsToMatchingNode: connectsToMatchingDataset && connectsToMatchingJob
+      }
+    })
+
+    const outLinks = singleJob.outputs.map(output => {
+      const matchingDataset = _find(datasets, d => d.name === output)
+      const connectsToMatchingDataset = matchingDataset && matchingDataset.matches
+      const connectsToMatchingJob = singleJob.matches
+      return {
+        offset: 'target',
+        source: singleJob.name,
+        target: output,
+        connectsToMatchingNode: connectsToMatchingDataset && connectsToMatchingJob
+      }
+    })
 
     return [...links, ...inLinks, ...outLinks]
   }, [])

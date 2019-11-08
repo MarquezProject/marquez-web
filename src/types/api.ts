@@ -1,19 +1,3 @@
-export interface INetworkLink {
-  offset: string
-  source: string
-  target: string
-}
-
-export interface INodeNetwork {
-  id: string
-  tag: 'dataset' | 'job'
-}
-
-export interface INetworkData {
-  nodes: INodeNetwork[]
-  links: INetworkLink[]
-}
-
 export interface IDatasetAPI {
   name: string
   createdAt: string

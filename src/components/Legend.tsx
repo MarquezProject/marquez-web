@@ -6,15 +6,17 @@ import {
   Theme as ITheme
 } from '@material-ui/core/styles'
 import { Typography, Box } from '@material-ui/core'
+const globalStyles = require('../global_styles.css')
+const { jobNodeGrey, datasetNodeWhite } = globalStyles
 
 const styles = ({ spacing }: ITheme) => {
   return createStyles({
     datasetShape: {
-      backgroundColor: '#7D7D7D'
+      backgroundColor: datasetNodeWhite
     },
     jobShape: {
       borderRadius: '50%',
-      backgroundColor: '#FFFFFF'
+      backgroundColor: jobNodeGrey
     },
     shape: {
       width: spacing(2),

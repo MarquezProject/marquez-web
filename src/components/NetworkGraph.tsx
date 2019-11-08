@@ -10,18 +10,25 @@ import {
 import Legend from './Legend'
 
 import { createNetworkData } from '../helpers'
-import { IDatasetAPI, IJobAPI, INodeNetwork, INetworkLink } from '../types/api'
+import { IDataset, IJob, INodeNetwork, INetworkLink } from '../types/'
 import { select } from 'd3-selection'
 import { forceCenter, forceLink, forceSimulation, forceManyBody, forceX, forceY } from 'd3-force'
 import { zoom } from 'd3-zoom'
+import { color } from 'd3-color'
+const globalStyles = require('../global_styles.css')
+const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
 
 const width = 960
 const height = 350
 
+const fadedOut = color(jobNodeGrey)
+  .darker(1.5)
+  .toString()
+
 const styles = ({ palette }: Theme) => {
   return createStyles({
     networkBackground: {
-      background: palette.primary.main,
+      background: palette.common.black,
       width: '100%',
       height: '50vh'
     },
@@ -46,16 +53,16 @@ const styles = ({ palette }: Theme) => {
 }
 
 interface IProps {
-  matchingJobs: IJobAPI[]
-  matchingDatasets: IDatasetAPI[]
+  jobs: IJob[]
+  datasets: IDataset[]
 }
 
 type IAllProps = IWithStyles<typeof styles> & IProps
 
-class NetworkGraph extends React.Component<IAllProps, {}> {
+export class NetworkGraph extends React.Component<IAllProps, {}> {
   shouldComponentUpdate(newProps: IProps) {
     type IDatumCombined = INodeNetwork & d3.SimulationNodeDatum
-    const networkData = createNetworkData(newProps.matchingDatasets, newProps.matchingJobs)
+    const networkData = createNetworkData(newProps.datasets, newProps.jobs)
     const { nodes, links } = networkData
 
     const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
@@ -89,7 +96,6 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
         .scaleExtent([0.5, 3])
         .on('zoom', () => {
           svg.attr('transform', (event as any).transform)
-          console.log('am I zooming?')
         })
     )
 
@@ -103,9 +109,9 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
           enter
             .append('line')
             .attr('class', 'link')
-            .style('stroke', '#aaa')
-            .style('stroke-width', 1),
-        update => update,
+            .style('stroke', l => (l.connectsToMatchingNode ? linkGrey : fadedOut))
+            .style('stroke-width', 2),
+        update => update.style('stroke', l => (l.connectsToMatchingNode ? linkGrey : fadedOut)),
         exit => exit.remove()
       )
 
@@ -127,8 +133,8 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
             .append('circle')
             .attr('class', 'jobNode')
             .attr('r', 5)
-            .attr('fill', '#fff'),
-        update => update,
+            .attr('fill', n => (n.matches ? jobNodeGrey : fadedOut)),
+        update => update.attr('fill', n => (n.matches ? jobNodeGrey : fadedOut)),
         exit => exit.remove()
       )
 
@@ -146,18 +152,15 @@ class NetworkGraph extends React.Component<IAllProps, {}> {
         (d: any) => d.id
       )
       .join(
-        enter => {
-          console.log('enter', enter)
-          return enter
+        enter =>
+          enter
             .append('rect')
             .attr('class', 'datasetNode')
             .attr('width', datasetNodeDimension)
             .attr('height', datasetNodeDimension)
-            .attr('fill', '#7d7d7d')
-        },
-        update => update,
+            .attr('fill', n => (n.matches ? datasetNodeWhite : fadedOut)),
+        update => update.attr('fill', n => (n.matches ? datasetNodeWhite : fadedOut)),
         exit => {
-          console.log('exit', exit)
           return exit.remove()
         }
       )

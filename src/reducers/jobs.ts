@@ -1,28 +1,25 @@
-import { IJobAPI } from '../types/api'
+import { IJob } from '../types/'
 import { findMatchingEntities } from './'
 import { FETCH_JOBS_SUCCESS, FIND_MATCHING_ENTITIES } from '../constants/ActionTypes'
 
-export interface IJobsState {
-  all: IJobAPI[]
-  matching: IJobAPI[]
-}
+export type IJobsState = IJob[]
 
-const initialState: IJobsState = { all: [], matching: [] }
+export const initialState: IJobsState = []
 
 interface IJobsAction {
   type: string
   payload: {
-    jobs: IJobAPI[]
+    jobs: IJob[]
     search?: string
   }
 }
 
-export default (state = initialState, action: IJobsAction) => {
+export default (state = initialState, action: IJobsAction): IJobsState => {
   const { type, payload } = action
 
   switch (type) {
     case FETCH_JOBS_SUCCESS:
-      return { all: payload.jobs, matching: payload.jobs }
+      return payload.jobs.map(j => ({ ...j, matches: true }))
     case FIND_MATCHING_ENTITIES:
       return findMatchingEntities(payload.search, state) as IJobsState
     default:

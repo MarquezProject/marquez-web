@@ -65,12 +65,11 @@ class Home extends React.Component<IAllProps, IState> {
 
   render(): ReactElement {
     const { datasets, jobs, classes, findMatchingEntities } = this.props
+    const matchingDatasets = datasets.filter(d => d.matches)
+    const matchingJobs = jobs.filter(j => j.matches)
     return (
       <Box display='flex' flexDirection='column' justifyContent='center'>
-        <NetworkGraph
-          matchingJobs={jobs.matching}
-          matchingDatasets={datasets.matching}
-        ></NetworkGraph>
+        <NetworkGraph jobs={jobs} datasets={datasets}></NetworkGraph>
         <CustomSearchBar
           customClassName={classes.search}
           findMatchingEntities={findMatchingEntities}
@@ -81,7 +80,7 @@ class Home extends React.Component<IAllProps, IState> {
             <Typography className={classes.header} color='secondary' variant='h3'>
               {!this.state.showJobs ? 'Popular Datasets' : 'Matching Datasets'}
             </Typography>
-            {datasets.matching.map(d => (
+            {matchingDatasets.map(d => (
               <DatasetPreviewCard
                 key={d.name}
                 name={d.name}
@@ -95,7 +94,7 @@ class Home extends React.Component<IAllProps, IState> {
               <Typography className={classes.header} color='secondary' variant='h3'>
                 Matching Jobs
               </Typography>
-              {jobs.matching.map(d => (
+              {matchingJobs.map(d => (
                 <JobPreviewCard
                   /* should change to unique identifier */
                   key={d.name}

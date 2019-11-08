@@ -5,6 +5,7 @@ import jobs, { IJobsState } from './jobs'
 import namespaces, { INamespacesState } from './namespaces'
 import display, { IDisplayState } from './display'
 import { History } from 'history'
+import { IDatasetsAPI } from '../types/api'
 
 export interface IState {
   datasets: IDatasetsState
@@ -22,17 +23,16 @@ export default (history: History): Reducer =>
     display
   })
 
+// temp fix for: https://github.com/Microsoft/TypeScript/issues/7294#issuecomment-465794460
 export function findMatchingEntities(
   payloadSearch: string,
-  initialState: IJobsState | IDatasetsState
-) {
+  initialState: Array<any>
+): IDatasetsState | IJobsState {
   const searchString = payloadSearch.toLowerCase()
-  const existingEntities = initialState.all as Array<any>
-  const matchingEntities = existingEntities.filter(d => {
-    return (
-      d.name.toLowerCase().includes(searchString) ||
-      (d.description || '').toLowerCase().includes(searchString)
-    )
-  })
-  return { ...initialState, matching: matchingEntities }
+  return initialState.map(e => ({
+    ...e,
+    matches:
+      e.name.toLowerCase().includes(searchString) ||
+      (e.description || '').toLowerCase().includes(searchString)
+  }))
 }

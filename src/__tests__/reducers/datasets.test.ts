@@ -15,7 +15,19 @@ describe('datasets reducer', () => {
         datasets: datasets
       }
     }
-    expect(datasetsReducer([], action).all).toHaveLength(datasets.length)
-    expect(datasetsReducer([], action).matching).toHaveLength(datasets.length)
+    expect(datasetsReducer([], action)).toHaveLength(datasets.length)
+  })
+
+  const searchTerms = ['', 'absoluteBogus', datasets[0].name]
+  searchTerms.forEach(s => {
+    it('should handle FIND_MATCHING_ENTITIES action if it finds no matches', () => {
+      const action = {
+        type: actionTypes.FIND_MATCHING_ENTITIES,
+        payload: {
+          search: s
+        }
+      }
+      expect(datasetsReducer(datasets, action)).toHaveLength(datasets.length)
+    })
   })
 })
