@@ -2,3 +2,4 @@ RELEASE.md merge=ours
 build-and-push.sh merge=ours
 config.yml merge=ours
 login.sh merge=ours
+index.prod.html merge=ours
