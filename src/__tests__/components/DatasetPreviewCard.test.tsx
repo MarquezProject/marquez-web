@@ -1,7 +1,8 @@
 import { mount } from 'enzyme'
 import * as React from 'react'
 import fakeTagToBadge from '../../config/__mocks__/tag-to-badge'
-import DatasetPreviewCard, { formatUpdatedAt } from '../../components/DatasetPreviewCard'
+import DatasetPreviewCard from '../../components/DatasetPreviewCard'
+import { formatUpdatedAt } from '../../helpers'
 
 /*
   Mock the functionality of tagToBadge
@@ -9,14 +10,6 @@ import DatasetPreviewCard, { formatUpdatedAt } from '../../components/DatasetPre
 */
 jest.mock('../../config/tag-to-badge')
 const datasets = require('../../../docker/db/data/datasets.json')
-
-describe('formatUpdated Function', () => {
-  const updatedAt = ''
-  const formatedDate = formatUpdatedAt(updatedAt)
-  it('Should return an empty string when passed a falsey value', () => {
-    expect(formatedDate).toBe('')
-  })
-})
 
 describe('DatasetPreviewCard Component', () => {
   const wrapper = mount(<DatasetPreviewCard />)
