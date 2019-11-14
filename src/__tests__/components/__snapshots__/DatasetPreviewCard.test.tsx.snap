@@ -167,18 +167,7 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
           >
             <div
               id="tagContainer"
-            >
-              <span
-                key="tag_a"
-              >
-                Pretend Badge
-              </span>
-              <span
-                key="tag_b"
-              >
-                Pretend Badge
-              </span>
-            </div>
+            />
             <WithStyles(ForwardRef(Typography))
               className="DatasetPreviewCard-lastUpdated-2"
             >
@@ -221,9 +210,7 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
               >
                 <p
                   className="MuiTypography-root DatasetPreviewCard-lastUpdated-2 MuiTypography-body1"
-                >
-                  Dec 31, 1969 07:12pm
-                </p>
+                />
               </ForwardRef(Typography)>
             </WithStyles(ForwardRef(Typography))>
           </div>
