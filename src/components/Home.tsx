@@ -9,6 +9,7 @@ import {
   Theme as ITheme
 } from '@material-ui/core/styles'
 
+import FilterContainer from '../containers/FilterContainer'
 import NetworkGraph from './NetworkGraph'
 import CustomSearchBar from './CustomSearchBar'
 import DatasetPreviewCard from './DatasetPreviewCard'
@@ -87,6 +88,7 @@ class Home extends React.Component<IAllProps, IState> {
           findMatchingEntities={findMatchingEntities}
           showJobs={this.showJobs}
         ></CustomSearchBar>
+        <FilterContainer />
         <div className={classes.row}>
           <Box className={classes.column}>
             {matchingDatasets.length > 0 ? (

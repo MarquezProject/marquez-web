@@ -71,3 +71,7 @@ export const formatUpdatedAt = (updatedAt: string) => {
     return `${dateString.slice(0, -2)}${dateString.slice(-2).toLowerCase()}`
   }
 }
+
+export const capitalize = (word: string) => {
+  return `${word[0].toUpperCase()}${word.slice(1)}`
+}
