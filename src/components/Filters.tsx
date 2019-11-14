@@ -6,18 +6,15 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import uniq from 'lodash/uniq'
 import { withStyles } from '@material-ui/core/styles'
-import { INamespaceAPI, IDatasetAPI } from '../types/api'
+import { capitalize } from '../helpers'
+import { IProps } from '../containers/FilterContainer'
+// import { IFilterByDisplay, IFilterByKey } from '../types'
 
 const StyledFormControl = withStyles({
   root: {
     margin: '0rem 2rem'
   }
 })(FormControl)
-
-interface IProps {
-  namespaces: INamespaceAPI[]
-  datasets: IDatasetAPI[]
-}
 
 interface IFilterDictionary {
   [key: string]: {
@@ -26,21 +23,25 @@ interface IFilterDictionary {
   }
 }
 
-const filterByOptions = ['Namespace', 'owner', 'Datasource', 'tags']
-const Filters = (props: IProps): ReactElement => {
-  const { namespaces, datasets } = props
+const filterByOptions: { [key: string]: 'namespace' | 'sourceName' } = {
+  namespace: 'namespace',
+  datasource: 'sourceName'
+}
 
-  const defaultFilter = filterByOptions[0]
+const Filters = (props: IProps): ReactElement => {
+  const { namespaces, datasets, filterJobs, filterDatasets } = props
+
+  const defaultFilter = Object.keys(filterByOptions)[0]
   const [currentFilter, setCurrentFilter] = useState(defaultFilter)
 
   const datasources = uniq(datasets.map(d => d.sourceName))
 
   const filterDictionary: IFilterDictionary = {
-    Namespace: {
+    namespace: {
       entities: namespaces,
       accessor: n => n.name
     },
-    Datasource: {
+    datasource: {
       entities: datasources,
       accessor: n => n
     }
@@ -56,14 +57,15 @@ const Filters = (props: IProps): ReactElement => {
         <InputLabel id='filter-by-label'>Filter by</InputLabel>
         <MUISelect
           value={currentFilter}
+          renderValue={capitalize}
           onChange={e => {
-            setCurrentFilter(e.target.value as 'Namespace' | 'owner' | 'Datasource')
+            setCurrentFilter(e.target.value as 'namespace' | 'datasource')
             setCurrentFilterValue(
-              filterDictionary[e.target.value as 'Namespace' | 'owner' | 'Datasource'].entities[0]
+              filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
             )
           }}
         >
-          {filterByOptions.map(o => (
+          {Object.keys(filterByOptions).map(o => (
             <MenuItem key={o} value={o}>
               {o}
             </MenuItem>
@@ -74,7 +76,14 @@ const Filters = (props: IProps): ReactElement => {
         <InputLabel id='secondary-filter'>{currentFilter}</InputLabel>
         <MUISelect
           value={currentFilterValue}
-          onChange={e => setCurrentFilterValue(e.target.value as string)}
+          onChange={e => {
+            const currentFilterValue = e.target.value as string
+            const currentFilterKeyDisplay = filterByOptions[currentFilter]
+            const currentFilterKey = filterByOptions[currentFilterKeyDisplay]
+            setCurrentFilterValue(currentFilterValue)
+            filterJobs(currentFilterKey, currentFilterValue)
+            filterDatasets(currentFilterKey, currentFilterValue)
+          }}
         >
           {filterDictionary[currentFilter].entities.map(o => (
             <MenuItem key={o} value={o}>
