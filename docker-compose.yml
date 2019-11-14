@@ -14,7 +14,7 @@ services:
       - ./docker/db/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
   marquez:
-    image: quay.io/wework/marquez:0.4.0.20191022.221aa8e
+    image: quay.io/wework/marquez:latest
     ports:
       - "5000:5000"
       - "5001:5001"
