@@ -58,3 +58,7 @@ export const createNetworkData = (datasets: IDataset[], jobs: IJob[]): INetworkD
     links
   }
 }
+
+export const capitalize = (word: string) => {
+  return `${word[0].toUpperCase()}${word.slice(1)}`
+}

@@ -5,7 +5,7 @@ import jobs, { IJobsState } from './jobs'
 import namespaces, { INamespacesState } from './namespaces'
 import display, { IDisplayState } from './display'
 import { History } from 'history'
-import { IFilterBy } from '../types'
+import { IFilterByKey } from '../types'
 
 export interface IState {
   datasets: IDatasetsState
@@ -38,7 +38,7 @@ export function findMatchingEntities(
 }
 
 export function filterEntities(
-  filterByKey: IFilterBy,
+  filterByKey: IFilterByKey,
   filterByValue: string,
   initialState: Array<any>
 ): IDatasetsState | IJobsState {
