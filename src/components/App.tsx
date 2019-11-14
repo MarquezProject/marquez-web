@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 import { CssBaseline } from '@material-ui/core'
 import AppBar from './AppBar'
 const globalStyles = require('../global_styles.css')
-const { neptune, telescopeBlack } = globalStyles
+const { neptune, telescopeBlack, badgeGray } = globalStyles
 import { Route, Switch } from 'react-router-dom'
 import { Grid } from '@material-ui/core'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
@@ -60,6 +60,9 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: neptune
+    },
+    disabled: {
+      main: badgeGray
     }
   }
 })

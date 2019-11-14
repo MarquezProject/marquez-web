@@ -10,6 +10,7 @@ import { isoParse, timeFormat } from 'd3-time-format'
 import tagToBadge from '../config/tag-to-badge'
 
 import { IDatasetAPI } from '../types/api'
+const _  = require('lodash')
 
 const styles = ({ palette }: ITheme) => {
   return createStyles({
@@ -44,7 +45,7 @@ export const formatUpdatedAt = (updatedAt: string) => {
 }
 class DatasetPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const { classes, name, description, updatedAt = 'error', tags = ['is_pii'] } = this.props
+    const { classes, name, description, updatedAt, tags = ['is_pii'] } = this.props
     return (
       <Box p={2} m={1} bgcolor='white' boxShadow={3} display='flex' justifyContent='space-between'>
         <div>
@@ -60,7 +61,14 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
           alignItems='flex-end'
           justifyContent='space-between'
         >
-          <div id='tagContainer'>{tags.map(t => tagToBadge[t])}</div>
+          <div id='tagContainer'>	            
+            {_.keys(tagToBadge.default).map((key: string) => {
+              if (tags.includes(key)) {
+                return tagToBadge.highlighted[key]
+              } else {
+                return tagToBadge.default[key]
+              }
+            })}</div>
           <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
         </Box>
       </Box>
