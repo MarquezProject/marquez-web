@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 import * as React from 'react'
-import fakeTagToBadge from '../../config/__mocks__/tag-to-badge'
+// import fakeTagToBadge from '../../config/__mocks__/tag-to-badge'
 import DatasetPreviewCard, { formatUpdatedAt } from '../../components/DatasetPreviewCard'
 
 /*
@@ -24,7 +24,7 @@ describe('DatasetPreviewCard Component', () => {
     expect(wrapper.exists()).toBe(true)
   })
   const dataset = datasets[0]
-  const tags = ['tag_a', 'tag_b', 'tag_c']
+  const tags = ['is_pii']
   wrapper.setProps({ ...dataset, tags })
   const componentText = wrapper.render().text()
 
@@ -38,10 +38,10 @@ describe('DatasetPreviewCard Component', () => {
     expect(componentText).toContain(formatUpdatedAt(dataset.updatedAt))
   })
   it('should render a badge per tag that has a corresponding entry in the tagToBadge config', () => {
-    const tagIsInFakeConfig = tag => !!fakeTagToBadge[tag]
+    // const tagIsInFakeConfig = tag => !!fakeTagToBadge[tag]
 
     expect(wrapper.find('#tagContainer').children().filterWhere((item) => item.prop('color') === 'secondary')).toHaveLength(
-      tags.filter(tagIsInFakeConfig).length
+      tags.length
     )
   })
   it('renders a snapshot that matches previous', () => {

@@ -9,9 +9,7 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
   sourceName="redshift"
   tags={
     Array [
-      "tag_a",
-      "tag_b",
-      "tag_c",
+      "is_pii",
     ]
   }
   type="DB_TABLE"
@@ -30,9 +28,7 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
     sourceName="redshift"
     tags={
       Array [
-        "tag_a",
-        "tag_b",
-        "tag_c",
+        "is_pii",
       ]
     }
     type="DB_TABLE"
