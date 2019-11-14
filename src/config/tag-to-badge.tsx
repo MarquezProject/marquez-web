@@ -14,7 +14,7 @@ const tagToBadgeConfig: ITagToBadge = {
   default: {
     is_pii: <LockOpen color='disabled' key='is_pii' />,
     is_compliant: <VerifiedUserOutlined color='disabled' key='is_compliant' />
-        /* 
+      /* 
       Add new  { key: value } pairs here
     */
   },
