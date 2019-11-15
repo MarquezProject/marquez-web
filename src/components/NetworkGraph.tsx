@@ -18,12 +18,7 @@ import { color } from 'd3-color'
 const globalStyles = require('../global_styles.css')
 const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
 
-const width = 960
-const height = 350
-
-const fadedOut = color(jobNodeGrey)
-  .darker(1.5)
-  .toString()
+const fadedOut = (color(jobNodeGrey) as any).darker(1.5).toString()
 
 const styles = ({ palette }: Theme) => {
   return createStyles({
@@ -61,11 +56,14 @@ type IAllProps = IWithStyles<typeof styles> & IProps
 
 export class NetworkGraph extends React.Component<IAllProps, {}> {
   shouldComponentUpdate(newProps: IProps) {
+    const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
+
+    const width = +svg.style('width').replace('px', '')
+    const height = +svg.style('height').replace('px', '')
+
     type IDatumCombined = INodeNetwork & d3.SimulationNodeDatum
     const networkData = createNetworkData(newProps.datasets, newProps.jobs)
     const { nodes, links } = networkData
-
-    const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
 
     forceSimulation<IDatumCombined, INetworkLink>(nodes)
       .force('charge', forceManyBody().strength(-30))
@@ -237,7 +235,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         <svg id='network-graph' className={networkBackground}>
           <g
             ref={node => {
-              this.graph = node
+              this.graph = node as SVGElement
             }}
           >
             <g id='links'></g>

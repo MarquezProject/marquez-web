@@ -17,7 +17,7 @@ export default function SimpleMenu() {
 
   const feedBackClicked = () => {
     handleClose()
-    const link = 'https://forms.gle/gWj8fn8iYiTsKEPD6'
+    const link = 'https://forms.gle/1234'
     window.open(link, '_blank')
   }
 

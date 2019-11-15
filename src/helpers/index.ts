@@ -1,5 +1,6 @@
-import { IDataset, IJob, INetworkData, INodeNetwork } from '../types/'
+import { IDataset, IJob, INetworkData, INodeNetwork, INetworkLink } from '../types/'
 import _find from 'lodash/find'
+import { isoParse, timeFormat } from 'd3-time-format'
 
 export const createRollbarMessage = (
   functionName: string,
@@ -35,7 +36,7 @@ export const createNetworkData = (datasets: IDataset[], jobs: IJob[]): INetworkD
         offset: 'source',
         source: input,
         target: singleJob.name,
-        connectsToMatchingNode: connectsToMatchingDataset && connectsToMatchingJob
+        connectsToMatchingNode: !!(connectsToMatchingDataset && connectsToMatchingJob)
       }
     })
 
@@ -47,11 +48,11 @@ export const createNetworkData = (datasets: IDataset[], jobs: IJob[]): INetworkD
         offset: 'target',
         source: singleJob.name,
         target: output,
-        connectsToMatchingNode: connectsToMatchingDataset && connectsToMatchingJob
+        connectsToMatchingNode: !!(connectsToMatchingDataset && connectsToMatchingJob)
       }
     })
 
-    return [...links, ...inLinks, ...outLinks]
+    return [...links, ...inLinks, ...outLinks] as INetworkLink[]
   }, [])
   return {
     nodes: [...datasetNodes, ...jobNodes],
@@ -61,4 +62,16 @@ export const createNetworkData = (datasets: IDataset[], jobs: IJob[]): INetworkD
 
 export const capitalize = (word: string) => {
   return `${word[0].toUpperCase()}${word.slice(1)}`
+}
+
+const customTimeFormat = timeFormat('%b %d, %Y %I:%m%p')
+
+export const formatUpdatedAt = (updatedAt: string) => {
+  const parsedDate = isoParse(updatedAt)
+  if (!parsedDate) {
+    return ''
+  } else {
+    const dateString = customTimeFormat(parsedDate)
+    return `${dateString.slice(0, -2)}${dateString.slice(-2).toLowerCase()}`
+  }
 }
