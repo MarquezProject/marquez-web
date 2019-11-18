@@ -5,7 +5,7 @@ import {
   WithStyles as IWithStyles,
   Theme as ITheme
 } from '@material-ui/core/styles'
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box, Tooltip } from '@material-ui/core'
 import { formatUpdatedAt } from '../helpers'
 import tagToBadge from '../config/tag-to-badge'
 
@@ -51,13 +51,13 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
           alignItems='flex-end'
           justifyContent='space-between'
         >
-          <div id='tagContainer'>	            
+          <div id='tagContainer'>
             {_.keys(tagToBadge.default).map((key: string) => {
-              if (tags.includes(key)) {
-                return tagToBadge.highlighted[key]
-              } else {
-                return tagToBadge.default[key]
-              }
+              return (
+                <Tooltip title={key} placement="top">
+                  {tags.includes(key) ? tagToBadge.highlighted[key] : tagToBadge.default[key]}
+                </Tooltip>
+              )
             })}
           </div>
           <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
