@@ -11,6 +11,7 @@ import { formatUpdatedAt } from '../../helpers'
 */
 jest.mock('../../config/tag-to-badge')
 const datasets = require('../../../docker/db/data/datasets.json')
+
 describe('DatasetPreviewCard Component', () => {
   const wrapper = mount(<DatasetPreviewCard />)
   it('Should render', () => {
