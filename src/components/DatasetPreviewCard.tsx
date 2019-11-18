@@ -58,7 +58,8 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
               } else {
                 return tagToBadge.default[key]
               }
-            })}</div>
+            })}
+          </div>
           <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
         </Box>
       </Box>

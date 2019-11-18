@@ -163,7 +163,16 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
           >
             <div
               id="tagContainer"
-            />
+            >
+              <ForwardRef(mockConstructor)
+                color="secondary"
+                key="is_pii"
+              />
+              <ForwardRef(mockConstructor)
+                color="disabled"
+                key="is_compliant"
+              />
+            </div>
             <WithStyles(ForwardRef(Typography))
               className="DatasetPreviewCard-lastUpdated-2"
             >
