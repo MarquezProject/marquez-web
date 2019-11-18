@@ -46,7 +46,7 @@ const styles = ({ palette }: Theme) => {
       opacity: 0.8
     },
     legend: {
-      position: 'absolute',
+      position: 'fixed',
       bottom: '59vh',
       right: '6%'
     }
