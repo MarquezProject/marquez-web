@@ -37,7 +37,7 @@ describe('DatasetPreviewCard Component', () => {
     ).toContain(formatUpdatedAt(dataset.updatedAt))
   })
   it('should render a colored and disabled badge', () => {
-    expect(wrapper.find('#tagContainer').children().filterWhere((item) => item.prop('color') == 'secondary')).toHaveLength(
+    expect(wrapper.find('.tagWrapper').children().filterWhere((item) => item.prop('color') == 'secondary')).toHaveLength(
       tags.length
     )
   })
