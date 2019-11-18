@@ -21,16 +21,15 @@ const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
 const width = 960
 const height = 350
 
-const fadedOut = color(jobNodeGrey)
-  .darker(1.5)
-  .toString()
+const fadedOut = (color(jobNodeGrey) as any).darker(1.5).toString()
 
 const styles = ({ palette }: Theme) => {
   return createStyles({
     networkBackground: {
       background: palette.common.black,
       width: '100%',
-      height: '50vh'
+      height: '50vh',
+      position: 'fixed'
     },
     tooltip: {
       position: 'absolute',
@@ -45,7 +44,7 @@ const styles = ({ palette }: Theme) => {
       opacity: 0.8
     },
     legend: {
-      position: 'absolute',
+      position: 'fixed',
       bottom: '59vh',
       right: '6%'
     }
@@ -237,7 +236,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         <svg id='network-graph' className={networkBackground}>
           <g
             ref={node => {
-              this.graph = node
+              this.graph = node as SVGElement
             }}
           >
             <g id='links'></g>
