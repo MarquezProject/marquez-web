@@ -22,16 +22,18 @@ export interface IProps {
   datasets: IDatasetAPI[]
   filterJobs: typeof filterJobs
   filterDatasets: typeof filterDatasets
+  showJobs: (bool: boolean) => void
 }
 
 const FiltersWrapper: FunctionComponent<IProps> = props => {
-  const { namespaces, datasets, filterJobs, filterDatasets } = props
+  const { namespaces, datasets, filterJobs, filterDatasets, showJobs } = props
   return namespaces.length && datasets.length ? (
     <Filters
       namespaces={namespaces}
       datasets={datasets}
       filterDatasets={filterDatasets}
       filterJobs={filterJobs}
+      showJobs={showJobs}
     />
   ) : null
 }

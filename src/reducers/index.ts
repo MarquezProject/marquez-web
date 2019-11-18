@@ -41,7 +41,7 @@ export function filterEntities(
   filterByKey: IFilterByKey,
   filterByValue: string,
   initialState: Array<any>
-): IDatasetsState | IJobsState {
+): IDatasetsState & IJobsState {
   return initialState.map(e => ({
     ...e,
     matches: e[filterByKey] === filterByValue

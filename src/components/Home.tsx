@@ -88,7 +88,7 @@ class Home extends React.Component<IAllProps, IState> {
           findMatchingEntities={findMatchingEntities}
           showJobs={this.showJobs}
         ></CustomSearchBar>
-        <FilterContainer />
+        <FilterContainer showJobs={this.showJobs} />
         <div className={classes.row}>
           <Box className={classes.column}>
             {matchingDatasets.length > 0 ? (

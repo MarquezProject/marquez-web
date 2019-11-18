@@ -12,7 +12,8 @@ import { IProps } from '../containers/FilterContainer'
 
 const StyledFormControl = withStyles({
   root: {
-    margin: '0rem 2rem'
+    margin: '0rem 2rem',
+    minWidth: '10rem'
   }
 })(FormControl)
 
@@ -29,10 +30,10 @@ const filterByOptions: { [key: string]: 'namespace' | 'sourceName' } = {
 }
 
 const Filters = (props: IProps): ReactElement => {
-  const { namespaces, datasets, filterJobs, filterDatasets } = props
+  const { namespaces, datasets, filterJobs, filterDatasets, showJobs } = props
+  const [currentFilter, setCurrentFilter] = useState('all')
 
-  const defaultFilter = Object.keys(filterByOptions)[0]
-  const [currentFilter, setCurrentFilter] = useState(defaultFilter)
+  const [showSubFilter, toggleShowSubFilter] = useState(false)
 
   const datasources = uniq(datasets.map(d => d.sourceName))
 
@@ -47,10 +48,8 @@ const Filters = (props: IProps): ReactElement => {
     }
   }
 
-  const [currentFilterValue, setCurrentFilterValue] = useState(
-    filterDictionary[defaultFilter].entities[0]
-  )
-
+  const [currentFilterValue, setCurrentFilterValue] = useState({})
+  console.log('CURRENT FILTER BVALUE', currentFilterValue)
   return (
     <Box p={2}>
       <StyledFormControl margin='normal'>
@@ -59,10 +58,22 @@ const Filters = (props: IProps): ReactElement => {
           value={currentFilter}
           renderValue={capitalize}
           onChange={e => {
-            setCurrentFilter(e.target.value as 'namespace' | 'datasource')
-            setCurrentFilterValue(
-              filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
-            )
+            const newValue = e.target.value as 'namespace' | 'datasource' | 'all'
+            console.log('NEW VALUE', newValue)
+            // debugger
+            setCurrentFilter(newValue)
+            if (newValue === 'all') {
+              toggleShowSubFilter(false)
+            } else {
+              console.log(
+                'new val',
+                filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
+              )
+              setCurrentFilterValue(
+                filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
+              )
+              toggleShowSubFilter(true)
+            }
           }}
         >
           {Object.keys(filterByOptions).map(o => (
@@ -70,28 +81,41 @@ const Filters = (props: IProps): ReactElement => {
               {o}
             </MenuItem>
           ))}
+          <MenuItem key='all' value='all'>
+            All
+          </MenuItem>
         </MUISelect>
       </StyledFormControl>
-      <StyledFormControl margin='normal'>
-        <InputLabel id='secondary-filter'>{currentFilter}</InputLabel>
-        <MUISelect
-          value={currentFilterValue}
-          onChange={e => {
-            const currentFilterValue = e.target.value as string
-            const currentFilterKeyDisplay = filterByOptions[currentFilter]
-            const currentFilterKey = filterByOptions[currentFilterKeyDisplay]
-            setCurrentFilterValue(currentFilterValue)
-            filterJobs(currentFilterKey, currentFilterValue)
-            filterDatasets(currentFilterKey, currentFilterValue)
-          }}
-        >
-          {filterDictionary[currentFilter].entities.map(o => (
-            <MenuItem key={o} value={o}>
-              {filterDictionary[currentFilter].accessor(o)}
-            </MenuItem>
-          ))}
-        </MUISelect>
-      </StyledFormControl>
+      {showSubFilter && (
+        <StyledFormControl margin='normal'>
+          <InputLabel id='secondary-filter'>{currentFilter}</InputLabel>
+          <MUISelect
+            value={currentFilterValue}
+            renderValue={filterDictionary[currentFilter].accessor}
+            onChange={e => {
+              const currentFilterValue = e.target.value as string
+              const currentFilterKeyDisplay = filterByOptions[currentFilter]
+              const currentFilterKey = filterByOptions[currentFilterKeyDisplay]
+              console.log('setting current filter value', currentFilterValue)
+              setCurrentFilterValue(currentFilterValue)
+              filterJobs(currentFilterKey, filterDictionary[currentFilter].accessor(currentFilterValue))
+              filterDatasets(currentFilterKey, filterDictionary[currentFilter].accessor(currentFilterValue))
+              showJobs(true)
+            }}
+          >
+            {filterDictionary[currentFilter].entities.map(o => {
+              console.log('O', o)
+              const val = filterDictionary[currentFilter].accessor(o)
+              console.log('VAL', val)
+              return (
+                <MenuItem key={val} value={o}>
+                  {val}
+                </MenuItem>
+              )
+            })}
+          </MUISelect>
+        </StyledFormControl>
+      )}
     </Box>
   )
 }

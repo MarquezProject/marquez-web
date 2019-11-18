@@ -172,7 +172,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     }
 
     const tooltip = select('#tooltip')
-
+    console.log(datasetNodeSelection)
     datasetNodeSelection
       .on('mouseover', focus)
       .on('mousemove', move)
@@ -184,6 +184,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       .on('mouseout', unfocus)
 
     function focus(d: INodeNetwork) {
+      console.log('FOCUS', focus, d)
       tooltip.text(d.id).style('visibility', 'visible')
     }
 
