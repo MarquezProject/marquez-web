@@ -30,7 +30,8 @@ const styles = ({ palette }: Theme) => {
     networkBackground: {
       background: palette.common.black,
       width: '100%',
-      height: '50vh'
+      height: '50vh',
+      position: 'fixed'
     },
     tooltip: {
       position: 'absolute',
