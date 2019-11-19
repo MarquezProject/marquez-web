@@ -9,7 +9,7 @@ import {
   Theme as ITheme
 } from '@material-ui/core/styles'
 
-import NetworkGraph from './NetworkGraph'
+import NetworkGraphContainer from '../containers/NetworkGraphContainer'
 import CustomSearchBar from './CustomSearchBar'
 import DatasetPreviewCard from './DatasetPreviewCard'
 import JobPreviewCard from './JobPreviewCard'
@@ -81,7 +81,7 @@ class Home extends React.Component<IAllProps, IState> {
     const matchingJobs = jobs.filter(j => j.matches)
     return (
       <Box display='flex' flexDirection='column' justifyContent='center'>
-        <NetworkGraph jobs={jobs} datasets={datasets}></NetworkGraph>
+        <NetworkGraphContainer />
         <CustomSearchBar
           customClassName={classes.search}
           findMatchingEntities={findMatchingEntities}
