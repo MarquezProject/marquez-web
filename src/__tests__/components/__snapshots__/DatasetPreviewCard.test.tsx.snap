@@ -9,7 +9,9 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
   sourceName="redshift"
   tags={
     Array [
-      "is_pii",
+      "tag_a",
+      "tag_b",
+      "tag_c",
     ]
   }
   type="DB_TABLE"
@@ -28,7 +30,9 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
     sourceName="redshift"
     tags={
       Array [
-        "is_pii",
+        "tag_a",
+        "tag_b",
+        "tag_c",
       ]
     }
     type="DB_TABLE"
@@ -164,14 +168,18 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
             <div
               id="tagContainer"
             >
-              <ForwardRef(mockConstructor)
-                color="secondary"
-                key="is_pii"
-              />
-              <ForwardRef(mockConstructor)
-                color="disabled"
-                key="is_compliant"
-              />
+              <span
+                color="highlighted"
+                key="tag_a"
+              >
+                Pretend Badge
+              </span>
+              <span
+                color="highlighted"
+                key="tag_b"
+              >
+                Pretend Badge
+              </span>
             </div>
             <WithStyles(ForwardRef(Typography))
               className="DatasetPreviewCard-lastUpdated-2"
