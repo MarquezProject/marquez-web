@@ -38,12 +38,12 @@ export function findMatchingEntities(
 }
 
 export function filterEntities(
+  initialState: Array<any>,
   filterByKey: IFilterByKey,
-  filterByValue: string,
-  initialState: Array<any>
+  filterByValue?: string
 ): IDatasetsState & IJobsState {
   return initialState.map(e => ({
     ...e,
-    matches: e[filterByKey] === filterByValue
+    matches: filterByKey === 'all' ? true : e[filterByKey] === filterByValue
   }))
 }

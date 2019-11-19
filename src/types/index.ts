@@ -32,4 +32,4 @@ export interface IJob extends IJobAPI {
 }
 
 export type IFilterByDisplay = 'namespace' | 'datasource'
-export type IFilterByKey = 'namespace' | 'sourceName'
+export type IFilterByKey = 'namespace' | 'sourceName' | 'all'

@@ -8,7 +8,9 @@ describe('Filters component', () => {
   const mockProps = {
     datasets: [],
     jobs: [],
-    namespaces
+    namespaces,
+    filterDatasets: () => {},
+    filterJobs: () => {}
   }
 
   const wrapper = shallow(<Filters {...mockProps} />)

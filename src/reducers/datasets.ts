@@ -28,7 +28,7 @@ export default (state: IDatasetsState = initialState, action: IDatasetsAction): 
     case FIND_MATCHING_ENTITIES:
       return findMatchingEntities(payload.search, state) as IDatasetsState
     case FILTER_DATASETS:
-      return filterEntities(payload.filterByKey, payload.filterByValue, state)
+      return filterEntities(state, payload.filterByKey, payload.filterByValue)
     default:
       return state
   }

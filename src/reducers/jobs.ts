@@ -24,7 +24,7 @@ export default (state = initialState, action: IJobsAction): IJobsState => {
     case FIND_MATCHING_ENTITIES:
       return findMatchingEntities(payload.search, state) as IJobsState
     case FILTER_JOBS:
-      return filterEntities(payload.filterByKey, payload.filterByValue, state)
+      return filterEntities(state, payload.filterByKey, payload.filterByValue)
     default:
       return state
   }

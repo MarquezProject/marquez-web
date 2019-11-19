@@ -10,7 +10,7 @@ export const fetchDatasetsSuccess = (datasets: IDatasetAPI[]) => ({
   }
 })
 
-export const filterDatasets = (filterByKey: IFilterByKey, filterByValue: string) => ({
+export const filterDatasets = (filterByKey: IFilterByKey, filterByValue?: string) => ({
   type: actionTypes.FILTER_DATASETS,
   payload: {
     filterByKey,
@@ -25,7 +25,7 @@ export const fetchJobsSuccess = (jobs: IJobAPI[]) => ({
   }
 })
 
-export const filterJobs = (filterByKey: IFilterByKey, filterByValue: string) => ({
+export const filterJobs = (filterByKey: IFilterByKey, filterByValue?: string) => ({
   type: actionTypes.FILTER_JOBS,
   payload: {
     filterByKey,

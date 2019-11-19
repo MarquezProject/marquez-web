@@ -15,7 +15,7 @@ describe('findMatchingEntities test', () => {
 
 describe('filterEntitites test', () => {
   const datasets = require('../../../docker/db/data/datasets.json')
-  const matchingDatasets = filterEntities('sourceName', 'something', datasets)
+  const matchingDatasets = filterEntities(datasets, 'sourceName', 'something')
   it('returns an array the same length of input array', () => {
     expect(matchingDatasets.length).toStrictEqual(datasets.length)
   })
@@ -25,7 +25,11 @@ describe('filterEntitites test', () => {
     })
   })
   it('returns an array with at least one match if we feed it something that matches', () => {
-    const matchingDatasets = filterEntities('sourceName', datasets[0].sourceName, datasets)
+    const matchingDatasets = filterEntities(datasets, 'sourceName', datasets[0].sourceName)
     expect(matchingDatasets.filter(d => d.matches).length).toBeGreaterThan(0)
+  })
+  it(`returns an array where every 'matches' field is true if we pass it a filterKey of 'all'`, () => {
+    const matchingDatasets = filterEntities(datasets, 'all', datasets[0].sourceName)
+    expect(matchingDatasets.filter(d => d.matches).length).toBe(datasets.length)
   })
 })

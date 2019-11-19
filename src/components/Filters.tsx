@@ -22,6 +22,7 @@ interface IFilterDictionary {
   [key: string]: {
     entities: IEntity[]
     accessor: (n: IEntity) => string
+    default: any
   }
 }
 
@@ -42,26 +43,34 @@ const Filters = (props: IProps): ReactElement => {
   const filterDictionary: IFilterDictionary = {
     namespace: {
       entities: namespaces,
-      accessor: n => (n as INamespaceAPI).name
+      accessor: n => (n as INamespaceAPI).name,
+      default: { name: '' }
     },
     datasource: {
       entities: datasources,
-      accessor: (n: string): string => n
+      accessor: (n: string): string => n,
+      default: ''
     }
     /* Can add more filters here */
   }
 
   /* Set the category we will be filtering by */
   const onPrimaryFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newValue = e.target.value as 'namespace' | 'datasource' | 'all'
-    setCurrentFilter(newValue)
-    if (newValue === 'all') {
+    const newPrimaryFilter = e.target.value as 'namespace' | 'datasource' | 'all'
+    console.log('NEW PRI<AR', newPrimaryFilter)
+    setCurrentFilter(newPrimaryFilter)
+    if (newPrimaryFilter === 'all') {
       toggleShowSubFilter(false)
+      filterJobs(newPrimaryFilter)
+      filterDatasets(newPrimaryFilter)
     } else {
-      setCurrentFilterValue(
-        filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
-      )
+      const currentFilterConfig = filterDictionary[newPrimaryFilter]
+      const currentFilterValue = currentFilterConfig.entities[0] || currentFilterConfig.default
+      const currentFilterKey = filterByOptions[newPrimaryFilter]
+      setCurrentFilterValue(currentFilterValue)
       toggleShowSubFilter(true)
+      filterJobs(currentFilterKey, currentFilterConfig.accessor(currentFilterValue))
+      filterDatasets(currentFilterKey, currentFilterConfig.accessor(currentFilterValue))
     }
   }
 
