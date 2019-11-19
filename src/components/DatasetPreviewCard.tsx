@@ -35,7 +35,7 @@ interface IState {}
 
 class DatasetPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const { classes, name, description, updatedAt, tags = ['is_pii'] } = this.props
+    const { classes, name, description, updatedAt, tags = [] } = this.props
     return (
       <Box p={2} m={1} bgcolor='white' boxShadow={3} display='flex' justifyContent='space-between'>
         <div>
