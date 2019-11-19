@@ -1,11 +1,9 @@
-import { shallow, mount } from 'enzyme'
+import { mount } from 'enzyme'
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
-// import tagToBadge from '../../config/tag-to-badge'
+import fakeTagToBadge from '../../config/__mocks__/tag-to-badge'
 import DatasetPreviewCard from '../../components/DatasetPreviewCard'
 import { formatUpdatedAt } from '../../helpers'
-
-const _ = require('lodash')
 
 jest.mock('../../config/tag-to-badge')
 const datasets = require('../../../docker/db/data/datasets.json')
@@ -17,7 +15,7 @@ describe('DatasetPreviewCard Component', () => {
   })
 
   const dataset = datasets[0]
-  const tags = ['is_pii']
+  const tags = ['tag_a', 'tag_b', 'tag_c']
   
   wrapper.setProps({ ...dataset, tags })
   const componentText = wrapper.render().text()
@@ -36,9 +34,10 @@ describe('DatasetPreviewCard Component', () => {
         .text()
     ).toContain(formatUpdatedAt(dataset.updatedAt))
   })
-  it('should render a colored and disabled badge', () => {
-    expect(wrapper.find('.tagWrapper').children().filterWhere((item) => item.prop('color') == 'secondary')).toHaveLength(
-      tags.length
+  it('should render a highlighted badge per matching tag in config', () => {
+    const tagIsInFakeConfig = tag => !!fakeTagToBadge.default[tag]
+    expect(wrapper.find('.tagWrapper').children().filterWhere((item) => item.prop('color') == 'highlighted')).toHaveLength(
+      tags.filter(tagIsInFakeConfig).length
     )
   })
   it('renders a snapshot that matches previous', () => {
