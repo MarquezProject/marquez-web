@@ -5,8 +5,6 @@ import fakeTagToBadge from '../../config/__mocks__/tag-to-badge'
 import DatasetPreviewCard from '../../components/DatasetPreviewCard'
 import { formatUpdatedAt } from '../../helpers'
 
-const _ = require('lodash')
-
 jest.mock('../../config/tag-to-badge')
 const datasets = require('../../../docker/db/data/datasets.json')
 
