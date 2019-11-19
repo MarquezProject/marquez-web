@@ -170,124 +170,18 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
               className="DatasetPreviewCard-tagContainer-3"
               id="tagContainer"
             >
-              <div
+              <span
+                color="highlighted"
                 key="tag_a"
               >
-                <WithStyles(ForwardRef(Tooltip))
-                  className="tagWrapper"
-                  placement="top"
-                  title="tag_a"
-                >
-                  <ForwardRef(Tooltip)
-                    className="tagWrapper"
-                    classes={
-                      Object {
-                        "popper": "MuiTooltip-popper",
-                        "popperInteractive": "MuiTooltip-popperInteractive",
-                        "tooltip": "MuiTooltip-tooltip",
-                        "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
-                        "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
-                        "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
-                        "tooltipPlacementTop": "MuiTooltip-tooltipPlacementTop",
-                        "touch": "MuiTooltip-touch",
-                      }
-                    }
-                    placement="top"
-                    title="tag_a"
-                  >
-                    <span
-                      aria-describedby={null}
-                      className="tagWrapper"
-                      color="highlighted"
-                      key="tag_a"
-                      onBlur={[Function]}
-                      onFocus={[Function]}
-                      onMouseLeave={[Function]}
-                      onMouseOver={[Function]}
-                      onTouchEnd={[Function]}
-                      onTouchStart={[Function]}
-                      title="tag_a"
-                    >
-                      Pretend Badge
-                    </span>
-                    <ForwardRef(Popper)
-                      anchorEl={
-                        <span
-                          class="tagWrapper"
-                          color="highlighted"
-                          title="tag_a"
-                        >
-                          Pretend Badge
-                        </span>
-                      }
-                      className="MuiTooltip-popper"
-                      id={null}
-                      open={false}
-                      placement="top"
-                      transition={true}
-                    />
-                  </ForwardRef(Tooltip)>
-                </WithStyles(ForwardRef(Tooltip))>
-              </div>
-              <div
+                Pretend Badge
+              </span>
+              <span
+                color="highlighted"
                 key="tag_b"
               >
-                <WithStyles(ForwardRef(Tooltip))
-                  className="tagWrapper"
-                  placement="top"
-                  title="tag_b"
-                >
-                  <ForwardRef(Tooltip)
-                    className="tagWrapper"
-                    classes={
-                      Object {
-                        "popper": "MuiTooltip-popper",
-                        "popperInteractive": "MuiTooltip-popperInteractive",
-                        "tooltip": "MuiTooltip-tooltip",
-                        "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
-                        "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
-                        "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
-                        "tooltipPlacementTop": "MuiTooltip-tooltipPlacementTop",
-                        "touch": "MuiTooltip-touch",
-                      }
-                    }
-                    placement="top"
-                    title="tag_b"
-                  >
-                    <span
-                      aria-describedby={null}
-                      className="tagWrapper"
-                      color="highlighted"
-                      key="tag_b"
-                      onBlur={[Function]}
-                      onFocus={[Function]}
-                      onMouseLeave={[Function]}
-                      onMouseOver={[Function]}
-                      onTouchEnd={[Function]}
-                      onTouchStart={[Function]}
-                      title="tag_b"
-                    >
-                      Pretend Badge
-                    </span>
-                    <ForwardRef(Popper)
-                      anchorEl={
-                        <span
-                          class="tagWrapper"
-                          color="highlighted"
-                          title="tag_b"
-                        >
-                          Pretend Badge
-                        </span>
-                      }
-                      className="MuiTooltip-popper"
-                      id={null}
-                      open={false}
-                      placement="top"
-                      transition={true}
-                    />
-                  </ForwardRef(Tooltip)>
-                </WithStyles(ForwardRef(Tooltip))>
-              </div>
+                Pretend Badge
+              </span>
             </div>
             <WithStyles(ForwardRef(Typography))
               className="DatasetPreviewCard-lastUpdated-2"
