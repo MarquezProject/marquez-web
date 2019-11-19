@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Filters Component renders a snapshot that matches previous 1`] = `
+exports[`Filters component renders a snapshot that matches previous 1`] = `
 <Styled(MuiBox)
   p={2}
 >
@@ -50,139 +50,21 @@ exports[`Filters Component renders a snapshot that matches previous 1`] = `
       renderValue={[Function]}
       value={
         Object {
-          "description": "calculates all possible dimensions from input geometry",
-          "inputs": Array [
-            "galaxy.geometry",
-          ],
-          "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_dimensions.sql",
-          "name": "calculate.galaxy_dimensions",
-          "namespace": "central-data",
-          "outputs": Array [
-            "galaxy.dimensions",
-          ],
-          "type": "BATCH",
+          "name": "central-data",
+          "ownerName": "central-data",
         }
       }
     >
       <WithStyles(ForwardRef(MenuItem))
-        key="calculate.galaxy_dimensions"
+        key="central-data"
         value={
           Object {
-            "description": "calculates all possible dimensions from input geometry",
-            "inputs": Array [
-              "galaxy.geometry",
-            ],
-            "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_dimensions.sql",
-            "name": "calculate.galaxy_dimensions",
-            "namespace": "central-data",
-            "outputs": Array [
-              "galaxy.dimensions",
-            ],
-            "type": "BATCH",
+            "name": "central-data",
+            "ownerName": "central-data",
           }
         }
       >
-        calculate.galaxy_dimensions
-      </WithStyles(ForwardRef(MenuItem))>
-      <WithStyles(ForwardRef(MenuItem))
-        key="calculate.galaxy_trips"
-        value={
-          Object {
-            "description": "calculates trips taken in the galaxy",
-            "inputs": Array [
-              "galaxy.dimensions",
-            ],
-            "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_trips.sql",
-            "name": "calculate.galaxy_trips",
-            "namespace": "central-data",
-            "outputs": Array [
-              "galaxy.trips",
-            ],
-            "type": "BATCH",
-          }
-        }
-      >
-        calculate.galaxy_trips
-      </WithStyles(ForwardRef(MenuItem))>
-      <WithStyles(ForwardRef(MenuItem))
-        key="calculate.earth_dimensions"
-        value={
-          Object {
-            "description": "calculates the dimensions of earth",
-            "inputs": Array [
-              "earth.dimensions",
-            ],
-            "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_trips.sql",
-            "name": "calculate.earth_dimensions",
-            "namespace": "central-data",
-            "outputs": Array [
-              "earth.trips",
-            ],
-            "type": "BATCH",
-          }
-        }
-      >
-        calculate.earth_dimensions
-      </WithStyles(ForwardRef(MenuItem))>
-      <WithStyles(ForwardRef(MenuItem))
-        key="calculate.universe"
-        value={
-          Object {
-            "description": "calculates the entire universe",
-            "inputs": Array [
-              "objects.stars",
-              "objects.planets",
-              "objects.life",
-            ],
-            "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_trips.sql",
-            "name": "calculate.universe",
-            "namespace": "central-data",
-            "outputs": Array [
-              "environment.universe",
-            ],
-            "type": "BATCH",
-          }
-        }
-      >
-        calculate.universe
-      </WithStyles(ForwardRef(MenuItem))>
-      <WithStyles(ForwardRef(MenuItem))
-        key="calculate.communications"
-        value={
-          Object {
-            "description": "calculates all communications in the galaxy",
-            "inputs": Array [
-              "galaxy.radiowaves",
-              "galaxy.satellites",
-            ],
-            "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_trips.sql",
-            "name": "calculate.communications",
-            "namespace": "central-data",
-            "outputs": Array [
-              "environment.conversations",
-              "environment.transcripts",
-            ],
-            "type": "BATCH",
-          }
-        }
-      >
-        calculate.communications
-      </WithStyles(ForwardRef(MenuItem))>
-      <WithStyles(ForwardRef(MenuItem))
-        key="calculate.nothing"
-        value={
-          Object {
-            "description": "calculates literally nothing!",
-            "inputs": Array [],
-            "location": "https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_trips.sql",
-            "name": "calculate.nothing",
-            "namespace": "central-data",
-            "outputs": Array [],
-            "type": "BATCH",
-          }
-        }
-      >
-        calculate.nothing
+        central-data
       </WithStyles(ForwardRef(MenuItem))>
     </WithStyles(ForwardRef(Select))>
   </WithStyles(WithStyles(ForwardRef(FormControl)))>

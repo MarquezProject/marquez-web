@@ -2,12 +2,9 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 import Filters from '../../components/Filters'
 import Select from '@material-ui/core/Select'
+const namespaces = require('../../../docker/db/data/namespaces.json')
 
-const jobs = require('../../../docker/db/data/jobs.json')
-const datasets = require('../../../docker/db/data/jobs.json')
-const namespaces = require('../../../docker/db/data/jobs.json')
-
-describe('Filters Component', () => {
+describe('Filters component', () => {
   const mockProps = {
     datasets: [],
     jobs: [],

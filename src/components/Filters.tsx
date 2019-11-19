@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, ChangeEvent } from 'react'
 import MUISelect from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Box from '@material-ui/core/Box'
@@ -8,7 +8,7 @@ import uniq from 'lodash/uniq'
 import { withStyles } from '@material-ui/core/styles'
 import { capitalize } from '../helpers'
 import { IProps } from '../containers/FilterContainer'
-// import { IFilterByDisplay, IFilterByKey } from '../types'
+import { INamespaceAPI } from '../types/api'
 
 const StyledFormControl = withStyles({
   root: {
@@ -17,59 +17,70 @@ const StyledFormControl = withStyles({
   }
 })(FormControl)
 
+type IEntity = INamespaceAPI | string
 interface IFilterDictionary {
   [key: string]: {
-    entities: any[]
-    accessor: (n: any) => any
+    entities: IEntity[]
+    accessor: (n: IEntity) => string
   }
 }
 
 const filterByOptions: { [key: string]: 'namespace' | 'sourceName' } = {
+  /* display name: entitiy name on dataset schema */
   namespace: 'namespace',
   datasource: 'sourceName'
 }
 
 const Filters = (props: IProps): ReactElement => {
   const { namespaces, datasets, filterJobs, filterDatasets, showJobs } = props
-  const [currentFilter, setCurrentFilter] = useState('all')
 
+  const [currentFilter, setCurrentFilter] = useState('all')
+  const [currentFilterValue, setCurrentFilterValue] = useState({})
   const [showSubFilter, toggleShowSubFilter] = useState(false)
 
   const datasources = uniq(datasets.map(d => d.sourceName))
-
   const filterDictionary: IFilterDictionary = {
     namespace: {
       entities: namespaces,
-      accessor: n => n.name
+      accessor: n => (n as INamespaceAPI).name
     },
     datasource: {
       entities: datasources,
-      accessor: n => n
+      accessor: (n: string): string => n
+    }
+    /* Can add more filters here */
+  }
+
+  /* Set the category we will be filtering by */
+  const onPrimaryFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newValue = e.target.value as 'namespace' | 'datasource' | 'all'
+    setCurrentFilter(newValue)
+    if (newValue === 'all') {
+      toggleShowSubFilter(false)
+    } else {
+      setCurrentFilterValue(
+        filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
+      )
+      toggleShowSubFilter(true)
     }
   }
 
-  const [currentFilterValue, setCurrentFilterValue] = useState({})
+  /* Filter jobs & datasets by the selected filter value */
+  const onSecondaryFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const currentFilterValue = e.target.value as string
+    const currentFilterKey = filterByOptions[currentFilter]
+
+    setCurrentFilterValue(currentFilterValue)
+    filterJobs(currentFilterKey, filterDictionary[currentFilter].accessor(currentFilterValue))
+    filterDatasets(currentFilterKey, filterDictionary[currentFilter].accessor(currentFilterValue))
+    showJobs(true)
+  }
+
   return (
     <Box p={2}>
       <StyledFormControl margin='normal'>
         <InputLabel id='filter-by-label'>Filter by</InputLabel>
-        <MUISelect
-          value={currentFilter}
-          renderValue={capitalize}
-          onChange={e => {
-            const newValue = e.target.value as 'namespace' | 'datasource' | 'all'
-            // debugger
-            setCurrentFilter(newValue)
-            if (newValue === 'all') {
-              toggleShowSubFilter(false)
-            } else {
-              setCurrentFilterValue(
-                filterDictionary[e.target.value as 'namespace' | 'datasource'].entities[0]
-              )
-              toggleShowSubFilter(true)
-            }
-          }}
-        >
+        <MUISelect value={currentFilter} renderValue={capitalize} onChange={onPrimaryFilterChange}>
           {Object.keys(filterByOptions).map(o => (
             <MenuItem key={o} value={o}>
               {o}
@@ -86,23 +97,9 @@ const Filters = (props: IProps): ReactElement => {
           <MUISelect
             value={currentFilterValue}
             renderValue={filterDictionary[currentFilter].accessor}
-            onChange={e => {
-              const currentFilterValue = e.target.value as string
-              const currentFilterKeyDisplay = filterByOptions[currentFilter]
-              const currentFilterKey = filterByOptions[currentFilterKeyDisplay]
-              setCurrentFilterValue(currentFilterValue)
-              filterJobs(
-                currentFilterKey,
-                filterDictionary[currentFilter].accessor(currentFilterValue)
-              )
-              filterDatasets(
-                currentFilterKey,
-                filterDictionary[currentFilter].accessor(currentFilterValue)
-              )
-              showJobs(true)
-            }}
+            onChange={onSecondaryFilterChange}
           >
-            {filterDictionary[currentFilter].entities.map(o => {
+            {filterDictionary[currentFilter].entities.map((o: any) => {
               const val = filterDictionary[currentFilter].accessor(o)
               return (
                 <MenuItem key={val} value={o}>

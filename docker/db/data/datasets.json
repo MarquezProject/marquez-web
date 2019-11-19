@@ -20,7 +20,7 @@
     "physicalName": "galaxy.trips",
     "type": "DB_TABLE",
     "namespace": "central-data",
-    "sourceName": "redshift",
+    "sourceName": "snowflake",
     "description": "all trips taken through the galaxy"
   },
   {
@@ -28,7 +28,7 @@
     "physicalName": "earth.dimensions",
     "type": "DB_TABLE",
     "namespace": "central-data",
-    "sourceName": "redshift",
+    "sourceName": "snowflake",
     "description": "describes all possible dimensions on earth"
   },
   {
@@ -36,7 +36,7 @@
     "physicalName": "earth.trips",
     "type": "DB_TABLE",
     "namespace": "central-data",
-    "sourceName": "redshift",
+    "sourceName": "snowflake",
     "description": "describes all possible trips taken on earth"
   },
   {

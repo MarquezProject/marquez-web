@@ -9,7 +9,6 @@ import React, { FunctionComponent } from 'react'
 import { INamespaceAPI, IDatasetAPI } from '../types/api'
 
 const mapStateToProps = (state: IState) => ({
-  // jobs: state.jobs,
   datasets: state.datasets,
   namespaces: state.namespaces
 })
@@ -25,9 +24,11 @@ export interface IProps {
   showJobs: (bool: boolean) => void
 }
 
-const FiltersWrapper: FunctionComponent<IProps> = props => {
+/*  exporting for testing purposes */
+export const FiltersWrapper: FunctionComponent<IProps> = props => {
   const { namespaces, datasets, filterJobs, filterDatasets, showJobs } = props
-  return namespaces.length && datasets.length ? (
+  const shouldRender = !!namespaces.length && !!datasets.length
+  return shouldRender ? (
     <Filters
       namespaces={namespaces}
       datasets={datasets}
