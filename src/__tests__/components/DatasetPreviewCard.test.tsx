@@ -36,7 +36,7 @@ describe('DatasetPreviewCard Component', () => {
   })
   it('should render a highlighted badge per matching tag in config', () => {
     const tagIsInFakeConfig = tag => !!fakeTagToBadge.default[tag]
-    expect(wrapper.find('#tagContainer').children().filterWhere((item) => item.prop('color') == 'highlighted')).toHaveLength(
+    expect(wrapper.find('.tagWrapper').children().filterWhere((item) => item.prop('color') == 'highlighted')).toHaveLength(
       tags.filter(tagIsInFakeConfig).length
     )
   })
