@@ -12,7 +12,7 @@ import { INamespaceAPI } from '../types/api'
 
 const StyledFormControl = withStyles({
   root: {
-    margin: '0rem 2rem',
+    margin: '0rem 2rem 0rem 0rem',
     minWidth: '10rem'
   }
 })(FormControl)
@@ -37,7 +37,7 @@ const Filters = (props: IProps): ReactElement => {
 
   const [currentFilter, setCurrentFilter] = useState('all')
   const [currentFilterValue, setCurrentFilterValue] = useState({})
-  const [showSubFilter, toggleShowSubFilter] = useState(false)
+  const [subFilterVisible, setSubFilterVisibility] = useState(false)
 
   const datasources = uniq(datasets.map(d => d.sourceName))
   const filterDictionary: IFilterDictionary = {
@@ -57,10 +57,9 @@ const Filters = (props: IProps): ReactElement => {
   /* Set the category we will be filtering by */
   const onPrimaryFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newPrimaryFilter = e.target.value as 'namespace' | 'datasource' | 'all'
-    console.log('NEW PRI<AR', newPrimaryFilter)
     setCurrentFilter(newPrimaryFilter)
     if (newPrimaryFilter === 'all') {
-      toggleShowSubFilter(false)
+      setSubFilterVisibility(false)
       filterJobs(newPrimaryFilter)
       filterDatasets(newPrimaryFilter)
     } else {
@@ -68,7 +67,7 @@ const Filters = (props: IProps): ReactElement => {
       const currentFilterValue = currentFilterConfig.entities[0] || currentFilterConfig.default
       const currentFilterKey = filterByOptions[newPrimaryFilter]
       setCurrentFilterValue(currentFilterValue)
-      toggleShowSubFilter(true)
+      setSubFilterVisibility(true)
       filterJobs(currentFilterKey, currentFilterConfig.accessor(currentFilterValue))
       filterDatasets(currentFilterKey, currentFilterConfig.accessor(currentFilterValue))
     }
@@ -86,7 +85,7 @@ const Filters = (props: IProps): ReactElement => {
   }
 
   return (
-    <Box p={2}>
+    <Box ml='5%' py={2}>
       <StyledFormControl margin='normal'>
         <InputLabel id='filter-by-label'>Filter by</InputLabel>
         <MUISelect value={currentFilter} renderValue={capitalize} onChange={onPrimaryFilterChange}>
@@ -100,7 +99,7 @@ const Filters = (props: IProps): ReactElement => {
           </MenuItem>
         </MUISelect>
       </StyledFormControl>
-      {showSubFilter && (
+      {subFilterVisible && (
         <StyledFormControl margin='normal'>
           <InputLabel id='secondary-filter'>{currentFilter}</InputLabel>
           <MUISelect
