@@ -7,7 +7,7 @@ const datasets = require('../../../docker/db/data/datasets.json')
 describe('NetworkGraph Component', () => {
   // TODO: There's an issue with rendering this component in jest
 
-  const wrapper = mount(<NetworkGraph jobs={jobs} datasets={datasets} classes={{}} />)
+  //const wrapper = mount(<NetworkGraph jobs={jobs} datasets={datasets} classes={{}} />)
   test.skip('Should render', () => {
     expect(wrapper.exists()).toBe(true)
   })

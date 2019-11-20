@@ -24,7 +24,6 @@ const initialState: IDisplayState = {
 }
 
 export default (state = initialState, action: IToggleExpandAction) => {
-  console.log(action.type.toLowerCase(), action.type.toLowerCase().includes('success'))
   if (action.type.toLowerCase().includes('success')) {
     return { ...state, isLoading: false }
   } else if (action.type.toLowerCase().includes('fetch')) {
