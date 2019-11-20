@@ -15,11 +15,9 @@ import { select } from 'd3-selection'
 import { forceCenter, forceLink, forceSimulation, forceManyBody, forceX, forceY } from 'd3-force'
 import { zoom } from 'd3-zoom'
 import { color } from 'd3-color'
+import Loader from './Loader'
 const globalStyles = require('../global_styles.css')
 const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
-
-const width = 960
-const height = 350
 
 const fadedOut = (color(jobNodeGrey) as any).darker(1.5).toString()
 
@@ -29,7 +27,9 @@ const styles = ({ palette }: Theme) => {
       background: palette.common.black,
       width: '100%',
       height: '50vh',
-      position: 'fixed'
+      position: 'fixed',
+      display: 'flex',
+      alignItems: 'center'
     },
     tooltip: {
       position: 'absolute',
@@ -54,6 +54,7 @@ const styles = ({ palette }: Theme) => {
 interface IProps {
   jobs: IJob[]
   datasets: IDataset[]
+  isLoading: boolean
 }
 
 type IAllProps = IWithStyles<typeof styles> & IProps
@@ -65,6 +66,12 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     const { nodes, links } = networkData
 
     const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
+
+    if (svg.empty()) {
+      return true
+    }
+    const width = +svg.style('width').replace('px', '')
+    const height = +svg.style('height').replace('px', '')
 
     forceSimulation<IDatumCombined, INetworkLink>(nodes)
       .force('charge', forceManyBody().strength(-30))
@@ -222,29 +229,39 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         return 'translate(' + d.x + ',' + d.y + ')'
       })
     }
-    return false
+
+    if (this.props.isLoading !== newProps.isLoading) {
+      return true
+    } else {
+      return false
+    }
   }
 
   graph: SVGElement
 
   render(): React.ReactElement {
-    const { classes } = this.props
+    const { classes, isLoading } = this.props
+
     const { tooltip, networkBackground } = classes
     return (
-      <div>
+      <div className={networkBackground}>
         <div id='tooltip' className={tooltip}></div>
-        <svg id='network-graph' className={networkBackground}>
-          <g
-            ref={node => {
-              this.graph = node as SVGElement
-            }}
-          >
-            <g id='links'></g>
-            <g id='jobNodes'></g>
-            <g id='datasetNodes'></g>
-          </g>
-        </svg>
         <Legend customClassName={classes.legend}></Legend>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <svg id='network-graph' className={networkBackground}>
+            <g
+              ref={node => {
+                this.graph = node as SVGElement
+              }}
+            >
+              <g id='links'></g>
+              <g id='jobNodes'></g>
+              <g id='datasetNodes'></g>
+            </g>
+          </svg>
+        )}
       </div>
     )
   }
