@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react'
 import * as RRD from 'react-router-dom'
-import { Box, Typography } from '@material-ui/core'
 
 import {
   withStyles,
@@ -9,9 +8,7 @@ import {
   Theme as ITheme
 } from '@material-ui/core/styles'
 
-import CustomSearchBar from './CustomSearchBar'
-import DatasetPreviewCard from './DatasetPreviewCard'
-import JobPreviewCard from './JobPreviewCard'
+import JobDetailPage from './JobDetailPage'
 
 import { IDatasetsState } from '../reducers/datasets'
 import { IJobsState } from '../reducers/jobs'
@@ -79,57 +76,19 @@ class Home extends React.Component<IAllProps, IState> {
   }
 
   render(): ReactElement {
-    const { datasets, jobs, classes, findMatchingEntities } = this.props
-    const matchingDatasets = datasets.filter(d => d.matches)
-    const matchingJobs = jobs.filter(j => j.matches)
+    const { jobs } = this.props
+
+    const sampleJob = jobs[0] || {}
     return (
-      <div>
-        <CustomSearchBar
-          customClassName={classes.search}
-          findMatchingEntities={findMatchingEntities}
-          showJobs={this.showJobs}
-        ></CustomSearchBar>
-        <div className={classes.row}>
-          <Box className={classes.column}>
-            {matchingDatasets.length > 0 ? (
-              <Typography className={classes.header} color='secondary' variant='h3'>
-                {!this.state.showJobs ? 'Popular Datasets' : 'Matching Datasets'}
-              </Typography>
-            ) : (
-              <Typography className={classes.noDatasets}>no datasets found!</Typography>
-            )}
-            {matchingDatasets.map(d => (
-              <DatasetPreviewCard
-                key={d.name}
-                name={d.name}
-                description={d.description}
-                updatedAt={d.createdAt}
-              />
-            ))}
-          </Box>
-          {this.state.showJobs ? (
-            <Box className={classes.column}>
-              {matchingJobs.length > 0 ? (
-                <Typography className={classes.header} color='secondary' variant='h3'>
-                  Matching Jobs
-                </Typography>
-              ) : (
-                <Typography className={classes.noJobs}>no jobs found!</Typography>
-              )}
-              {matchingJobs.map(d => (
-                <JobPreviewCard
-                  /* should change to unique identifier */
-                  key={d.name}
-                  name={d.name}
-                  description={d.description}
-                  updatedAt={d.createdAt}
-                  status={d.status}
-                />
-              ))}
-            </Box>
-          ) : null}
-        </div>
-      </div>
+      <JobDetailPage
+        /* should change to unique identifier */
+        key={sampleJob.name}
+        name={sampleJob.name}
+        location={sampleJob.location}
+        description={sampleJob.description}
+        updatedAt={sampleJob.createdAt}
+        status={sampleJob.status}
+      />
     )
   }
 }

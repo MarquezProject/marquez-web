@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JobDetailPage Component renders a snapshot that matches previous 1`] = `
+<WithStyles(JobDetailPage)
+  description="calculates all possible dimensions from input geometry"
+  inputs={
+    Array [
+      "galaxy.geometry",
+    ]
+  }
+  location="https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_dimensions.sql"
+  name="calculate.galaxy_dimensions"
+  namespace="central-data"
+  outputs={
+    Array [
+      "galaxy.dimensions",
+    ]
+  }
+  type="BATCH"
+>
+  <JobDetailPage
+    classes={
+      Object {
+        "failed": "JobDetailPage-failed-4",
+        "lastUpdated": "JobDetailPage-lastUpdated-2",
+        "passed": "JobDetailPage-passed-5",
+        "rightCol": "JobDetailPage-rightCol-1",
+        "status": "JobDetailPage-status-3",
+      }
+    }
+    description="calculates all possible dimensions from input geometry"
+    inputs={
+      Array [
+        "galaxy.geometry",
+      ]
+    }
+    location="https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_dimensions.sql"
+    name="calculate.galaxy_dimensions"
+    namespace="central-data"
+    outputs={
+      Array [
+        "galaxy.dimensions",
+      ]
+    }
+    type="BATCH"
+  >
+    <Styled(MuiBox)
+      display="flex"
+      justifyContent="space-between"
+      p={2}
+    >
+      <div
+        className="MuiBox-root MuiBox-root-7"
+      >
+        <div>
+          <WithStyles(ForwardRef(Typography))
+            color="secondary"
+            variant="h3"
+          >
+            <ForwardRef(Typography)
+              classes={
+                Object {
+                  "alignCenter": "MuiTypography-alignCenter",
+                  "alignJustify": "MuiTypography-alignJustify",
+                  "alignLeft": "MuiTypography-alignLeft",
+                  "alignRight": "MuiTypography-alignRight",
+                  "body1": "MuiTypography-body1",
+                  "body2": "MuiTypography-body2",
+                  "button": "MuiTypography-button",
+                  "caption": "MuiTypography-caption",
+                  "colorError": "MuiTypography-colorError",
+                  "colorInherit": "MuiTypography-colorInherit",
+                  "colorPrimary": "MuiTypography-colorPrimary",
+                  "colorSecondary": "MuiTypography-colorSecondary",
+                  "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                  "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                  "displayBlock": "MuiTypography-displayBlock",
+                  "displayInline": "MuiTypography-displayInline",
+                  "gutterBottom": "MuiTypography-gutterBottom",
+                  "h1": "MuiTypography-h1",
+                  "h2": "MuiTypography-h2",
+                  "h3": "MuiTypography-h3",
+                  "h4": "MuiTypography-h4",
+                  "h5": "MuiTypography-h5",
+                  "h6": "MuiTypography-h6",
+                  "noWrap": "MuiTypography-noWrap",
+                  "overline": "MuiTypography-overline",
+                  "paragraph": "MuiTypography-paragraph",
+                  "root": "MuiTypography-root",
+                  "srOnly": "MuiTypography-srOnly",
+                  "subtitle1": "MuiTypography-subtitle1",
+                  "subtitle2": "MuiTypography-subtitle2",
+                }
+              }
+              color="secondary"
+              variant="h3"
+            >
+              <h3
+                className="MuiTypography-root MuiTypography-h3 MuiTypography-colorSecondary"
+              >
+                <a
+                  className="link"
+                  href="https://github.com/Galaxy/blob/ecfc04de65137bfd25a0416d227eaba5325c8c63/calculate.galaxy_dimensions.sql"
+                  target="_"
+                >
+                  calculate.galaxy_dimensions
+                </a>
+              </h3>
+            </ForwardRef(Typography)>
+          </WithStyles(ForwardRef(Typography))>
+          <WithStyles(WithStyles(ForwardRef(Typography)))
+            color="primary"
+          >
+            <WithStyles(ForwardRef(Typography))
+              classes={
+                Object {
+                  "root": "WithStyles(ForwardRef(Typography))-root-38",
+                }
+              }
+              color="primary"
+            >
+              <ForwardRef(Typography)
+                classes={
+                  Object {
+                    "alignCenter": "MuiTypography-alignCenter",
+                    "alignJustify": "MuiTypography-alignJustify",
+                    "alignLeft": "MuiTypography-alignLeft",
+                    "alignRight": "MuiTypography-alignRight",
+                    "body1": "MuiTypography-body1",
+                    "body2": "MuiTypography-body2",
+                    "button": "MuiTypography-button",
+                    "caption": "MuiTypography-caption",
+                    "colorError": "MuiTypography-colorError",
+                    "colorInherit": "MuiTypography-colorInherit",
+                    "colorPrimary": "MuiTypography-colorPrimary",
+                    "colorSecondary": "MuiTypography-colorSecondary",
+                    "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                    "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                    "displayBlock": "MuiTypography-displayBlock",
+                    "displayInline": "MuiTypography-displayInline",
+                    "gutterBottom": "MuiTypography-gutterBottom",
+                    "h1": "MuiTypography-h1",
+                    "h2": "MuiTypography-h2",
+                    "h3": "MuiTypography-h3",
+                    "h4": "MuiTypography-h4",
+                    "h5": "MuiTypography-h5",
+                    "h6": "MuiTypography-h6",
+                    "noWrap": "MuiTypography-noWrap",
+                    "overline": "MuiTypography-overline",
+                    "paragraph": "MuiTypography-paragraph",
+                    "root": "MuiTypography-root WithStyles(ForwardRef(Typography))-root-38",
+                    "srOnly": "MuiTypography-srOnly",
+                    "subtitle1": "MuiTypography-subtitle1",
+                    "subtitle2": "MuiTypography-subtitle2",
+                  }
+                }
+                color="primary"
+              >
+                <p
+                  className="MuiTypography-root WithStyles(ForwardRef(Typography))-root-38 MuiTypography-body1 MuiTypography-colorPrimary"
+                >
+                  calculates all possible dimensions from input geometry
+                </p>
+              </ForwardRef(Typography)>
+            </WithStyles(ForwardRef(Typography))>
+          </WithStyles(WithStyles(ForwardRef(Typography)))>
+        </div>
+        <Styled(MuiBox)
+          alignItems="flex-end"
+          className="JobDetailPage-rightCol-1"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <div
+            className="MuiBox-root MuiBox-root-39 JobDetailPage-rightCol-1"
+          >
+            <div
+              className="JobDetailPage-passed-5 JobDetailPage-status-3"
+            />
+            <WithStyles(ForwardRef(Typography))
+              className="JobDetailPage-lastUpdated-2"
+            >
+              <ForwardRef(Typography)
+                className="JobDetailPage-lastUpdated-2"
+                classes={
+                  Object {
+                    "alignCenter": "MuiTypography-alignCenter",
+                    "alignJustify": "MuiTypography-alignJustify",
+                    "alignLeft": "MuiTypography-alignLeft",
+                    "alignRight": "MuiTypography-alignRight",
+                    "body1": "MuiTypography-body1",
+                    "body2": "MuiTypography-body2",
+                    "button": "MuiTypography-button",
+                    "caption": "MuiTypography-caption",
+                    "colorError": "MuiTypography-colorError",
+                    "colorInherit": "MuiTypography-colorInherit",
+                    "colorPrimary": "MuiTypography-colorPrimary",
+                    "colorSecondary": "MuiTypography-colorSecondary",
+                    "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                    "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                    "displayBlock": "MuiTypography-displayBlock",
+                    "displayInline": "MuiTypography-displayInline",
+                    "gutterBottom": "MuiTypography-gutterBottom",
+                    "h1": "MuiTypography-h1",
+                    "h2": "MuiTypography-h2",
+                    "h3": "MuiTypography-h3",
+                    "h4": "MuiTypography-h4",
+                    "h5": "MuiTypography-h5",
+                    "h6": "MuiTypography-h6",
+                    "noWrap": "MuiTypography-noWrap",
+                    "overline": "MuiTypography-overline",
+                    "paragraph": "MuiTypography-paragraph",
+                    "root": "MuiTypography-root",
+                    "srOnly": "MuiTypography-srOnly",
+                    "subtitle1": "MuiTypography-subtitle1",
+                    "subtitle2": "MuiTypography-subtitle2",
+                  }
+                }
+              >
+                <p
+                  className="MuiTypography-root JobDetailPage-lastUpdated-2 MuiTypography-body1"
+                />
+              </ForwardRef(Typography)>
+            </WithStyles(ForwardRef(Typography))>
+          </div>
+        </Styled(MuiBox)>
+      </div>
+    </Styled(MuiBox)>
+  </JobDetailPage>
+</WithStyles(JobDetailPage)>
+`;
