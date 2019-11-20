@@ -51,21 +51,32 @@ exports[`Filters component renders a snapshot that matches previous 1`] = `
       renderValue={[Function]}
       value={
         Object {
-          "name": "central-data",
-          "ownerName": "central-data",
+          "name": "galactic-data",
+          "ownerName": "galactic-data",
         }
       }
     >
       <WithStyles(ForwardRef(MenuItem))
-        key="central-data"
+        key="galactic-data"
         value={
           Object {
-            "name": "central-data",
-            "ownerName": "central-data",
+            "name": "galactic-data",
+            "ownerName": "galactic-data",
           }
         }
       >
-        central-data
+        galactic-data
+      </WithStyles(ForwardRef(MenuItem))>
+      <WithStyles(ForwardRef(MenuItem))
+        key="interstellar-data"
+        value={
+          Object {
+            "name": "interstellar-data",
+            "ownerName": "interstellar-data",
+          }
+        }
+      >
+        interstellar-data
       </WithStyles(ForwardRef(MenuItem))>
     </WithStyles(ForwardRef(Select))>
   </WithStyles(WithStyles(ForwardRef(FormControl)))>
