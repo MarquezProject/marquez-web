@@ -33,14 +33,15 @@ const styles = (_theme: ITheme) => {
       padding: '52vh 5% 1%',
       position: 'absolute',
       top: 0,
-      zIndex: -1,
+      zIndex: 1,
       width: '100%'
     },
     search: {
       position: 'fixed',
       bottom: '52vh',
       width: '90%',
-      left: '5%'
+      left: '5%',
+      zIndex: 4
     },
     noDatasets: {
       color: '#9e9e9e',
