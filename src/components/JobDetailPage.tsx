@@ -5,12 +5,14 @@ import {
   WithStyles as IWithStyles,
   Theme as ITheme
 } from '@material-ui/core/styles'
+import { Typography, Box } from '@material-ui/core'
+import HowToRegIcon from '@material-ui/icons/HowToReg'
+
 const globalStyles = require('../global_styles.css')
 const { vibrantGreen } = globalStyles
-import { Typography, Box } from '@material-ui/core'
 import { formatUpdatedAt } from '../helpers'
 
-import { IJobAPI } from '../types/api'
+import { IJob } from '../types'
 
 const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
@@ -25,6 +27,9 @@ const styles = ({ palette, spacing }: ITheme) => {
       height: spacing(2),
       borderRadius: '50%'
     },
+    SQL: {
+      overflow: 'hidden'
+    },
     failed: {
       backgroundColor: palette.error.main
     },
@@ -35,7 +40,7 @@ const styles = ({ palette, spacing }: ITheme) => {
 }
 
 type IProps = IWithStyles<typeof styles> &
-  Pick<IJobAPI, 'name' | 'description' | 'updatedAt' | 'status' | 'location'>
+  Pick<IJob, 'name' | 'description' | 'updatedAt' | 'status' | 'location' | 'namespace' | 'context'>
 interface IState {}
 
 const StyledTypography = withStyles({
@@ -44,12 +49,28 @@ const StyledTypography = withStyles({
   }
 })(Typography)
 
+const StyledTypographySQL = withStyles({
+  root: {
+    whiteSpace: 'pre'
+  }
+})(Typography)
+
 class JobDetailPage extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const { classes, name, description, updatedAt = '', status = 'passed', location } = this.props
+    const {
+      classes,
+      name,
+      description,
+      updatedAt = '',
+      status = 'passed',
+      location,
+      namespace,
+      context = { SQL: '' }
+    } = this.props
 
+    const { SQL } = context
     return (
-      <Box p={2} display='flex' justifyContent='space-between'>
+      <Box p={2} display='flex' flexDirection='column' justifyContent='space-between' width='100%'>
         <div>
           <div className={`${classes[status]} ${classes.status}`} />
           <Typography color='secondary' variant='h3'>
@@ -58,16 +79,32 @@ class JobDetailPage extends React.Component<IProps, IState> {
             </a>
           </Typography>
           <StyledTypography color='primary'>{description}</StyledTypography>
+          <Box
+            className={classes.rightCol}
+            display='flex'
+            flexDirection='column'
+            alignItems='flex-end'
+            justifyContent='space-between'
+          >
+            <HowToRegIcon color='secondary' />
+            <Typography>{namespace}</Typography>
+          </Box>
         </div>
         <Box
-          className={classes.rightCol}
-          display='flex'
-          flexDirection='column'
-          alignItems='flex-end'
-          justifyContent='space-between'
+          className={classes.SQL}
+          width='100%'
+          minHeight='75%'
+          maxHeight={200}
+          bgcolor='white'
+          boxShadow={1}
+          p={2}
         >
-          <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+          {SQL.split('\n').map((line, i) => {
+            console.log('LINE of sql', line)
+            return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
+          })}
         </Box>
+        <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
       </Box>
     )
   }
