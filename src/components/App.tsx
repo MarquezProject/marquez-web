@@ -26,7 +26,7 @@ import rootSaga from '../sagas'
 import HomeContainer from '../containers/HomeContainer'
 import Toast from '../containers/ToastContainer'
 import NetworkGraphContainer from '../containers/NetworkGraphContainer'
-import JobDetailPage from './JobDetailPage'
+import JobDetailContainer from '../containers/JobDetailContainer'
 
 const sagaMiddleware = createSagaMiddleware({
   onError: (error, _sagaStackIgnored) => {
@@ -93,7 +93,7 @@ const App = ({ classes }: IProps): ReactElement => {
             <NetworkGraphContainer />
             <Switch>
               <Route path='/' exact component={HomeContainer} />
-              <Route path='/jobs/:jobId' exact component={JobDetailPage} />
+              <Route path='/jobs/:jobName' exact component={JobDetailContainer} />
             </Switch>
             <Toast />
           </Grid>

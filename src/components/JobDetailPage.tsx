@@ -8,6 +8,7 @@ import {
 import { Typography, Box } from '@material-ui/core'
 import HowToRegIcon from '@material-ui/icons/HowToReg'
 import { useParams } from 'react-router-dom'
+import _find from 'lodash/find'
 
 const globalStyles = require('../global_styles.css')
 const { vibrantGreen } = globalStyles
@@ -17,6 +18,9 @@ import { IJob } from '../types'
 
 const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
+    root: {
+      marginTop: '52vh'
+    },
     rightCol: {
       textAlign: 'right'
     },
@@ -40,8 +44,7 @@ const styles = ({ palette, spacing }: ITheme) => {
   })
 }
 
-type IProps = IWithStyles<typeof styles> &
-  Pick<IJob, 'name' | 'description' | 'updatedAt' | 'status' | 'location' | 'namespace' | 'context'>
+type IProps = IWithStyles<typeof styles> & { jobs: IJob[] }
 
 const StyledTypography = withStyles({
   root: {
@@ -56,8 +59,14 @@ const StyledTypographySQL = withStyles({
 })(Typography)
 
 const JobDetailPage: FunctionComponent<IProps> = props => {
+  const { jobs, classes } = props
+
+  const { jobName } = useParams()
+  const job = _find(jobs, j => j.name === jobName)
+  if (!job) {
+    return <p>No job</p>
+  }
   const {
-    classes,
     name,
     description,
     updatedAt = '',
@@ -65,13 +74,19 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     location,
     namespace,
     context = { SQL: '' }
-  } = props
-
-  const { SQL } = context
-  const { jobId } = useParams()
-  console.log('JOBID', jobId)
+  } = job
+  console.log('description', description)
+  console.log('context', context)
+  const { SQL = '' } = context
   return (
-    <Box p={2} display='flex' flexDirection='column' justifyContent='space-between' width='100%'>
+    <Box
+      p={2}
+      display='flex'
+      flexDirection='column'
+      justifyContent='space-between'
+      width='100%'
+      className={classes.root}
+    >
       <div>
         <div className={`${classes[status]} ${classes.status}`} />
         <Typography color='secondary' variant='h3'>

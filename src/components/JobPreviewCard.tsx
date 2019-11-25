@@ -32,6 +32,9 @@ const styles = ({ palette, spacing }: ITheme) => {
     },
     passed: {
       backgroundColor: vibrantGreen
+    },
+    link: {
+      textDecoration: 'none'
     }
   })
 }
@@ -51,8 +54,7 @@ class JobPreviewCard extends React.Component<IProps, IState> {
     const { classes, name, description, updatedAt = '', status = 'passed' } = this.props
 
     return (
-      <Link to='/jobs/1234'>
-        Text
+      <Link to={`/jobs/${name}`} className={classes.link}>
         <Box
           p={2}
           m={1}
