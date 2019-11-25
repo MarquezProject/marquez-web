@@ -93,7 +93,7 @@ const App = ({ classes }: IProps): ReactElement => {
             <NetworkGraphContainer />
             <Switch>
               <Route path='/' exact component={HomeContainer} />
-              <Route path='/datasets/:id' exact component={DatasetsContainer} />
+              <Route path='/datasets/:name' exact component={DatasetsContainer} />
             </Switch>
             <Toast />
           </Grid>
