@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, FunctionComponent } from 'react'
 import {
   withStyles,
   createStyles,
@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core/styles'
 import { Typography, Box } from '@material-ui/core'
 import HowToRegIcon from '@material-ui/icons/HowToReg'
+import { useParams } from 'react-router-dom'
 
 const globalStyles = require('../global_styles.css')
 const { vibrantGreen } = globalStyles
@@ -41,7 +42,6 @@ const styles = ({ palette, spacing }: ITheme) => {
 
 type IProps = IWithStyles<typeof styles> &
   Pick<IJob, 'name' | 'description' | 'updatedAt' | 'status' | 'location' | 'namespace' | 'context'>
-interface IState {}
 
 const StyledTypography = withStyles({
   root: {
@@ -55,59 +55,58 @@ const StyledTypographySQL = withStyles({
   }
 })(Typography)
 
-class JobDetailPage extends React.Component<IProps, IState> {
-  render(): ReactElement {
-    const {
-      classes,
-      name,
-      description,
-      updatedAt = '',
-      status = 'passed',
-      location,
-      namespace,
-      context = { SQL: '' }
-    } = this.props
+const JobDetailPage: FunctionComponent<IProps> = props => {
+  const {
+    classes,
+    name,
+    description,
+    updatedAt = '',
+    status = 'passed',
+    location,
+    namespace,
+    context = { SQL: '' }
+  } = props
 
-    const { SQL } = context
-    return (
-      <Box p={2} display='flex' flexDirection='column' justifyContent='space-between' width='100%'>
-        <div>
-          <div className={`${classes[status]} ${classes.status}`} />
-          <Typography color='secondary' variant='h3'>
-            <a href={location} className='link' target='_'>
-              {name}
-            </a>
-          </Typography>
-          <StyledTypography color='primary'>{description}</StyledTypography>
-          <Box
-            className={classes.rightCol}
-            display='flex'
-            flexDirection='column'
-            alignItems='flex-end'
-            justifyContent='space-between'
-          >
-            <HowToRegIcon color='secondary' />
-            <Typography>{namespace}</Typography>
-          </Box>
-        </div>
+  const { SQL } = context
+  const { jobId } = useParams()
+  console.log('JOBID', jobId)
+  return (
+    <Box p={2} display='flex' flexDirection='column' justifyContent='space-between' width='100%'>
+      <div>
+        <div className={`${classes[status]} ${classes.status}`} />
+        <Typography color='secondary' variant='h3'>
+          <a href={location} className='link' target='_'>
+            {name}
+          </a>
+        </Typography>
+        <StyledTypography color='primary'>{description}</StyledTypography>
         <Box
-          className={classes.SQL}
-          width='100%'
-          minHeight='75%'
-          maxHeight={200}
-          bgcolor='white'
-          boxShadow={1}
-          p={2}
+          className={classes.rightCol}
+          display='flex'
+          flexDirection='column'
+          alignItems='flex-end'
+          justifyContent='space-between'
         >
-          {SQL.split('\n').map((line, i) => {
-            console.log('LINE of sql', line)
-            return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
-          })}
+          <HowToRegIcon color='secondary' />
+          <Typography>{namespace}</Typography>
         </Box>
-        <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+      </div>
+      <Box
+        className={classes.SQL}
+        width='100%'
+        minHeight='75%'
+        maxHeight={200}
+        bgcolor='white'
+        boxShadow={1}
+        p={2}
+      >
+        {SQL.split('\n').map((line, i) => {
+          return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
+        })}
       </Box>
-    )
-  }
+      <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+    </Box>
+  )
 }
 
 export default withStyles(styles)(JobDetailPage)

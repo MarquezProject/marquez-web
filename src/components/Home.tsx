@@ -14,6 +14,7 @@ import { IDatasetsState } from '../reducers/datasets'
 import { IJobsState } from '../reducers/jobs'
 
 import { findMatchingEntities } from '../actionCreators'
+import JobPreviewCard from './JobPreviewCard'
 
 const styles = (_theme: ITheme) => {
   return createStyles({
@@ -83,8 +84,9 @@ class Home extends React.Component<IAllProps, IState> {
     console.log('SAMEPLE JOB', sampleJob)
     return (
       <div className={classes.row}>
-        <JobDetailPage
-          /* should change to unique identifier */
+        <JobPreviewCard {...sampleJob} />
+        {/*<JobDetailPage
+          should change to unique identifier
           key={sampleJob.name}
           name={sampleJob.name}
           location={sampleJob.location}
@@ -94,6 +96,7 @@ class Home extends React.Component<IAllProps, IState> {
           namespace={sampleJob.namespace}
           context={sampleJob.context}
         />
+        */}
       </div>
     )
   }
