@@ -19,12 +19,13 @@ import { IJob } from '../types'
 const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
     root: {
-      marginTop: '52vh'
+      marginTop: '52vh',
+      height: '48vh'
     },
     topSection: {
       display: 'grid',
       gridTemplateColumns: '40px 3fr 1fr',
-      gridTemplateRows: '50px 50px',
+      gridTemplateRows: '1fr 1fr',
       /* eslint-disable @typescript-eslint/quotes */
       gridTemplateAreas: `'status name owner-icon' '. description owner'`,
       alignItems: 'center'
@@ -96,7 +97,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
   if (!job) {
     return (
       <Box
-        p={2}
+        p={4}
         display='flex'
         flexDirection='column'
         justifyContent='space-between'
@@ -122,7 +123,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
 
   return (
     <Box
-      p={2}
+      p={4}
       display='flex'
       flexDirection='column'
       justifyContent='space-between'
@@ -144,18 +145,21 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       <Box
         className={_SQL}
         width='80%'
-        minHeight='75%'
-        maxHeight={200}
+        height={200}
         bgcolor='white'
         boxShadow={1}
         p={2}
         mx='auto'
+        my={2}
+        borderRadius='3px'
       >
         {SQL.split('\n').map((line, i) => {
           return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
         })}
       </Box>
-      <Typography className={lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+      <Typography className={lastUpdated} align='right'>
+        {formatUpdatedAt(updatedAt)}
+      </Typography>
     </Box>
   )
 }
