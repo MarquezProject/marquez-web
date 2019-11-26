@@ -1,4 +1,4 @@
-import React, { ReactElement, FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import {
   withStyles,
   createStyles,
@@ -21,25 +21,45 @@ const styles = ({ palette, spacing }: ITheme) => {
     root: {
       marginTop: '52vh'
     },
-    rightCol: {
-      textAlign: 'right'
+    topSection: {
+      display: 'grid',
+      gridTemplateColumns: '40px 3fr 1fr',
+      gridTemplateRows: '50px 50px',
+      /* eslint-disable @typescript-eslint/quotes */
+      gridTemplateAreas: `'status name owner-icon' '. description owner'`,
+      alignItems: 'center'
     },
     lastUpdated: {
       color: palette.grey[600]
     },
-    status: {
+    _status: {
+      gridArea: 'status',
       width: spacing(2),
       height: spacing(2),
       borderRadius: '50%'
-    },
-    SQL: {
-      overflow: 'hidden'
     },
     failed: {
       backgroundColor: palette.error.main
     },
     passed: {
       backgroundColor: vibrantGreen
+    },
+    _name: {
+      gridArea: 'name'
+    },
+    _description: {
+      gridArea: 'description'
+    },
+    _owner: {
+      gridArea: 'owner',
+      justifySelf: 'end'
+    },
+    _ownerIcon: {
+      gridArea: 'owner-icon',
+      justifySelf: 'end'
+    },
+    _SQL: {
+      overflow: 'hidden'
     }
   })
 }
@@ -60,11 +80,33 @@ const StyledTypographySQL = withStyles({
 
 const JobDetailPage: FunctionComponent<IProps> = props => {
   const { jobs, classes } = props
-
+  const {
+    root,
+    _status,
+    _name,
+    _description,
+    _SQL,
+    _owner,
+    _ownerIcon,
+    lastUpdated,
+    topSection
+  } = classes
   const { jobName } = useParams()
   const job = _find(jobs, j => j.name === jobName)
   if (!job) {
-    return <p>No job</p>
+    return (
+      <Box
+        p={2}
+        display='flex'
+        flexDirection='column'
+        justifyContent='space-between'
+        className={root}
+      >
+        <Typography align='center'>
+          No job by the name of <strong>"{jobName}"</strong> found
+        </Typography>
+      </Box>
+    )
   }
   const {
     name,
@@ -75,51 +117,45 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     namespace,
     context = { SQL: '' }
   } = job
-  console.log('description', description)
-  console.log('context', context)
+
   const { SQL = '' } = context
+
   return (
     <Box
       p={2}
       display='flex'
       flexDirection='column'
       justifyContent='space-between'
-      width='100%'
-      className={classes.root}
+      className={root}
     >
-      <div>
-        <div className={`${classes[status]} ${classes.status}`} />
-        <Typography color='secondary' variant='h3'>
+      <div className={topSection}>
+        <div className={`${_status} ${classes[status]}`} />
+        <Typography color='secondary' variant='h3' className={_name}>
           <a href={location} className='link' target='_'>
             {name}
           </a>
         </Typography>
-        <StyledTypography color='primary'>{description}</StyledTypography>
-        <Box
-          className={classes.rightCol}
-          display='flex'
-          flexDirection='column'
-          alignItems='flex-end'
-          justifyContent='space-between'
-        >
-          <HowToRegIcon color='secondary' />
-          <Typography>{namespace}</Typography>
-        </Box>
+        <StyledTypography color='primary' className={_description}>
+          {description}
+        </StyledTypography>
+        <HowToRegIcon color='secondary' className={_ownerIcon} />
+        <Typography className={_owner}>{namespace}</Typography>
       </div>
       <Box
-        className={classes.SQL}
-        width='100%'
+        className={_SQL}
+        width='80%'
         minHeight='75%'
         maxHeight={200}
         bgcolor='white'
         boxShadow={1}
         p={2}
+        mx='auto'
       >
         {SQL.split('\n').map((line, i) => {
           return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
         })}
       </Box>
-      <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+      <Typography className={lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
     </Box>
   )
 }
