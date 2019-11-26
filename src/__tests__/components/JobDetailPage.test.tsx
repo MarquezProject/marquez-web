@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
 
 import JobDetailPage from '../../components/JobDetailPage'
 import { formatUpdatedAt } from '../../helpers'
@@ -94,6 +95,27 @@ describe('JobDetailPage Component', () => {
             .at(3) // zero-indexed
             .text()
         ).toContain(formatUpdatedAt(job.updatedAt))
+      })
+
+      it('if there is no SQL, should render text saying so', () => {
+        const job = { ...jobs[0], context: {} }
+
+        useParams.mockImplementation(() => ({
+          jobName: job.name
+        }))
+
+        const wrapper = mount(<JobDetailPage />)
+
+        wrapper.setProps({ jobs: jobs.map(j => (j.name === job.name ? job : j)) })
+
+        expect(
+          wrapper
+            .find(Box)
+            .last()
+            .find(Typography)
+            .first()
+            .text()
+        ).toContain('no SQL')
       })
       it('renders a snapshot that matches previous', () => {
         expect(wrapper).toMatchSnapshot()

@@ -116,10 +116,10 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     status = 'passed',
     location,
     namespace,
-    context = { SQL: '' }
+    context = { SQL: null }
   } = job
 
-  const { SQL = '' } = context
+  const { SQL } = context
 
   return (
     <Box
@@ -153,9 +153,13 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
         my={2}
         borderRadius='3px'
       >
-        {SQL.split('\n').map((line, i) => {
-          return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
-        })}
+        {SQL ? (
+          SQL.split('\n').map((line, i) => {
+            return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
+          })
+        ) : (
+          <Typography>There is no SQL for this job at this time.</Typography>
+        )}
       </Box>
       <Typography className={lastUpdated} align='right'>
         {formatUpdatedAt(updatedAt)}

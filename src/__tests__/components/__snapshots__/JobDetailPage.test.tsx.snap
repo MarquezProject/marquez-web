@@ -24,7 +24,7 @@ exports[`JobDetailPage Component when there is no match for the jobName in url p
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      p={2}
+      p={4}
     >
       <div
         className="MuiBox-root MuiBox-root-13 JobDetailPage-root-1"
@@ -589,7 +589,7 @@ exports[`JobDetailPage Component when there is no match for the jobName in url p
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      p={2}
+      p={4}
     >
       <div
         className="MuiBox-root MuiBox-root-44 JobDetailPage-root-1"
@@ -815,75 +815,70 @@ exports[`JobDetailPage Component when there is no match for the jobName in url p
         </div>
         <Styled(MuiBox)
           bgcolor="white"
+          borderRadius="3px"
           boxShadow={1}
           className="JobDetailPage-_SQL-11"
-          maxHeight={200}
-          minHeight="75%"
+          height={200}
           mx="auto"
+          my={2}
           p={2}
           width="80%"
         >
           <div
             className="MuiBox-root MuiBox-root-55 JobDetailPage-_SQL-11"
           >
-            <WithStyles(WithStyles(ForwardRef(Typography)))
-              key="0"
-            >
-              <WithStyles(ForwardRef(Typography))
+            <WithStyles(ForwardRef(Typography))>
+              <ForwardRef(Typography)
                 classes={
                   Object {
-                    "root": "WithStyles(ForwardRef(Typography))-root-56",
+                    "alignCenter": "MuiTypography-alignCenter",
+                    "alignJustify": "MuiTypography-alignJustify",
+                    "alignLeft": "MuiTypography-alignLeft",
+                    "alignRight": "MuiTypography-alignRight",
+                    "body1": "MuiTypography-body1",
+                    "body2": "MuiTypography-body2",
+                    "button": "MuiTypography-button",
+                    "caption": "MuiTypography-caption",
+                    "colorError": "MuiTypography-colorError",
+                    "colorInherit": "MuiTypography-colorInherit",
+                    "colorPrimary": "MuiTypography-colorPrimary",
+                    "colorSecondary": "MuiTypography-colorSecondary",
+                    "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                    "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                    "displayBlock": "MuiTypography-displayBlock",
+                    "displayInline": "MuiTypography-displayInline",
+                    "gutterBottom": "MuiTypography-gutterBottom",
+                    "h1": "MuiTypography-h1",
+                    "h2": "MuiTypography-h2",
+                    "h3": "MuiTypography-h3",
+                    "h4": "MuiTypography-h4",
+                    "h5": "MuiTypography-h5",
+                    "h6": "MuiTypography-h6",
+                    "noWrap": "MuiTypography-noWrap",
+                    "overline": "MuiTypography-overline",
+                    "paragraph": "MuiTypography-paragraph",
+                    "root": "MuiTypography-root",
+                    "srOnly": "MuiTypography-srOnly",
+                    "subtitle1": "MuiTypography-subtitle1",
+                    "subtitle2": "MuiTypography-subtitle2",
                   }
                 }
               >
-                <ForwardRef(Typography)
-                  classes={
-                    Object {
-                      "alignCenter": "MuiTypography-alignCenter",
-                      "alignJustify": "MuiTypography-alignJustify",
-                      "alignLeft": "MuiTypography-alignLeft",
-                      "alignRight": "MuiTypography-alignRight",
-                      "body1": "MuiTypography-body1",
-                      "body2": "MuiTypography-body2",
-                      "button": "MuiTypography-button",
-                      "caption": "MuiTypography-caption",
-                      "colorError": "MuiTypography-colorError",
-                      "colorInherit": "MuiTypography-colorInherit",
-                      "colorPrimary": "MuiTypography-colorPrimary",
-                      "colorSecondary": "MuiTypography-colorSecondary",
-                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                      "displayBlock": "MuiTypography-displayBlock",
-                      "displayInline": "MuiTypography-displayInline",
-                      "gutterBottom": "MuiTypography-gutterBottom",
-                      "h1": "MuiTypography-h1",
-                      "h2": "MuiTypography-h2",
-                      "h3": "MuiTypography-h3",
-                      "h4": "MuiTypography-h4",
-                      "h5": "MuiTypography-h5",
-                      "h6": "MuiTypography-h6",
-                      "noWrap": "MuiTypography-noWrap",
-                      "overline": "MuiTypography-overline",
-                      "paragraph": "MuiTypography-paragraph",
-                      "root": "MuiTypography-root WithStyles(ForwardRef(Typography))-root-56",
-                      "srOnly": "MuiTypography-srOnly",
-                      "subtitle1": "MuiTypography-subtitle1",
-                      "subtitle2": "MuiTypography-subtitle2",
-                    }
-                  }
+                <p
+                  className="MuiTypography-root MuiTypography-body1"
                 >
-                  <p
-                    className="MuiTypography-root WithStyles(ForwardRef(Typography))-root-56 MuiTypography-body1"
-                  />
-                </ForwardRef(Typography)>
-              </WithStyles(ForwardRef(Typography))>
-            </WithStyles(WithStyles(ForwardRef(Typography)))>
+                  There is no SQL for this job at this time.
+                </p>
+              </ForwardRef(Typography)>
+            </WithStyles(ForwardRef(Typography))>
           </div>
         </Styled(MuiBox)>
         <WithStyles(ForwardRef(Typography))
+          align="right"
           className="JobDetailPage-lastUpdated-3"
         >
           <ForwardRef(Typography)
+            align="right"
             className="JobDetailPage-lastUpdated-3"
             classes={
               Object {
@@ -921,7 +916,7 @@ exports[`JobDetailPage Component when there is no match for the jobName in url p
             }
           >
             <p
-              className="MuiTypography-root JobDetailPage-lastUpdated-3 MuiTypography-body1"
+              className="MuiTypography-root JobDetailPage-lastUpdated-3 MuiTypography-body1 MuiTypography-alignRight"
             />
           </ForwardRef(Typography)>
         </WithStyles(ForwardRef(Typography))>
