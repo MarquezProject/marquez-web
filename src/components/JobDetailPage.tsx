@@ -61,6 +61,9 @@ const styles = ({ palette, spacing }: ITheme) => {
     },
     _SQL: {
       overflow: 'hidden'
+    },
+    _SQLComment: {
+      color: palette.grey[400]
     }
   })
 }
@@ -88,6 +91,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     _name,
     _description,
     _SQL,
+    _SQLComment,
     _owner,
     _ownerIcon,
     lastUpdated,
@@ -146,20 +150,31 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       <Box
         className={_SQL}
         width='80%'
-        height={200}
+        minHeight={200}
+        maxHeight={250}
         bgcolor='white'
         boxShadow={1}
-        p={2}
+        // using border to create effect of padding, which will not work when there's overflow
+        border='1rem solid white'
+        borderLeft='2rem solid white'
         mx='auto'
         my={2}
         borderRadius='3px'
       >
         {SQL ? (
           SQL.split('\n').map((line, i) => {
-            return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
+            const extraClass = line.trim().startsWith('--') ? _SQLComment : ''
+
+            return (
+              <StyledTypographySQL key={i} className={extraClass}>
+                {line}
+              </StyledTypographySQL>
+            )
           })
         ) : (
-          <StyledTypographySQL>There is no SQL for this job at this time.</StyledTypographySQL>
+          <StyledTypographySQL align='center'>
+            There is no SQL for this job at this time.
+          </StyledTypographySQL>
         )}
       </Box>
       <Typography className={lastUpdated} align='right'>
