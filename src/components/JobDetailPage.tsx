@@ -109,7 +109,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
         className={root}
       >
         <Typography align='center'>
-          No job by the name of <strong>"{jobName}"</strong> found
+          No job by the name of <strong>&quot;{jobName}&quot;</strong> found
         </Typography>
       </Box>
     )
