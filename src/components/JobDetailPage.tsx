@@ -75,7 +75,8 @@ const StyledTypography = withStyles({
 
 const StyledTypographySQL = withStyles({
   root: {
-    whiteSpace: 'pre'
+    whiteSpace: 'pre',
+    fontFamily: `'Inconsolata', monospace`
   }
 })(Typography)
 
@@ -158,7 +159,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
             return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
           })
         ) : (
-          <Typography>There is no SQL for this job at this time.</Typography>
+          <StyledTypographySQL>There is no SQL for this job at this time.</StyledTypographySQL>
         )}
       </Box>
       <Typography className={lastUpdated} align='right'>
