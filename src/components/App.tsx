@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { CssBaseline } from '@material-ui/core'
 import AppBar from './AppBar'
@@ -24,9 +24,11 @@ import {
 import createRootReducer from '../reducers'
 import rootSaga from '../sagas'
 import HomeContainer from '../containers/HomeContainer'
+import CustomSearchBarContainer from '../containers/CustomSearchBarContainer'
 import Toast from '../containers/ToastContainer'
 import NetworkGraphContainer from '../containers/NetworkGraphContainer'
 import DatasetsContainer from '../containers/DatasetsContainer'
+import JobDetailContainer from '../containers/JobDetailContainer'
 
 const sagaMiddleware = createSagaMiddleware({
   onError: (error, _sagaStackIgnored) => {
@@ -80,6 +82,7 @@ interface IProps extends IWithStyles<typeof styles> {}
 const TITLE = 'Marquez | Data Kit'
 
 const App = ({ classes }: IProps): ReactElement => {
+  const [showJobs, setShowJobs] = useState(false)
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -91,9 +94,20 @@ const App = ({ classes }: IProps): ReactElement => {
           <Grid direction='column' alignItems='stretch' classes={classes} justify='space-between'>
             <AppBar />
             <NetworkGraphContainer />
+            <CustomSearchBarContainer
+              setShowJobs={setShowJobs}
+              showJobs={showJobs}
+            ></CustomSearchBarContainer>
             <Switch>
-              <Route path='/' exact component={HomeContainer} />
               <Route path='/datasets/:name' exact component={DatasetsContainer} />
+              <Route
+                path='/'
+                exact
+                render={props => (
+                  <HomeContainer {...props} showJobs={showJobs} setShowJobs={setShowJobs} />
+                )}
+              />
+              <Route path='/jobs/:jobName' exact component={JobDetailContainer} />
             </Switch>
             <Toast />
           </Grid>
