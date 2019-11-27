@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react'
 import * as RRD from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+
 import { Typography, Box } from '@material-ui/core'
 
 import { IDatasetsState } from '../reducers/datasets'
@@ -31,9 +33,9 @@ class Datasets extends React.Component<IAllProps, IState> {
   render(): ReactElement {
     const routeParams = this.props.match.params
     const { classes, datasets } = this.props
-    const dataset = _.find(datasets, d => d.name == routeParams.name)
-    console.log('Dataset: ', dataset)
-    console.log('Classes: ', classes)
+    // const dataset = _.find(datasets, d => d.name == routeParams.name)
+    // console.log('Dataset: ', dataset)
+    // console.log('Classes: ', classes)
     return (
       <Box mt={10}>
         <Typography color='primary' align='center'>
