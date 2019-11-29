@@ -74,7 +74,7 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
       padding: spacing(2),
       width: '80%',
       height: '80%',
-      margin: '10%',
+      margin: '10vh 10%',
       overflow: 'scroll',
       boxShadow: shadows[1],
       // using border to create effect of padding, which will not work when there's overflow
@@ -84,7 +84,16 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
     },
     SQLModalTitle: {
       fontSize: '2rem',
-      fontWeight: 700
+      fontWeight: 700,
+      position: 'fixed',
+      width: '100%',
+      right: 0
+    },
+    copyToClipboard: {
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      cursor: 'pointer'
     }
   })
 }
@@ -121,7 +130,8 @@ const StyledCloseIcon = withStyles({
     right: 0,
     top: '1rem',
     backgroundColor: 'white',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    zIndex: 10
   }
 })(CloseIcon)
 
@@ -129,7 +139,6 @@ const displaySQL = (SQL: string, SQLCommentClass: string) => {
   return SQL ? (
     SQL.split('\n').map((line, i) => {
       const extraClass = line.trim().startsWith('--') ? SQLCommentClass : ''
-
       return (
         <StyledTypographySQL key={i} className={extraClass}>
           {line}
@@ -157,7 +166,8 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     _owner,
     _ownerIcon,
     lastUpdated,
-    topSection
+    topSection,
+    copyToClipboard
   } = classes
   const { jobName } = useParams()
   const job = _find(jobs, j => j.name === jobName)
@@ -231,7 +241,21 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
             <Typography id='modal-title' align='center' gutterBottom className={SQLModalTitle}>
               {name}
             </Typography>
-            {displaySQL(SQL, _SQLComment)}
+            {/* gutter (because we cannot put margin on the fixed-positioned title)*/}
+            <Box height='4rem'></Box> {displaySQL(SQL, _SQLComment)}
+            {!!SQL && (
+              <Typography
+                color='secondary'
+                className={copyToClipboard}
+                onClick={() => {
+                  if (SQL) {
+                    navigator.clipboard.writeText(SQL)
+                  }
+                }}
+              >
+                copy to clipboard
+              </Typography>
+            )}
           </div>
         </Modal>
         {displaySQL(SQL, _SQLComment) // here is a comment to make the line longer
