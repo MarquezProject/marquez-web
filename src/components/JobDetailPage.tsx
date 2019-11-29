@@ -110,7 +110,8 @@ const StyledExpandButton = withStyles({
     position: 'absolute',
     right: 0,
     bottom: 0,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    cursor: 'pointer'
   }
 })(OpenWithSharpIcon)
 
@@ -142,7 +143,7 @@ const displaySQL = (SQL: string, SQLCommentClass: string) => {
   )
 }
 const JobDetailPage: FunctionComponent<IProps> = props => {
-  const [SQLModalOpen, _setSQLModalOpen] = useState(true)
+  const [SQLModalOpen, setSQLModalOpen] = useState(false)
   const { jobs, classes } = props
   const {
     root,
@@ -223,10 +224,10 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
         borderRadius='3px'
         position='relative'
       >
-        <StyledExpandButton color='secondary' />
+        <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)} />
         <Modal aria-labelledby='modal-title' open={SQLModalOpen}>
           <div className={SQLModal}>
-            <StyledCloseIcon fontSize='large' />
+            <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)} />
             <Typography id='modal-title' align='center' gutterBottom className={SQLModalTitle}>
               {name}
             </Typography>
