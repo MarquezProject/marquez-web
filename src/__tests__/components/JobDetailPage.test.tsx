@@ -106,17 +106,18 @@ describe('JobDetailPage Component', () => {
         it(`should render an 'expand' button`, () => {
           expect(wrapper.find(OpenWithSharpIcon)).toHaveLength(1)
         })
+        it('renders a snapshot that matches previous', () => {
+          expect(wrapper).toMatchSnapshot()
+        })
       })
 
-      describe.only('if there is no SQL', () => {
+      describe('if there is no SQL', () => {
         const job = { ...jobs[0], context: {} }
-        console.log('NAME IN TEST', job.name)
         useParams.mockImplementation(() => ({
           jobName: job.name
         }))
 
         const props = { jobs: jobs.map(j => (j.name === job.name ? job : j)) }
-        console.log('PROPS in test', props)
         const wrapper = mount(<JobDetailPage {...props} />)
         it('should render text saying so', () => {
           expect(
@@ -136,13 +137,6 @@ describe('JobDetailPage Component', () => {
           expect(wrapper.find(OpenWithSharpIcon)).toHaveLength(0)
         })
       })
-      it('renders a snapshot that matches previous', () => {
-        expect(wrapper).toMatchSnapshot()
-      })
     })
   })
 })
-//
-
-//
-// const componentText = wrapper.render().text()
