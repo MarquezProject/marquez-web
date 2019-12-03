@@ -1,5 +1,6 @@
 import { all, call, put, take } from 'redux-saga/effects'
 import * as RS from 'redux-saga'
+import _orderBy from 'lodash/orderBy'
 import { INamespaceAPI, INamespacesAPI, IDatasetsAPI, IJobsAPI } from '../types/api'
 import { fetchNamespaces, fetchDatasets, fetchJobs, fetchLatestJobRuns } from '../requests'
 import { createRollbarMessage } from '../helpers'
@@ -39,7 +40,9 @@ export function* fetchJobRunsSaga() {
 
       const { runs } = yield call(fetchLatestJobRuns, payload.jobName, payload.namespaceName)
 
-      yield put(fetchJobRunsSuccess(payload.jobName, runs))
+      const runsOrderedByStartTime = _orderBy(runs, ['nominalStartTime'], ['asc'])
+
+      yield put(fetchJobRunsSuccess(payload.jobName, runsOrderedByStartTime))
     } catch (e) {
       createRollbarMessage('fetchJobRuns', e)
       yield put(applicationError('Something went wrong while fetching job runs'))
