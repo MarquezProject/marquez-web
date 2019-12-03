@@ -130,7 +130,7 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
                 <TableRow key={row.uuid}>
                   {
                     fakeHeaders.map((header: string) => {
-                      return <TableCell key={header} align="left">{`${row[header]}`}</TableCell>
+                      return <TableCell key={header} align="left">{row[header].toString()}</TableCell>
                     })
                   }
                 </TableRow>
