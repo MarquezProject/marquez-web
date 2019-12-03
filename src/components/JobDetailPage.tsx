@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import {
   withStyles,
   createStyles,
@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core/styles'
 import { Typography, Box } from '@material-ui/core'
 import HowToRegIcon from '@material-ui/icons/HowToReg'
-import { useParams } from 'react-router-dom'
+import { useParams, RouteComponentProps } from 'react-router-dom'
 import _find from 'lodash/find'
 
 const globalStyles = require('../global_styles.css')
@@ -15,6 +15,7 @@ const { vibrantGreen } = globalStyles
 import { formatUpdatedAt } from '../helpers'
 
 import { IJob } from '../types'
+import { fetchJobRuns as _fetchJobRuns } from '../actionCreators'
 
 const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
@@ -68,7 +69,7 @@ const styles = ({ palette, spacing }: ITheme) => {
   })
 }
 
-type IProps = IWithStyles<typeof styles> & { jobs: IJob[] }
+type IProps = IWithStyles<typeof styles> & { jobs: IJob[]; fetchJobRuns: typeof _fetchJobRuns }
 
 const StyledTypography = withStyles({
   root: {
@@ -83,8 +84,11 @@ const StyledTypographySQL = withStyles({
   }
 })(Typography)
 
-const JobDetailPage: FunctionComponent<IProps> = props => {
-  const { jobs, classes } = props
+const JobDetailPage: FunctionComponent<
+  IProps & RouteComponentProps<{ jobName: string }>
+> = props => {
+  const { jobs, classes, fetchJobRuns } = props
+
   const {
     root,
     _status,
@@ -99,6 +103,14 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
   } = classes
   const { jobName } = useParams()
   const job = _find(jobs, j => j.name === jobName)
+
+  useEffect(() => {
+    console.log('going to fetch again', job)
+    if (job && !job.lastTenRuns) {
+      fetchJobRuns(job.name, job.namespace)
+    }
+  }, [props.jobs])
+
   if (!job) {
     return (
       <Box
