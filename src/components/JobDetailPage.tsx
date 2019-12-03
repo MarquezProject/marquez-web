@@ -1,4 +1,4 @@
-import React, { ReactElement, FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import {
   withStyles,
   createStyles,
@@ -19,27 +19,51 @@ import { IJob } from '../types'
 const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
     root: {
-      marginTop: '52vh'
+      marginTop: '52vh',
+      height: '48vh'
     },
-    rightCol: {
-      textAlign: 'right'
+    topSection: {
+      display: 'grid',
+      gridTemplateColumns: '40px 3fr 1fr',
+      gridTemplateRows: '1fr 1fr',
+      /* eslint-disable @typescript-eslint/quotes */
+      gridTemplateAreas: `'status name owner-icon' '. description owner'`,
+      alignItems: 'center'
     },
     lastUpdated: {
       color: palette.grey[600]
     },
-    status: {
+    _status: {
+      gridArea: 'status',
       width: spacing(2),
       height: spacing(2),
       borderRadius: '50%'
-    },
-    SQL: {
-      overflow: 'hidden'
     },
     failed: {
       backgroundColor: palette.error.main
     },
     passed: {
       backgroundColor: vibrantGreen
+    },
+    _name: {
+      gridArea: 'name'
+    },
+    _description: {
+      gridArea: 'description'
+    },
+    _owner: {
+      gridArea: 'owner',
+      justifySelf: 'end'
+    },
+    _ownerIcon: {
+      gridArea: 'owner-icon',
+      justifySelf: 'end'
+    },
+    _SQL: {
+      overflow: 'hidden'
+    },
+    _SQLComment: {
+      color: palette.grey[400]
     }
   })
 }
@@ -54,17 +78,41 @@ const StyledTypography = withStyles({
 
 const StyledTypographySQL = withStyles({
   root: {
-    whiteSpace: 'pre'
+    whiteSpace: 'pre',
+    fontFamily: `'Inconsolata', monospace`
   }
 })(Typography)
 
 const JobDetailPage: FunctionComponent<IProps> = props => {
   const { jobs, classes } = props
-
+  const {
+    root,
+    _status,
+    _name,
+    _description,
+    _SQL,
+    _SQLComment,
+    _owner,
+    _ownerIcon,
+    lastUpdated,
+    topSection
+  } = classes
   const { jobName } = useParams()
   const job = _find(jobs, j => j.name === jobName)
   if (!job) {
-    return <p>No job</p>
+    return (
+      <Box
+        p={4}
+        display='flex'
+        flexDirection='column'
+        justifyContent='space-between'
+        className={root}
+      >
+        <Typography align='center'>
+          No job by the name of <strong>&quot;{jobName}&quot;</strong> found
+        </Typography>
+      </Box>
+    )
   }
   const {
     name,
@@ -73,53 +121,65 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     status = 'passed',
     location,
     namespace,
-    context = { SQL: '' }
+    context = { SQL: null }
   } = job
-  console.log('description', description)
-  console.log('context', context)
-  const { SQL = '' } = context
+
+  const { SQL } = context
+
   return (
     <Box
-      p={2}
+      p={4}
       display='flex'
       flexDirection='column'
       justifyContent='space-between'
-      width='100%'
-      className={classes.root}
+      className={root}
     >
-      <div>
-        <div className={`${classes[status]} ${classes.status}`} />
-        <Typography color='secondary' variant='h3'>
+      <div className={topSection}>
+        <div className={`${_status} ${classes[status]}`} />
+        <Typography color='secondary' variant='h3' className={_name}>
           <a href={location} className='link' target='_'>
             {name}
           </a>
         </Typography>
-        <StyledTypography color='primary'>{description}</StyledTypography>
-        <Box
-          className={classes.rightCol}
-          display='flex'
-          flexDirection='column'
-          alignItems='flex-end'
-          justifyContent='space-between'
-        >
-          <HowToRegIcon color='secondary' />
-          <Typography>{namespace}</Typography>
-        </Box>
+        <StyledTypography color='primary' className={_description}>
+          {description}
+        </StyledTypography>
+        <HowToRegIcon color='secondary' className={_ownerIcon} />
+        <Typography className={_owner}>{namespace}</Typography>
       </div>
       <Box
-        className={classes.SQL}
-        width='100%'
-        minHeight='75%'
-        maxHeight={200}
+        className={_SQL}
+        width='80%'
+        minHeight={200}
+        maxHeight={250}
         bgcolor='white'
         boxShadow={1}
-        p={2}
+        // using border to create effect of padding, which will not work when there's overflow
+        border='1rem solid white'
+        borderLeft='2rem solid white'
+        mx='auto'
+        my={2}
+        borderRadius='3px'
       >
-        {SQL.split('\n').map((line, i) => {
-          return <StyledTypographySQL key={i}>{line}</StyledTypographySQL>
-        })}
+        {SQL ? (
+          SQL.split('\n').map((line, i) => {
+            const extraClass = line.trim().startsWith('--') ? _SQLComment : ''
+
+            return (
+              <StyledTypographySQL key={i} className={extraClass}>
+                {line}
+              </StyledTypographySQL>
+            )
+          })
+        ) : (
+          <StyledTypographySQL align='center'>
+            There is no SQL for this job at this time.
+          </StyledTypographySQL>
+        )}
       </Box>
-      <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+      <Typography className={lastUpdated} align='right'>
+        {formatUpdatedAt(updatedAt)}
+      </Typography>
     </Box>
   )
 }

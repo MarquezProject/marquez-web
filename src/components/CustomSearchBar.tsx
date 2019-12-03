@@ -41,7 +41,6 @@ class CustomSearchBar extends React.Component<IAllProps, IState> {
   searchChanged = (searchString: string) => {
     this.setState({ value: searchString })
     this.props.findMatchingEntities(searchString)
-    console.log(searchString == '')
     searchString == '' ? this.props.setShowJobs(false) : this.props.setShowJobs(true)
   }
 

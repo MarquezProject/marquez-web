@@ -9,7 +9,7 @@ const webpackDev = {
     port: 1337,
     publicPath: '/',
     historyApiFallback: {
-      index: './src/index.html',
+      index: './index.html',
       disableDotRule: true
     },
     proxy: {
