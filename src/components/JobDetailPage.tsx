@@ -5,13 +5,15 @@ import {
   WithStyles as IWithStyles,
   Theme as ITheme
 } from '@material-ui/core/styles'
-import { Typography, Box } from '@material-ui/core'
+import Box from '@material-ui/core/Box'
+import Typography from '@material-ui/core/Typography'
+import Tooltip from '@material-ui/core/Tooltip'
 import HowToRegIcon from '@material-ui/icons/HowToReg'
 import { useParams, RouteComponentProps } from 'react-router-dom'
 import _find from 'lodash/find'
 
 const globalStyles = require('../global_styles.css')
-const { vibrantGreen } = globalStyles
+const { vibrantGreen, deepRed, jobRunYellow, jobRunBlue, jobNodeGrey } = globalStyles
 import { formatUpdatedAt } from '../helpers'
 
 import { IJob } from '../types'
@@ -65,6 +67,29 @@ const styles = ({ palette, spacing }: ITheme) => {
     },
     _SQLComment: {
       color: palette.grey[400]
+    },
+    jobRun: {
+      minWidth: '1.25rem',
+      minHeight: '1.25rem',
+      backgroundColor: '#e4cd51',
+      margin: '0.25rem',
+      display: 'inline-block',
+      verticalAlign: 'middle'
+    },
+    jobRun_NEW: {
+      backgroundColor: jobRunBlue
+    },
+    jobRun_RUNNING: {
+      backgroundColor: jobRunYellow
+    },
+    jobRun_COMPLETED: {
+      backgroundColor: vibrantGreen
+    },
+    jobRun_FAILED: {
+      backgroundColor: deepRed
+    },
+    jobRun_ABORTED: {
+      backgroundColor: jobNodeGrey
     }
   })
 }
@@ -84,6 +109,12 @@ const StyledTypographySQL = withStyles({
   }
 })(Typography)
 
+const TypographyWithLeftMargin = withStyles({
+  root: {
+    marginLeft: '2rem'
+  }
+})(Typography)
+
 const JobDetailPage: FunctionComponent<
   IProps & RouteComponentProps<{ jobName: string }>
 > = props => {
@@ -99,13 +130,13 @@ const JobDetailPage: FunctionComponent<
     _owner,
     _ownerIcon,
     lastUpdated,
-    topSection
+    topSection,
+    jobRun
   } = classes
   const { jobName } = useParams()
   const job = _find(jobs, j => j.name === jobName)
 
   useEffect(() => {
-    console.log('going to fetch again', job)
     if (job && !job.lastTenRuns) {
       fetchJobRuns(job.name, job.namespace)
     }
@@ -133,7 +164,8 @@ const JobDetailPage: FunctionComponent<
     status = 'passed',
     location,
     namespace,
-    context = { SQL: null }
+    context = { SQL: null },
+    lastTenRuns
   } = job
 
   const { SQL } = context
@@ -189,9 +221,25 @@ const JobDetailPage: FunctionComponent<
           </StyledTypographySQL>
         )}
       </Box>
-      <Typography className={lastUpdated} align='right'>
-        {formatUpdatedAt(updatedAt)}
-      </Typography>
+      <Box flexDirection='row' textAlign='end'>
+        {(lastTenRuns || []).map(r => {
+          const { runState, runId } = r
+          const colorClass = `jobRun_${runState}`
+          return (
+            <Tooltip
+              key={runId}
+              placement='top'
+              title={`job state: ${runState}`}
+              id='job_run_details'
+            >
+              <div key={runId} className={`${jobRun} ${(classes as any)[colorClass]}`}></div>
+            </Tooltip>
+          )
+        })}
+        <TypographyWithLeftMargin className={lastUpdated} align='right' display='inline'>
+          {formatUpdatedAt(updatedAt)}
+        </TypographyWithLeftMargin>
+      </Box>
     </Box>
   )
 }
