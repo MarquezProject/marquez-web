@@ -15,7 +15,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import tagToBadge from '../config/tag-to-badge'
+import InfoIcon from '@material-ui/icons/Info'
 
+import { formatUpdatedAt } from '../helpers' 
 
 import { useParams } from 'react-router-dom'
 import _find from 'lodash/find'
@@ -35,13 +37,20 @@ const styles = ({ palette, spacing }: ITheme) => {
       display: 'flex',
       margin: '12px 12px 0px 0px'
     },
-    paper: {
-      width: '100%',
-      overflowX: 'auto',
-      marginTop: '6px'
+    noData: {
+      padding: '125px 0 0 0'
     },
-    table: {
-      minWidth: 650
+    infoIcon: {
+      float: 'right',
+      paddingRight: '60px',
+      paddingTop: '3px'
+    },
+    tableCell: {
+      paddingTop: '12px'
+    },
+    paper: {
+      overflowX: 'auto',
+      marginTop: '10px'
     },
     updated: {
       marginTop: '10px'
@@ -54,43 +63,56 @@ type IProps = IWithStyles<typeof styles> & { datasets: IDataset[] }
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
   const {
-    root, paper, table, updated, tagContainer
+    root, paper, updated, tagContainer, noData, infoIcon, tableCell
   } = classes
   const { datasetName } = useParams()
   const dataset = _find(datasets, d => d.name === datasetName)
   if (!dataset) {
     return (
       <Box
-        p={4}
+        mt={10}
         display='flex'
-        flexDirection='column'
-        justifyContent='space-between'
+        justifyContent="center"
         className={root}
       >
-        <Typography align='center'>
+        <Typography align='center' className={noData}>
           No dataset by the name of <strong>&quot;{datasetName}&quot;</strong> found
         </Typography>
       </Box>
     )
   } else {
-    const {
+    let {
       name,
       description,
       tags = [],
+      fields,
       updatedAt
     } = dataset
 
-    const fakeHeaders = ['uuid', 'name', 'location', 'usf', 'open']
+    // placeholder logic to seed 'fields' attribute if API returns nothing
+    !fields ? fields = [
+      {
+      "name": "uuid",
+      "type": "STRING"
+      },
+      {
+      "name": "name",
+      "type": "STRING"
+      },
+      {
+      "name": "mass",
+      "type": "INTEGER"
+      },
+      {
+      "name": "dimension",
+      "type": "STRING"
+      },
+      {
+      "name": "interstellar",
+      "type": "BOOLEAN"
+      }
+    ] : null
 
-    const createFakeData = function(uuid: string, name: string, location: string, usf: number, open: boolean) {
-      return { uuid, name, location, usf, open };
-    }
-    
-    const rows = [
-      createFakeData('8dg2j54ldkg93d', '555 Burrard Street', 'Atlanta', 25000, true),
-      createFakeData('kj5ld89gjk3ld9', '595 Weston Lane', 'Philadelphia', 50000, false),
-    ];
-  
     return (
       <Box mt={10} className={root}>
         <Box display='flex' justifyContent='space-between'>
@@ -115,31 +137,39 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
           </div>
         </Box>
         <Paper className={paper}>
-          <Table className={table} size="small" aria-label="a dense table">
+          <Table size="small">
             <TableHead>
               <TableRow>
                 {
-                  fakeHeaders.map((header: string) => {
-                    return <TableCell key={header} align="left"><strong>{header}</strong></TableCell>
+                  fields.map((field) => {
+                    return (
+                    <TableCell className={tableCell} key={field.name} align="left"><strong>{field.name}</strong>
+                      <Tooltip title={field.type} placement="top">
+                        <div className={infoIcon}>
+                          <InfoIcon color='disabled' fontSize='small' />
+                        </div>
+                      </Tooltip>
+                    </TableCell>
+                    )
                   })
                 }
               </TableRow>
             </TableHead>
-            <TableBody>
+            {/* <TableBody>
               {rows.map(row => (
-                <TableRow key={row.uuid}>
+                <TableRow key={row.id}>
                   {
-                    fakeHeaders.map((header: string) => {
-                      return <TableCell key={header} align="left">{row[header].toString()}</TableCell>
+                    fields.map(field => {
+                      return <TableCell key={field} align="left">{row[field].toString()}</TableCell>
                     })
                   }
                 </TableRow>
               ))}
-            </TableBody>
+            </TableBody> */}
           </Table>
         </Paper>
         <Typography className={updated} color='primary' align='right'>
-          {updatedAt}
+          {formatUpdatedAt(updatedAt)}
         </Typography>
       </Box>
     )

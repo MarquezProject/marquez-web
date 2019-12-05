@@ -1,5 +1,5 @@
 interface IFieldsAPI {
-  name: string
+  name: string,
   type: string
 }
 
@@ -11,7 +11,7 @@ export interface IDatasetAPI {
   sourceName: string
   description: string
   tags?: string[]
-  fields?: IFieldsAPI[]
+  fields: IFieldsAPI[]
 }
 
 export interface INamespaceAPI {
