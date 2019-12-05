@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import {
   Link
-} from "react-router-dom";
+} from 'react-router-dom'
 
 import {
   withStyles,

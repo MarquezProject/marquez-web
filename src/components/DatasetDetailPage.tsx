@@ -2,17 +2,16 @@ import React, { FunctionComponent } from 'react'
 import {
   withStyles,
   createStyles,
-  WithStyles as IWithStyles,
-  Theme as ITheme
+  WithStyles as IWithStyles
 } from '@material-ui/core/styles'
 import { Typography, Box, Tooltip } from '@material-ui/core'
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table'
+// import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
 
 import tagToBadge from '../config/tag-to-badge'
 import InfoIcon from '@material-ui/icons/Info'
@@ -25,7 +24,7 @@ import _keys from 'lodash/keys'
 
 import { IDataset } from '../types'
 
-const styles = ({ palette, spacing }: ITheme) => {
+const styles = () => {
   return createStyles({
     root: {
       padding: '42vh 6% 1%',
@@ -81,35 +80,38 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
       </Box>
     )
   } else {
-    let {
+    const {
       name,
       description,
       tags = [],
-      fields,
       updatedAt
     } = dataset
 
+    let {
+      fields
+    } = dataset
+    
     // placeholder logic to seed 'fields' attribute if API returns nothing
     !fields ? fields = [
       {
-      "name": "uuid",
-      "type": "STRING"
+      'name': 'uuid',
+      'type': 'STRING'
       },
       {
-      "name": "name",
-      "type": "STRING"
+      'name': 'name',
+      'type': 'STRING'
       },
       {
-      "name": "mass",
-      "type": "INTEGER"
+      'name': 'mass',
+      'type': 'INTEGER'
       },
       {
-      "name": "dimension",
-      "type": "STRING"
+      'name': 'dimension',
+      'type': 'STRING'
       },
       {
-      "name": "interstellar",
-      "type": "BOOLEAN"
+      'name': 'interstellar',
+      'type': 'BOOLEAN'
       }
     ] : null
 
