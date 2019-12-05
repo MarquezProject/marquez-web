@@ -10,15 +10,16 @@ import { formatUpdatedAt } from '../../helpers'
 const jobs = require('../../../docker/db/data/jobs.json')
 
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'), // use actual for all non-hook parts
+  ...jest.requireActual('react-router-dom'), // use actual for all non-hook props
   useParams: jest.fn()
 }))
+
 import { useParams } from 'react-router-dom'
 
 describe('JobDetailPage Component', () => {
   describe('when there is no match for the jobName in url params', () => {
     useParams.mockImplementation(() => ({
-      jobName: 'test.job'
+      jobName: 'job.nomatch'
     }))
 
     const wrapper = mount(<JobDetailPage />)
@@ -26,7 +27,8 @@ describe('JobDetailPage Component', () => {
     it('should render', () => {
       expect(wrapper.exists()).toBe(true)
     })
-    it('should render text explaning that there was no matching job found', () => {
+
+    it('should render text explaniing that there was no matching job found', () => {
       expect(
         wrapper
           .find(Typography)
@@ -34,12 +36,17 @@ describe('JobDetailPage Component', () => {
           .toLowerCase()
       ).toContain('no job')
     })
+
     it('renders a snapshot that matches previous', () => {
       expect(wrapper).toMatchSnapshot()
     })
   })
 
-  describe.only('when there is a match for the jobName in url params', () => {
+  describe('when there is a match for the jobName in url params', () => {
+    /*
+      will replace this with imported job_runs.json once Willy is able to add
+      seeding step for jobs runs
+    */
     const tempJobRuns = [
       {
         runId: '870492da-ecfb-4be0-91b9-9a89ddd3db90',
@@ -49,7 +56,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'NEW',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -63,7 +70,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'FAILED',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -77,7 +84,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'COMPLETED',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -92,7 +99,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'COMPLETED',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -107,7 +114,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'FAILED',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -121,7 +128,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'NEW',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -135,7 +142,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'ABORTED',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -149,7 +156,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'RUNNING',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -163,7 +170,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'RUNNING',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -177,7 +184,7 @@ describe('JobDetailPage Component', () => {
         nominalEndTime: '2019-05-12T19:52:24.201Z',
         runState: 'ABORTED',
         runArgs: {
-          email: 'data@wework.com',
+          email: 'data@domain.com',
           emailOnFailure: false,
           emailOnRetry: true,
           retries: 2
@@ -272,18 +279,15 @@ describe('JobDetailPage Component', () => {
       expect(
         wrapper
           .find(Box)
-          .at(1)
+          .at(1) // zero-indexed
           .find(Typography)
           .first()
           .text()
       ).toContain('no SQL')
     })
+
     it('renders a snapshot that matches previous', () => {
       expect(wrapper).toMatchSnapshot()
     })
   })
 })
-//
-
-//
-// const componentText = wrapper.render().text()
