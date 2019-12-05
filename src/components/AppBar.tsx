@@ -42,13 +42,11 @@ const MyAppBar = (props: IProps): ReactElement => {
   return (
     <AppBar position='fixed' className={classes.appBar}>
       <Toolbar>
-        <BrowserRouter>
-          <Link className={link} to="/">
-            <Typography className={classes.icon} variant='h4' color='inherit' noWrap>
-              MARQUEZ
-            </Typography>
-          </Link>
-        </BrowserRouter>
+        <Link className={link} to="/">
+          <Typography className={classes.icon} variant='h4' color='inherit' noWrap>
+            MARQUEZ
+          </Typography>
+        </Link>
         <div className={classes.rightToolbar}>
           <Menu></Menu>
         </div>
