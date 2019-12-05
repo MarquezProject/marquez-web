@@ -1,114 +1,126 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1`] = `
-<WithStyles(DatasetPreviewCard)
-  description="describes different geometries in the galaxy"
-  fields={
-    Array [
+<MemoryRouter>
+  <Router
+    history={
       Object {
-        "name": "uuid",
-        "type": "STRING",
-      },
-      Object {
-        "name": "name",
-        "type": "STRING",
-      },
-      Object {
-        "name": "mass",
-        "type": "INTEGER",
-      },
-      Object {
-        "name": "dimension",
-        "type": "STRING",
-      },
-      Object {
-        "name": "interstellar",
-        "type": "BOOLEAN",
-      },
-    ]
-  }
-  name="galaxy.geometry"
-  namespace="galactic-data"
-  physicalName="galaxy.geometry"
-  sourceName="redshift"
-  tags={
-    Array [
-      "tag_a",
-      "tag_b",
-      "tag_c",
-    ]
-  }
-  type="DB_TABLE"
->
-  <DatasetPreviewCard
-    classes={
-      Object {
-        "lastUpdated": "DatasetPreviewCard-lastUpdated-2",
-        "link": "DatasetPreviewCard-link-4",
-        "rightCol": "DatasetPreviewCard-rightCol-1",
-        "tagContainer": "DatasetPreviewCard-tagContainer-3",
+        "action": "POP",
+        "block": [Function],
+        "canGo": [Function],
+        "createHref": [Function],
+        "entries": Array [
+          Object {
+            "hash": "",
+            "key": "39eq9z",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+        ],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "index": 0,
+        "length": 1,
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "key": "39eq9z",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        },
+        "push": [Function],
+        "replace": [Function],
       }
     }
-    description="describes different geometries in the galaxy"
-    fields={
-      Array [
-        Object {
-          "name": "uuid",
-          "type": "STRING",
-        },
-        Object {
-          "name": "name",
-          "type": "STRING",
-        },
-        Object {
-          "name": "mass",
-          "type": "INTEGER",
-        },
-        Object {
-          "name": "dimension",
-          "type": "STRING",
-        },
-        Object {
-          "name": "interstellar",
-          "type": "BOOLEAN",
-        },
-      ]
-    }
-    name="galaxy.geometry"
-    namespace="galactic-data"
-    physicalName="galaxy.geometry"
-    sourceName="redshift"
-    tags={
-      Array [
-        "tag_a",
-        "tag_b",
-        "tag_c",
-      ]
-    }
-    type="DB_TABLE"
   >
-    <BrowserRouter>
-      <Router
-        history={
+    <WithStyles(DatasetPreviewCard)
+      description="describes different geometries in the galaxy"
+      fields={
+        Array [
           Object {
-            "action": "POP",
-            "block": [Function],
-            "createHref": [Function],
-            "go": [Function],
-            "goBack": [Function],
-            "goForward": [Function],
-            "length": 1,
-            "listen": [Function],
-            "location": Object {
-              "hash": "",
-              "pathname": "/",
-              "search": "",
-              "state": undefined,
-            },
-            "push": [Function],
-            "replace": [Function],
+            "name": "uuid",
+            "type": "STRING",
+          },
+          Object {
+            "name": "name",
+            "type": "STRING",
+          },
+          Object {
+            "name": "mass",
+            "type": "INTEGER",
+          },
+          Object {
+            "name": "dimension",
+            "type": "STRING",
+          },
+          Object {
+            "name": "interstellar",
+            "type": "BOOLEAN",
+          },
+        ]
+      }
+      name="galaxy.geometry"
+      namespace="galactic-data"
+      physicalName="galaxy.geometry"
+      sourceName="redshift"
+      tags={
+        Array [
+          "tag_a",
+          "tag_b",
+          "tag_c",
+        ]
+      }
+      type="DB_TABLE"
+    >
+      <DatasetPreviewCard
+        classes={
+          Object {
+            "lastUpdated": "DatasetPreviewCard-lastUpdated-2",
+            "link": "DatasetPreviewCard-link-4",
+            "rightCol": "DatasetPreviewCard-rightCol-1",
+            "tagContainer": "DatasetPreviewCard-tagContainer-3",
           }
         }
+        description="describes different geometries in the galaxy"
+        fields={
+          Array [
+            Object {
+              "name": "uuid",
+              "type": "STRING",
+            },
+            Object {
+              "name": "name",
+              "type": "STRING",
+            },
+            Object {
+              "name": "mass",
+              "type": "INTEGER",
+            },
+            Object {
+              "name": "dimension",
+              "type": "STRING",
+            },
+            Object {
+              "name": "interstellar",
+              "type": "BOOLEAN",
+            },
+          ]
+        }
+        name="galaxy.geometry"
+        namespace="galactic-data"
+        physicalName="galaxy.geometry"
+        sourceName="redshift"
+        tags={
+          Array [
+            "tag_a",
+            "tag_b",
+            "tag_c",
+          ]
+        }
+        type="DB_TABLE"
       >
         <Link
           className="DatasetPreviewCard-link-4"
@@ -431,8 +443,8 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
             </a>
           </LinkAnchor>
         </Link>
-      </Router>
-    </BrowserRouter>
-  </DatasetPreviewCard>
-</WithStyles(DatasetPreviewCard)>
+      </DatasetPreviewCard>
+    </WithStyles(DatasetPreviewCard)>
+  </Router>
+</MemoryRouter>
 `;

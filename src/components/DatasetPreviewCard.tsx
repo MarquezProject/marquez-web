@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 
 import {
-  Link, BrowserRouter
+  Link
 } from 'react-router-dom'
 
 import {

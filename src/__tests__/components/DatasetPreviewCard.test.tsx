@@ -4,20 +4,20 @@ import Typography from '@material-ui/core/Typography'
 import tagToBadge from '../../config/tag-to-badge'
 import DatasetPreviewCard from '../../components/DatasetPreviewCard'
 import { formatUpdatedAt } from '../../helpers'
+import { MemoryRouter } from 'react-router-dom'
 
 jest.mock('../../config/tag-to-badge') // https://jestjs.io/docs/en/manual-mocks
 const datasets = require('../../../docker/db/data/datasets.json')
+const dataset = datasets[0]
+const tags = ['tag_a', 'tag_b', 'tag_c']
+dataset.tags = tags
 
 describe('DatasetPreviewCard Component', () => {
-  const wrapper = mount(<DatasetPreviewCard />)
+  const wrapper = mount(<MemoryRouter><DatasetPreviewCard { ...dataset }/></MemoryRouter>)
   it('Should render', () => {
     expect(wrapper.exists()).toBe(true)
   })
-
-  const dataset = datasets[0]
-  const tags = ['tag_a', 'tag_b', 'tag_c']
-
-  wrapper.setProps({ ...dataset, tags })
+  
   const componentText = wrapper.render().text()
 
   it('should render the dataset name', () => {
