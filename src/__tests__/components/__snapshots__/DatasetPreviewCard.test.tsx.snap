@@ -12,7 +12,7 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
         "entries": Array [
           Object {
             "hash": "",
-            "key": "39eq9z",
+            "key": "4qlu9f",
             "pathname": "/",
             "search": "",
             "state": undefined,
@@ -26,7 +26,7 @@ exports[`DatasetPreviewCard Component renders a snapshot that matches previous 1
         "listen": [Function],
         "location": Object {
           "hash": "",
-          "key": "39eq9z",
+          "key": "4qlu9f",
           "pathname": "/",
           "search": "",
           "state": undefined,
