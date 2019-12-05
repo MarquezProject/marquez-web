@@ -70,7 +70,7 @@ describe('JobDetailPage Component', () => {
             .text()
         ).toContain(job.name)
       })
-      it('job name should contain a link to the job description', () => {
+      it('job name should contain a link to the job location', () => {
         expect(
           wrapper
             .find(Typography)
