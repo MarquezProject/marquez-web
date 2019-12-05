@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { AppBar, Toolbar, Typography } from '@material-ui/core'
 import {
-  Link
+  Link, BrowserRouter
 } from 'react-router-dom'
 
 import {
@@ -42,11 +42,13 @@ const MyAppBar = (props: IProps): ReactElement => {
   return (
     <AppBar position='fixed' className={classes.appBar}>
       <Toolbar>
-        <Link className={link} to="/">
-          <Typography className={classes.icon} variant='h4' color='inherit' noWrap>
-            MARQUEZ
-          </Typography>
-        </Link>
+        <BrowserRouter>
+          <Link className={link} to="/">
+            <Typography className={classes.icon} variant='h4' color='inherit' noWrap>
+              MARQUEZ
+            </Typography>
+          </Link>
+        </BrowserRouter>
         <div className={classes.rightToolbar}>
           <Menu></Menu>
         </div>
