@@ -48,6 +48,6 @@ describe('jobs reducer', () => {
 
     const newState = jobsReducer(jobs, action)
     const changedJob = _find(newState, j => j.name === randomJob.name)
-    expect(changedJob).toHaveProperty('lastTenRuns')
+    expect(changedJob).toHaveProperty('latestRuns')
   })
 })

@@ -36,7 +36,7 @@ export default (state = initialState, action: IJobsAction): IJobsState => {
     case FETCH_JOB_RUNS_SUCCESS: {
       return state.map((j: IJob) => {
         const isMatching = j.name === payload.jobName
-        return isMatching ? { ...j, lastTenRuns: payload.lastTenJobRuns } : j
+        return isMatching ? { ...j, latestRuns: payload.lastTenJobRuns } : j
       })
     }
     default:

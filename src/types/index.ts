@@ -31,7 +31,7 @@ export interface IDataset extends IDatasetAPI {
 export interface IJob extends IJobAPI {
   matches: boolean
   namespace: string
-  lastTenRuns?: IJobRunAPI[]
+  latestRuns?: IJobRunAPI[]
 }
 
 export type IFilterByDisplay = 'namespace' | 'datasource'

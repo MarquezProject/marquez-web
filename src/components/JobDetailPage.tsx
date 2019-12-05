@@ -137,7 +137,7 @@ const JobDetailPage: FunctionComponent<
   const job = _find(jobs, j => j.name === jobName)
 
   useEffect(() => {
-    if (job && !job.lastTenRuns) {
+    if (job && !job.latestRuns) {
       fetchJobRuns(job.name, job.namespace)
     }
   }, [props.jobs])
@@ -165,7 +165,7 @@ const JobDetailPage: FunctionComponent<
     location,
     namespace,
     context = { SQL: null },
-    lastTenRuns
+    latestRuns
   } = job
 
   const { SQL } = context
@@ -222,7 +222,7 @@ const JobDetailPage: FunctionComponent<
         )}
       </Box>
       <Box flexDirection='row' textAlign='end'>
-        {(lastTenRuns || []).map(r => {
+        {(latestRuns || []).map(r => {
           const { runState, runId } = r
           const colorClass = `jobRun_${runState}`
           return (

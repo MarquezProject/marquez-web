@@ -32,11 +32,12 @@ export const fetchJobRuns = (jobName: string, namespaceName: string) => ({
     namespaceName
   }
 })
+
 export const fetchJobRunsSuccess = (jobName: string, jobRuns: IJobRunAPI[]) => ({
   type: actionTypes.FETCH_JOB_RUNS_SUCCESS,
   payload: {
-    lastTenJobRuns: jobRuns,
-    jobName
+    jobName,
+    lastTenJobRuns: jobRuns
   }
 })
 

@@ -2,6 +2,7 @@ import { mount } from 'enzyme'
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import JobDetailPage from '../../components/JobDetailPage'
 import { formatUpdatedAt } from '../../helpers'
@@ -36,9 +37,226 @@ describe('JobDetailPage Component', () => {
     it('renders a snapshot that matches previous', () => {
       expect(wrapper).toMatchSnapshot()
     })
+  })
 
-    describe('when there is a match for the jobName in url params', () => {
-      const job = jobs[0]
+  describe.only('when there is a match for the jobName in url params', () => {
+    const tempJobRuns = [
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db90',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'NEW',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db90',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'FAILED',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db90',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'COMPLETED',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db92',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'COMPLETED',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db93',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'FAILED',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db93',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'NEW',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db93',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'ABORTED',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db92',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'RUNNING',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db91',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'RUNNING',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      },
+      {
+        runId: '870492da-ecfb-4be0-91b9-9a89ddd3db91',
+        createdAt: '2019-05-09T19:49:24.201Z',
+        updatedAt: '2019-05-09T19:49:24.201Z',
+        nominalStartTime: '2019-05-12T19:49:24.201Z',
+        nominalEndTime: '2019-05-12T19:52:24.201Z',
+        runState: 'ABORTED',
+        runArgs: {
+          email: 'data@wework.com',
+          emailOnFailure: false,
+          emailOnRetry: true,
+          retries: 2
+        }
+      }
+    ]
+
+    const job = { ...jobs[0], latestRuns: tempJobRuns }
+
+    useParams.mockImplementation(() => ({
+      jobName: job.name
+    }))
+
+    const wrapper = mount(<JobDetailPage />)
+
+    wrapper.setProps({
+      jobs: jobs.map(j => (j.name === job.name ? job : j)),
+      fetchJobRuns: () => {}
+    })
+
+    it('should render', () => {
+      expect(wrapper.exists()).toBe(true)
+    })
+
+    it(`does not render 'no job'`, () => {
+      expect(
+        wrapper.findWhere(n =>
+          n
+            .text()
+            .toLowerCase()
+            .includes('no job')
+        )
+      ).toHaveLength(0)
+    })
+
+    it('should render the job name', () => {
+      expect(
+        wrapper
+          .find(Typography)
+          .first()
+          .text()
+      ).toContain(job.name)
+    })
+
+    it('job name should contain a link to the job description', () => {
+      expect(
+        wrapper
+          .find(Typography)
+          .first()
+          .find('a')
+          .first()
+          .html()
+      ).toContain(job.location)
+    })
+
+    it('should render the job description', () => {
+      expect(
+        wrapper
+          .find(Typography)
+          .at(1) // zero-indexed
+          .text()
+      ).toContain(job.description)
+    })
+
+    it('should render the job time', () => {
+      expect(
+        wrapper
+          .find(Typography)
+          .at(3) // zero-indexed
+          .text()
+      ).toContain(formatUpdatedAt(job.updatedAt))
+    })
+
+    it('should render a tooltip per job run', () => {
+      expect(wrapper.find(Tooltip)).toHaveLength(job.latestRuns.length)
+    })
+
+    it('if there is no SQL, should render text saying so', () => {
+      const job = { ...jobs[0], context: {} }
 
       useParams.mockImplementation(() => ({
         jobName: job.name
@@ -46,80 +264,22 @@ describe('JobDetailPage Component', () => {
 
       const wrapper = mount(<JobDetailPage />)
 
-      wrapper.setProps({ jobs })
-
-      it('should render', () => {
-        expect(wrapper.exists()).toBe(true)
-      })
-      it(`does not render 'no job'`, () => {
-        expect(
-          wrapper.findWhere(n =>
-            n
-              .text()
-              .toLowerCase()
-              .includes('no job')
-          )
-        ).toHaveLength(0)
+      wrapper.setProps({
+        jobs: jobs.map(j => (j.name === job.name ? job : j)),
+        fetchJobRuns: () => {}
       })
 
-      it('should render the job name', () => {
-        expect(
-          wrapper
-            .find(Typography)
-            .first()
-            .text()
-        ).toContain(job.name)
-      })
-      it('job name should contain a link to the job description', () => {
-        expect(
-          wrapper
-            .find(Typography)
-            .first()
-            .find('a')
-            .first()
-            .html()
-        ).toContain(job.location)
-      })
-      it('should render the job description', () => {
-        expect(
-          wrapper
-            .find(Typography)
-            .at(1) // zero-indexed
-            .text()
-        ).toContain(job.description)
-      })
-      it('should render the job time', () => {
-        expect(
-          wrapper
-            .find(Typography)
-            .at(3) // zero-indexed
-            .text()
-        ).toContain(formatUpdatedAt(job.updatedAt))
-      })
-
-      it('if there is no SQL, should render text saying so', () => {
-        const job = { ...jobs[0], context: {} }
-
-        useParams.mockImplementation(() => ({
-          jobName: job.name
-        }))
-
-        const wrapper = mount(<JobDetailPage />)
-
-        wrapper.setProps({ jobs: jobs.map(j => (j.name === job.name ? job : j)) })
-
-        expect(
-          wrapper
-            .find(Box)
-            .last()
-            .find(Typography)
-            .first()
-            .text()
-        ).toContain('no SQL')
-      })
-      it('renders a snapshot that matches previous', () => {
-        expect(wrapper).toMatchSnapshot()
-      })
+      expect(
+        wrapper
+          .find(Box)
+          .at(1)
+          .find(Typography)
+          .first()
+          .text()
+      ).toContain('no SQL')
+    })
+    it('renders a snapshot that matches previous', () => {
+      expect(wrapper).toMatchSnapshot()
     })
   })
 })
