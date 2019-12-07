@@ -117,8 +117,10 @@ describe('JobDetailPage Component', () => {
           jobName: job.name
         }))
 
-        const props = { jobs: jobs.map(j => (j.name === job.name ? job : j)) }
-        const wrapper = mount(<JobDetailPage {...props} />)
+        const wrapper = mount(<JobDetailPage />)
+
+        wrapper.setProps({ jobs: jobs.map(j => (j.name === job.name ? job : j)) })
+
         it('should render text saying so', () => {
           expect(
             wrapper
