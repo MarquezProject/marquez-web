@@ -28,7 +28,7 @@ describe('JobDetailPage Component', () => {
       expect(wrapper.exists()).toBe(true)
     })
 
-    it('should render text explaniing that there was no matching job found', () => {
+    it('should render text explaining that there was no matching job found', () => {
       expect(
         wrapper
           .find(Typography)
