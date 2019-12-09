@@ -8,7 +8,7 @@ import {
   Theme as ITheme
 } from '@material-ui/core/styles'
 
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
 
 interface IProps {
   findMatchingEntities: typeof findMatchingEntities
@@ -31,9 +31,9 @@ const styles = (_theme: ITheme) => {
 }
 
 const CustomSearchBar: FunctionComponent<IAllProps> = props => {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('')
   const { classes } = props
-  let history = useHistory();
+  const history = useHistory()
 
   const searchChanged = (searchString: string) => {
     setSearch(searchString)
@@ -47,7 +47,7 @@ const CustomSearchBar: FunctionComponent<IAllProps> = props => {
   }
 
   const onRequestSearch = () => {
-    history.push("/");
+    history.push('/')
   }
 
   return (
