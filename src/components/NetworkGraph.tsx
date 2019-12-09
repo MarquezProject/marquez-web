@@ -77,7 +77,6 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       .force('charge', forceManyBody().strength(-50))
       .force('center', forceCenter(width / 2, height / 2))
       .alpha(.2)
-      .force('x', forceX(width / 2))
       .force('y', forceY(height / 2))
       .force(
         'link',
@@ -199,7 +198,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       let k = 6 * graphLayout.alpha()
       link
         .each(function(d,i) {
-          d.source.x -= k * 8, d.target.x += k * 4;
+          d.source.x -= k * 7, d.target.x += k * 4;
         })
         .attr('x1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
           return d.offset == 'source' ? d.source.x + datasetNodeDimension / 2 : d.source.x
