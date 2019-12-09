@@ -12,7 +12,7 @@ import Legend from './Legend'
 import { createNetworkData } from '../helpers'
 import { IDataset, IJob, INodeNetwork, INetworkLink } from '../types/'
 import { select } from 'd3-selection'
-import { forceCenter, forceLink, forceSimulation, forceManyBody, forceX, forceY } from 'd3-force'
+import { forceCenter, forceLink, forceSimulation, forceManyBody, forceY } from 'd3-force'
 import { zoom } from 'd3-zoom'
 import { color } from 'd3-color'
 import Loader from './Loader'
@@ -197,10 +197,10 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     }
 
     function updateLink(link: d3.Selection<SVGElement, any, any, any>) {
-      let k = 6 * graphLayout.alpha()
+      const k = 6 * graphLayout.alpha()
       link
-        .each(function(d,i) {
-          d.source.x -= k * 7, d.target.x += k * 4;
+        .each(function(d) {
+          d.source.x -= k * 7, d.target.x += k * 4
         })
         .attr('x1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
           return d.offset == 'source' ? d.source.x + datasetNodeDimension / 2 : d.source.x
