@@ -29,8 +29,7 @@ const styles = ({ palette }: Theme) => {
       height: '50vh',
       position: 'fixed',
       display: 'flex',
-      alignItems: 'center',
-      zIndex: 2
+      alignItems: 'center'
     },
     tooltip: {
       position: 'absolute',
