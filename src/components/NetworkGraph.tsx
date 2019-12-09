@@ -73,9 +73,10 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     const width = +svg.style('width').replace('px', '')
     const height = +svg.style('height').replace('px', '')
 
-    forceSimulation<IDatumCombined, INetworkLink>(nodes)
-      .force('charge', forceManyBody().strength(-30))
+    const graphLayout = forceSimulation<IDatumCombined, INetworkLink>(nodes)
+      .force('charge', forceManyBody().strength(-50))
       .force('center', forceCenter(width / 2, height / 2))
+      .alpha(.2)
       .force('x', forceX(width / 2))
       .force('y', forceY(height / 2))
       .force(
@@ -85,17 +86,6 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         })
       )
       .on('tick', ticked)
-
-    // const adjacent = []
-
-    // data.links.forEach(d => {
-    //   adjacent[d.source.index + '-' + d.target.index] = true
-    //   adjacent[d.target.index + '-' + d.source.index] = true
-    // })
-
-    // const neighbor = (a, b) => {
-    //   return a == b || adjacent[a + '-' + b]
-    // }
 
     svg.call(
       zoom()
@@ -206,7 +196,11 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     }
 
     function updateLink(link: d3.Selection<SVGElement, any, any, any>) {
+      let k = 6 * graphLayout.alpha()
       link
+        .each(function(d,i) {
+          d.source.x -= k * 8, d.target.x += k * 4;
+        })
         .attr('x1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
           return d.offset == 'source' ? d.source.x + datasetNodeDimension / 2 : d.source.x
         })
