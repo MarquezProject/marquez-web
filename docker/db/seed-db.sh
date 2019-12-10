@@ -6,7 +6,8 @@ set -eu
 
 echo "Seeding database ..."
 
-RUN_STATES=('start' 'complete' 'fail' 'abort')
+readonly RUN_STATES=('start' 'complete' 'fail' 'abort')
+readonly RUNS=10
 
 # NAMESPACES
 cat ./data/namespaces.json | jq -c '.[]' | \
@@ -56,16 +57,19 @@ cat ./data/jobs.json | jq -c '.[]' | \
       -H 'Content-Type: application/json' \
       -d "${payload}"
 
-    if [[ "( $RANDOM % 2 )" -ne 0 ]]; then
-      response=$(curl --silent -X POST "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/namespaces/${namespace}/jobs/${job}/runs" \
-        -H 'Content-Type: application/json' \
-        -d "{}")
-
-      if [[ "( $RANDOM % 2 )" -ne 0 ]]; then
-        run_id=$(echo "${response}" | jq -r '.runId')
-        mark_run_as=${RUN_STATES[($RANDOM % 4)]}
-        curl --silent --output /dev/null -X POST "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/jobs/runs/${run_id}/${mark_run_as}"
-      fi
+    if [[ "( $RANDOM % 2 )" -ge 0 ]]; then
+      n=0
+      while [[ "${n}" -lt $RUNS ]]; do
+        response=$(curl --silent -X POST "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/namespaces/${namespace}/jobs/${job}/runs" \
+          -H 'Content-Type: application/json' \
+          -d "{}")
+        if [[ "( $RANDOM % 2 )" -ne 0 ]]; then
+          run_id=$(echo "${response}" | jq -r '.runId')
+          mark_run_as=${RUN_STATES[($RANDOM % 4)]}
+          curl --silent --output /dev/null -X POST "http://${MARQUEZ_HOST}:${MARQUEZ_PORT}/api/v1/jobs/runs/${run_id}/${mark_run_as}"
+        fi
+        n=$((n + 1))
+      done
     fi
   done
 
