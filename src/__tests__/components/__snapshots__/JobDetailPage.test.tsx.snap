@@ -1301,7 +1301,7 @@ exports[`JobDetailPage Component when there is a match for the jobName in url pa
         <Styled(MuiBox)
           bgcolor="white"
           border="1rem solid white"
-          borderLeft="2rem solid white"
+          borderLeft="none"
           borderRadius="3px"
           boxShadow={1}
           className="JobDetailPage-_SQL-11"
@@ -1309,6 +1309,7 @@ exports[`JobDetailPage Component when there is a match for the jobName in url pa
           minHeight={200}
           mx="auto"
           my={2}
+          paddingLeft="2rem"
           width="80%"
         >
           <div

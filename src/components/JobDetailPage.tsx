@@ -200,7 +200,8 @@ const JobDetailPage: FunctionComponent<
         boxShadow={1}
         // using border to create effect of padding, which will not work when there's overflow
         border='1rem solid white'
-        borderLeft='2rem solid white'
+        borderLeft='none'
+        paddingLeft='2rem'
         mx='auto'
         my={2}
         borderRadius='3px'
