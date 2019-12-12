@@ -27,10 +27,9 @@ import { IDataset } from '../types'
 const styles = () => {
   return createStyles({
     root: {
-      padding: '42vh 6% 1%',
-      position: 'absolute',
-      zIndex: 1,
-      width: '100%'
+      marginTop: '52vh',
+      height: '48vh',
+      padding: '0 6% 1%',
     },
     tagContainer: {
       display: 'flex',
