@@ -7,6 +7,8 @@
 @value jobNodeGrey: #7d7d7d;
 @value datasetNodeWhite: #fff;
 @value linkGrey: #aaa;
+@value jobRunYellow: #ffcc00;
+@value jobRunBlue: #3399ff;
 
 body {
   font-family: 'Karla-Regular', sans-serif;
