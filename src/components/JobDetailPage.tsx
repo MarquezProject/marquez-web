@@ -169,7 +169,6 @@ const JobDetailPage: FunctionComponent<
   } = job
 
   const { SQL } = context
-
   return (
     <Box
       p={4}
