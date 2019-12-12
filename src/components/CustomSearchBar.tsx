@@ -61,5 +61,4 @@ const CustomSearchBar: FunctionComponent<IAllProps> = props => {
   )
 }
 
-
 export default withStyles(styles)(CustomSearchBar)

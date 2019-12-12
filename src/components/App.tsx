@@ -107,6 +107,8 @@ const App = ({ classes }: IProps): ReactElement => {
                   )}
               />
               <Route path='/datasets/:datasetName' exact component={DatasetDetailContainer} />
+                )}
+              />
               <Route path='/jobs/:jobName' exact component={JobDetailContainer} />
             </Switch>
             <Toast />

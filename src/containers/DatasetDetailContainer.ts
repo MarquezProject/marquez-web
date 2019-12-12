@@ -5,12 +5,10 @@ import DatasetDetailPage from '../components/DatasetDetailPage'
 import { IState } from '../reducers'
 
 const mapStateToProps = (state: IState) => ({
-  datasets: state.datasets
+  jobs: state.jobs
 })
 
-const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
-  actions: bindActionCreators({}, dispatch)
-})
+const mapDispatchToProps = (dispatch: Redux.Dispatch) => bindActionCreators({}, dispatch)
 
 export default connect(
   mapStateToProps,

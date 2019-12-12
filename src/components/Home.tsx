@@ -33,13 +33,6 @@ const styles = (_theme: ITheme) => {
       zIndex: 1,
       width: '100%'
     },
-    search: {
-      position: 'fixed',
-      bottom: '52vh',
-      width: '90%',
-      left: '5%',
-      zIndex: 4
-    },
     noDatasets: {
       color: '#9e9e9e',
       position: 'fixed',
