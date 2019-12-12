@@ -4,21 +4,15 @@ import {
   createStyles,
   WithStyles as IWithStyles
 } from '@material-ui/core/styles'
-import { Typography, Box, Tooltip } from '@material-ui/core'
-
-import Table from '@material-ui/core/Table'
-// import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
+import { Typography, Box, Tooltip, Fab, Table, TableCell, TableHead, TableRow, Paper } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
 
 import tagToBadge from '../config/tag-to-badge'
 import InfoIcon from '@material-ui/icons/Info'
 
 import { formatUpdatedAt } from '../helpers' 
 
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import _find from 'lodash/find'
 import _keys from 'lodash/keys'
 
@@ -47,11 +41,19 @@ const styles = () => {
       paddingTop: '12px'
     },
     paper: {
-      overflowX: 'auto',
+      ovserflowX: 'auto',
       marginTop: '10px'
     },
     updated: {
       marginTop: '10px'
+    },
+    closeButton: {
+      color: '#7D7D7D',
+      backgroundColor: '#ffffff'
+    },
+    tagHolder: {
+      display: 'flex',
+      padding: '9px 12px'
     }
   })
 }
@@ -61,10 +63,15 @@ type IProps = IWithStyles<typeof styles> & { datasets: IDataset[] }
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
   const {
-    root, paper, updated, tagContainer, noData, infoIcon, tableCell
+    root, paper, updated, tagContainer, noData, infoIcon, tableCell, closeButton, tagHolder
   } = classes
   const { datasetName } = useParams()
   const dataset = _find(datasets, d => d.name === datasetName)
+
+  const history = useHistory()
+  const goHome = () => {
+    history.push('/')
+  }
   if (!dataset) {
     return (
       <Box
@@ -126,6 +133,7 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
             </Typography>
           </div>
           <div id='tagContainer' className={tagContainer}>
+            <div className={tagHolder}>
             {_keys(tagToBadge.default).map((key: string) => {
               return (
                 <div key={key}>
@@ -135,6 +143,10 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
                 </div>
               )
             })}
+            </div>
+            <Fab className={closeButton} onClick={() => goHome()} size="small" aria-label="edit">
+              <CloseIcon />
+            </Fab>
           </div>
         </Box>
         <Paper className={paper}>

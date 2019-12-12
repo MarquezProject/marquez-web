@@ -5,9 +5,11 @@ import {
   WithStyles as IWithStyles,
   Theme as ITheme
 } from '@material-ui/core/styles'
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box, Fab } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
+
 import HowToRegIcon from '@material-ui/icons/HowToReg'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import _find from 'lodash/find'
 
 const globalStyles = require('../global_styles.css')
@@ -20,6 +22,7 @@ const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
     root: {
       marginTop: '52vh',
+      paddingTop: '8px',
       height: '48vh'
     },
     topSection: {
@@ -28,10 +31,18 @@ const styles = ({ palette, spacing }: ITheme) => {
       gridTemplateRows: '1fr 1fr',
       /* eslint-disable @typescript-eslint/quotes */
       gridTemplateAreas: `'status name owner-icon' '. description owner'`,
-      alignItems: 'center'
+      alignItems: 'center',
+      marginRight: '90px'
     },
     lastUpdated: {
       color: palette.grey[600]
+    },
+    closeButton: {
+      position: "absolute",
+      right: '65px',
+      margin: '8px',
+      color: '#7D7D7D',
+      backgroundColor: '#ffffff'
     },
     _status: {
       gridArea: 'status',
@@ -95,9 +106,15 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     _owner,
     _ownerIcon,
     lastUpdated,
-    topSection
+    topSection,
+    closeButton
   } = classes
   const { jobName } = useParams()
+  const history = useHistory()
+  const goHome = () => {
+    history.push('/')
+  }
+
   const job = _find(jobs, j => j.name === jobName)
   if (!job) {
     return (
@@ -134,6 +151,9 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       justifyContent='space-between'
       className={root}
     >
+      <Fab className={closeButton} onClick={() => goHome()} size="small" aria-label="edit">
+        <CloseIcon />
+      </Fab>
       <div className={topSection}>
         <div className={`${_status} ${classes[status]}`} />
         <Typography color='secondary' variant='h3' className={_name}>
