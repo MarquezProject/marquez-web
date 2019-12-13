@@ -47,11 +47,6 @@ const styles = () => {
       flexDirection: 'row',
       justifyContent: 'space-between'
     },
-    tableRow2: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between'
-    },
     paper: {
       overflowX: 'auto',
       marginTop: '10px'
@@ -75,7 +70,7 @@ type IProps = IWithStyles<typeof styles> & { datasets: IDataset[] }
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
   const {
-    root, paper, updated, tagContainer, noData, infoIcon, tableCell, tableRow, closeButton, tagHolder, tableRow2
+    root, paper, updated, tagContainer, noData, infoIcon, tableCell, tableRow, closeButton, tagHolder
   } = classes
   const { datasetName } = useParams()
   const history = useHistory()
@@ -150,9 +145,9 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow className={tableRow2}>
+              <TableRow className={tableRow}>
                 {fields.map(field => {
-                  return <TableCell className={tableCell} key={field.name} align="center">{field.description || 'no description'}</TableCell>
+                  return <TableCell key={field.name} align="center">{field.description || 'no description'}</TableCell>
                 })}
               </TableRow>
             </TableBody>
