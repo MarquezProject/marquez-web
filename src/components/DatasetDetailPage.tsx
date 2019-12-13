@@ -4,7 +4,7 @@ import {
   createStyles,
   WithStyles as IWithStyles
 } from '@material-ui/core/styles'
-import { Typography, Box, Tooltip, Fab, Table, TableCell, TableHead, TableRow, Paper } from '@material-ui/core'
+import { Typography, Box, Tooltip, Fab, Table, TableCell, TableHead, TableRow, TableBody, Paper } from '@material-ui/core'
 
 import CloseIcon from '@material-ui/icons/Close'
 
@@ -39,9 +39,15 @@ const styles = () => {
     },
     tableCell: {
       display: 'flex',
+      flexDirection: 'row',
       paddingTop: '12px'
     },
     tableRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+    tableRow2: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between'
@@ -69,7 +75,7 @@ type IProps = IWithStyles<typeof styles> & { datasets: IDataset[] }
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
   const {
-    root, paper, updated, tagContainer, noData, infoIcon, tableCell, tableRow, closeButton, tagHolder
+    root, paper, updated, tagContainer, noData, infoIcon, tableCell, tableRow, closeButton, tagHolder, tableRow2
   } = classes
   const { datasetName } = useParams()
   const history = useHistory()
@@ -131,7 +137,7 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
                 {
                   fields.map((field) => {
                     return (
-                    <TableCell className={tableCell} key={field.name} align="left"><strong>{field.name}</strong>
+                    <TableCell className={tableCell} key={field.name} align="center"><strong>{field.name}</strong>
                       <Tooltip title={field.type} placement="top">
                         <div className={infoIcon}>
                           <InfoIcon color='disabled' fontSize='small' />
@@ -144,9 +150,9 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
+              <TableRow className={tableRow2}>
                 {fields.map(field => {
-                  return <TableCell key={field.name} align="left">{field.description || 'no description'}</TableCell>
+                  return <TableCell className={tableCell} key={field.name} align="center">{field.description || 'no description'}</TableCell>
                 })}
               </TableRow>
             </TableBody>
