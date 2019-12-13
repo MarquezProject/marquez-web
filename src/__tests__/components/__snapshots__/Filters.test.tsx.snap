@@ -2,7 +2,7 @@
 
 exports[`Filters component renders a snapshot that matches previous 1`] = `
 <Styled(MuiBox)
-  ml="5%"
+  ml="0.5rem"
   py={2}
 >
   <WithStyles(WithStyles(ForwardRef(FormControl)))

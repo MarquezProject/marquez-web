@@ -2556,9 +2556,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                     className="tagWrapper"
                     classes={
                       Object {
+                        "arrow": "MuiTooltip-arrow",
                         "popper": "MuiTooltip-popper",
+                        "popperArrow": "MuiTooltip-popperArrow",
                         "popperInteractive": "MuiTooltip-popperInteractive",
                         "tooltip": "MuiTooltip-tooltip",
+                        "tooltipArrow": "MuiTooltip-tooltipArrow",
                         "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                         "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                         "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -2646,6 +2649,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                       id={null}
                       open={false}
                       placement="top"
+                      popperOptions={
+                        Object {
+                          "modifiers": Object {
+                            "arrow": Object {
+                              "element": null,
+                              "enabled": false,
+                            },
+                          },
+                        }
+                      }
                       transition={true}
                     />
                   </ForwardRef(Tooltip)>
@@ -2663,9 +2676,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                     className="tagWrapper"
                     classes={
                       Object {
+                        "arrow": "MuiTooltip-arrow",
                         "popper": "MuiTooltip-popper",
+                        "popperArrow": "MuiTooltip-popperArrow",
                         "popperInteractive": "MuiTooltip-popperInteractive",
                         "tooltip": "MuiTooltip-tooltip",
+                        "tooltipArrow": "MuiTooltip-tooltipArrow",
                         "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                         "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                         "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -2753,6 +2769,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                       id={null}
                       open={false}
                       placement="top"
+                      popperOptions={
+                        Object {
+                          "modifiers": Object {
+                            "arrow": Object {
+                              "element": null,
+                              "enabled": false,
+                            },
+                          },
+                        }
+                      }
                       transition={true}
                     />
                   </ForwardRef(Tooltip)>
@@ -2882,9 +2908,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                         <ForwardRef(Tooltip)
                                           classes={
                                             Object {
+                                              "arrow": "MuiTooltip-arrow",
                                               "popper": "MuiTooltip-popper",
+                                              "popperArrow": "MuiTooltip-popperArrow",
                                               "popperInteractive": "MuiTooltip-popperInteractive",
                                               "tooltip": "MuiTooltip-tooltip",
+                                              "tooltipArrow": "MuiTooltip-tooltipArrow",
                                               "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                                               "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                                               "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -2951,6 +2980,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                             id={null}
                                             open={false}
                                             placement="top"
+                                            popperOptions={
+                                              Object {
+                                                "modifiers": Object {
+                                                  "arrow": Object {
+                                                    "element": null,
+                                                    "enabled": false,
+                                                  },
+                                                },
+                                              }
+                                            }
                                             transition={true}
                                           />
                                         </ForwardRef(Tooltip)>
@@ -2998,9 +3037,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                         <ForwardRef(Tooltip)
                                           classes={
                                             Object {
+                                              "arrow": "MuiTooltip-arrow",
                                               "popper": "MuiTooltip-popper",
+                                              "popperArrow": "MuiTooltip-popperArrow",
                                               "popperInteractive": "MuiTooltip-popperInteractive",
                                               "tooltip": "MuiTooltip-tooltip",
+                                              "tooltipArrow": "MuiTooltip-tooltipArrow",
                                               "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                                               "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                                               "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -3067,6 +3109,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                             id={null}
                                             open={false}
                                             placement="top"
+                                            popperOptions={
+                                              Object {
+                                                "modifiers": Object {
+                                                  "arrow": Object {
+                                                    "element": null,
+                                                    "enabled": false,
+                                                  },
+                                                },
+                                              }
+                                            }
                                             transition={true}
                                           />
                                         </ForwardRef(Tooltip)>
@@ -3114,9 +3166,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                         <ForwardRef(Tooltip)
                                           classes={
                                             Object {
+                                              "arrow": "MuiTooltip-arrow",
                                               "popper": "MuiTooltip-popper",
+                                              "popperArrow": "MuiTooltip-popperArrow",
                                               "popperInteractive": "MuiTooltip-popperInteractive",
                                               "tooltip": "MuiTooltip-tooltip",
+                                              "tooltipArrow": "MuiTooltip-tooltipArrow",
                                               "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                                               "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                                               "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -3183,6 +3238,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                             id={null}
                                             open={false}
                                             placement="top"
+                                            popperOptions={
+                                              Object {
+                                                "modifiers": Object {
+                                                  "arrow": Object {
+                                                    "element": null,
+                                                    "enabled": false,
+                                                  },
+                                                },
+                                              }
+                                            }
                                             transition={true}
                                           />
                                         </ForwardRef(Tooltip)>
@@ -3230,9 +3295,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                         <ForwardRef(Tooltip)
                                           classes={
                                             Object {
+                                              "arrow": "MuiTooltip-arrow",
                                               "popper": "MuiTooltip-popper",
+                                              "popperArrow": "MuiTooltip-popperArrow",
                                               "popperInteractive": "MuiTooltip-popperInteractive",
                                               "tooltip": "MuiTooltip-tooltip",
+                                              "tooltipArrow": "MuiTooltip-tooltipArrow",
                                               "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                                               "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                                               "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -3299,6 +3367,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                             id={null}
                                             open={false}
                                             placement="top"
+                                            popperOptions={
+                                              Object {
+                                                "modifiers": Object {
+                                                  "arrow": Object {
+                                                    "element": null,
+                                                    "enabled": false,
+                                                  },
+                                                },
+                                              }
+                                            }
                                             transition={true}
                                           />
                                         </ForwardRef(Tooltip)>
@@ -3346,9 +3424,12 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                         <ForwardRef(Tooltip)
                                           classes={
                                             Object {
+                                              "arrow": "MuiTooltip-arrow",
                                               "popper": "MuiTooltip-popper",
+                                              "popperArrow": "MuiTooltip-popperArrow",
                                               "popperInteractive": "MuiTooltip-popperInteractive",
                                               "tooltip": "MuiTooltip-tooltip",
+                                              "tooltipArrow": "MuiTooltip-tooltipArrow",
                                               "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom",
                                               "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft",
                                               "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight",
@@ -3415,6 +3496,16 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                             id={null}
                                             open={false}
                                             placement="top"
+                                            popperOptions={
+                                              Object {
+                                                "modifiers": Object {
+                                                  "arrow": Object {
+                                                    "element": null,
+                                                    "enabled": false,
+                                                  },
+                                                },
+                                              }
+                                            }
                                             transition={true}
                                           />
                                         </ForwardRef(Tooltip)>
