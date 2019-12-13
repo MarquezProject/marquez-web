@@ -7,7 +7,7 @@ import {
 import { Typography, Box, Tooltip } from '@material-ui/core'
 
 import Table from '@material-ui/core/Table'
-// import TableBody from '@material-ui/core/TableBody'
+import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
@@ -83,36 +83,9 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
       name,
       description,
       tags = [],
-      updatedAt
-    } = dataset
-
-    let {
+      updatedAt,
       fields
     } = dataset
-    
-    // placeholder logic to seed 'fields' attribute if API returns nothing
-    !fields ? fields = [
-      {
-      'name': 'uuid',
-      'type': 'STRING'
-      },
-      {
-      'name': 'name',
-      'type': 'STRING'
-      },
-      {
-      'name': 'mass',
-      'type': 'INTEGER'
-      },
-      {
-      'name': 'dimension',
-      'type': 'STRING'
-      },
-      {
-      'name': 'interstellar',
-      'type': 'BOOLEAN'
-      }
-    ] : null
 
     return (
       <Box mt={10} className={root}>
@@ -156,17 +129,13 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
                 }
               </TableRow>
             </TableHead>
-            {/* <TableBody>
-              {rows.map(row => (
-                <TableRow key={row.id}>
-                  {
-                    fields.map(field => {
-                      return <TableCell key={field} align="left">{row[field].toString()}</TableCell>
-                    })
-                  }
-                </TableRow>
-              ))}
-            </TableBody> */}
+            <TableBody>
+              <TableRow>
+                {fields.map(field => {
+                  return <TableCell key={field.name} align="left">{field.description || 'no description'}</TableCell>
+                })}
+              </TableRow>
+            </TableBody>
           </Table>
         </Paper>
         <Typography className={updated} color='primary' align='right'>
