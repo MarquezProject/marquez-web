@@ -33,7 +33,7 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
       /* eslint-disable @typescript-eslint/quotes */
       gridTemplateAreas: `'status name owner-icon' '. description owner'`,
       alignItems: 'center',
-      margin: '0px 80px 0px 0px'
+      margin: '0px 6% 0px 0px'
     },
     lastUpdated: {
       color: palette.grey[600]
@@ -105,8 +105,8 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
       color: '#7D7D7D',
       backgroundColor: '#ffffff',
       position: "absolute",
-      right: '75px',
-      margin: '8px'
+      right: '6%',
+      marginTop: '12px'
     }
   })
 }
