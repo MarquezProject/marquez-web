@@ -2,8 +2,8 @@ import React, { FunctionComponent, useState } from 'react'
 import * as RRD from 'react-router-dom'
 import { Box, Typography } from '@material-ui/core'
 
-import Pagination from "material-ui-flat-pagination";
-import _chunk from 'lodash/chunk';
+import Pagination from 'material-ui-flat-pagination'
+import _chunk from 'lodash/chunk'
 
 import {
   withStyles,
