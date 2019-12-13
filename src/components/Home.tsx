@@ -65,9 +65,9 @@ class Home extends React.Component<IAllProps, IState> {
     const matchingDatasets = datasets.filter(d => d.matches)
     const matchingJobs = jobs.filter(j => j.matches)
     return (
-      <div>
+      <div className="jilladded">
+        <FilterContainer showJobs={setShowJobs} />
         <div className={classes.row}>
-          <FilterContainer showJobs={setShowJobs} />
           <Box className={classes.column}>
             {matchingDatasets.length > 0 ? (
               <Typography className={classes.header} color='secondary' variant='h3'>
