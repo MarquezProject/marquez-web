@@ -85,7 +85,7 @@ const Filters = (props: IProps): ReactElement => {
   }
 
   return (
-    <Box ml='5%' py={2}>
+    <Box ml='0.5rem' py={2}>
       <StyledFormControl margin='normal'>
         <InputLabel id='filter-by-label'>Filter by</InputLabel>
         <MUISelect value={currentFilter} renderValue={capitalize} onChange={onPrimaryFilterChange}>
