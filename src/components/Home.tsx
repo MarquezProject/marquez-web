@@ -101,9 +101,7 @@ const Home:  FunctionComponent<IAllProps> = props => {
             limit={limit}
             offset={datasetPageIndex * limit}
             total={matchingDatasets.length}
-            onClick={(e, offset, page) => {
-              setDatasetPageIndex(page - 1)
-            }}
+            onClick={(e, offset, page) => setDatasetPageIndex(page - 1)}
           />
           ) : null}
         </Box>
@@ -130,9 +128,7 @@ const Home:  FunctionComponent<IAllProps> = props => {
                 limit={limit}
                 offset={jobPageIndex * limit}
                 total={matchingJobs.length}
-                onClick={(e, offset, page) => {
-                  setJobPageIndex(page - 1)
-                }}
+                onClick={(e, offset, page) => setJobPageIndex(page - 1)}
               />
             ) : null}
           </Box>
