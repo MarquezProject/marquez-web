@@ -1,5 +1,5 @@
 interface IFieldsAPI {
-  name: string,
+  name: string
   type: string
 }
 
@@ -44,4 +44,19 @@ export interface IDatasetsAPI {
 }
 export interface IJobsAPI {
   jobs: IJobAPI[]
+}
+
+export interface IJobRunAPI {
+  runId: string
+  createdAt: string // timestamp
+  updatedAt: string // timestamp
+  nominalStartTime: string // timestamp
+  nominalEndTime: string // timestamp
+  runState: 'NEW' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'ABORTED'
+  runArgs: {
+    email: string
+    emailOnFailure: boolean
+    emailOnRetry: boolean
+    retries: number
+  }
 }
