@@ -31,10 +31,13 @@ const styles = (_theme: ITheme) => {
       display: 'flex',
       flexDirection: 'row'
     },
+    filter: {
+      marginLeft: '-4%'
+    },
     lowerHalf: {
       display: 'flex',
       flexDirection: 'column',
-      padding: '52vh 5% 1%',
+      padding: '50vh 5% 1%',
       position: 'absolute',
       top: 0,
       zIndex: 1,
@@ -82,7 +85,9 @@ const Home:  FunctionComponent<IAllProps> = props => {
 
   return (
     <div className={classes.lowerHalf}>
-      <FilterContainer showJobs={setShowJobs} />
+      <div className={classes.filter}>
+        <FilterContainer showJobs={setShowJobs} />
+      </div>
       <div className={classes.row}>
         <Box className={classes.column}>
           {matchingDatasets.length > 0 ? (
