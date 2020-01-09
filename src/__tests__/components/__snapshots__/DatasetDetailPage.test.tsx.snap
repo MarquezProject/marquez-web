@@ -3579,11 +3579,11 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                 className="MuiTableRow-root DatasetDetailPage-tableRow-6"
                               >
                                 <WithStyles(ForwardRef(TableCell))
-                                  align="center"
+                                  align="left"
                                   key="uuid"
                                 >
                                   <ForwardRef(TableCell)
-                                    align="center"
+                                    align="left"
                                     classes={
                                       Object {
                                         "alignCenter": "MuiTableCell-alignCenter",
@@ -3603,18 +3603,18 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                   >
                                     <td
                                       aria-sort={null}
-                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall"
+                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                                     >
                                       no description
                                     </td>
                                   </ForwardRef(TableCell)>
                                 </WithStyles(ForwardRef(TableCell))>
                                 <WithStyles(ForwardRef(TableCell))
-                                  align="center"
+                                  align="left"
                                   key="name"
                                 >
                                   <ForwardRef(TableCell)
-                                    align="center"
+                                    align="left"
                                     classes={
                                       Object {
                                         "alignCenter": "MuiTableCell-alignCenter",
@@ -3634,18 +3634,18 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                   >
                                     <td
                                       aria-sort={null}
-                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall"
+                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                                     >
                                       no description
                                     </td>
                                   </ForwardRef(TableCell)>
                                 </WithStyles(ForwardRef(TableCell))>
                                 <WithStyles(ForwardRef(TableCell))
-                                  align="center"
+                                  align="left"
                                   key="mass"
                                 >
                                   <ForwardRef(TableCell)
-                                    align="center"
+                                    align="left"
                                     classes={
                                       Object {
                                         "alignCenter": "MuiTableCell-alignCenter",
@@ -3665,18 +3665,18 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                   >
                                     <td
                                       aria-sort={null}
-                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall"
+                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                                     >
                                       no description
                                     </td>
                                   </ForwardRef(TableCell)>
                                 </WithStyles(ForwardRef(TableCell))>
                                 <WithStyles(ForwardRef(TableCell))
-                                  align="center"
+                                  align="left"
                                   key="dimension"
                                 >
                                   <ForwardRef(TableCell)
-                                    align="center"
+                                    align="left"
                                     classes={
                                       Object {
                                         "alignCenter": "MuiTableCell-alignCenter",
@@ -3696,18 +3696,18 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                   >
                                     <td
                                       aria-sort={null}
-                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall"
+                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                                     >
                                       no description
                                     </td>
                                   </ForwardRef(TableCell)>
                                 </WithStyles(ForwardRef(TableCell))>
                                 <WithStyles(ForwardRef(TableCell))
-                                  align="center"
+                                  align="left"
                                   key="interstellar"
                                 >
                                   <ForwardRef(TableCell)
-                                    align="center"
+                                    align="left"
                                     classes={
                                       Object {
                                         "alignCenter": "MuiTableCell-alignCenter",
@@ -3727,7 +3727,7 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
                                   >
                                     <td
                                       aria-sort={null}
-                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall"
+                                      className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignLeft MuiTableCell-sizeSmall"
                                     >
                                       no description
                                     </td>
