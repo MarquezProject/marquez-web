@@ -44,12 +44,11 @@ const styles = () => {
     },
     tableRow: {
       display: 'flex',
-      flexDirection: 'row',
       justifyContent: 'space-between'
     },
     paper: {
       overflowX: 'auto',
-      marginTop: '10px'
+      marginTop: '10px',
     },
     updated: {
       marginTop: '10px'
@@ -147,7 +146,7 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
             <TableBody>
               <TableRow className={tableRow}>
                 {fields.map(field => {
-                  return <TableCell key={field.name} align="center">{field.description || 'no description'}</TableCell>
+                  return <TableCell key={field.name} align="left">{field.description || 'no description'}</TableCell>
                 })}
               </TableRow>
             </TableBody>
