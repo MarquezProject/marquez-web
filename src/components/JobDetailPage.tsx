@@ -18,6 +18,7 @@ const { vibrantGreen } = globalStyles
 import { formatUpdatedAt } from '../helpers'
 
 import { IJob } from '../types'
+import { fetchJobRuns } from '../actionCreators'
 
 const styles = ({ palette, spacing, shadows }: ITheme) => {
   return createStyles({
@@ -112,7 +113,7 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
   })
 }
 
-type IProps = IWithStyles<typeof styles> & { jobs: IJob[] }
+type IProps = IWithStyles<typeof styles> & { jobs: IJob[] } & { fetchJobRuns: any}
 
 const StyledTypography = withStyles({
   root: {
@@ -167,7 +168,7 @@ const displaySQL = (SQL: string, SQLCommentClass: string) => {
 }
 const JobDetailPage: FunctionComponent<IProps> = props => {
   const [SQLModalOpen, setSQLModalOpen] = useState(false)
-  const { jobs, classes } = props
+  const { jobs, classes, fetchJobRuns } = props
   const {
     root,
     _status,
@@ -188,14 +189,16 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
   const { jobName } = useParams()
   const history = useHistory()
   const job = _find(jobs, j => j.name === jobName)
+
+  
   if (!job) {
     return (
       <Box
-        p={4}
-        display='flex'
-        flexDirection='column'
-        justifyContent='space-between'
-        className={root}
+      p={4}
+      display='flex'
+      flexDirection='column'
+      justifyContent='space-between'
+      className={root}
       >
         <Typography align='center'>
           No job by the name of <strong>&quot;{jobName}&quot;</strong> found
@@ -203,6 +206,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       </Box>
     )
   }
+  
   const {
     name,
     description,
@@ -212,7 +216,8 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     namespace,
     context = { SQL: '' }
   } = job
-
+  
+  fetchJobRuns(name, namespace)
   const { SQL } = context
 
   return (
