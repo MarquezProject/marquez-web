@@ -29,7 +29,11 @@ const styles = (_theme: ITheme) => {
     },
     row: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'row'
+    },
+    lowerHalf: {
+      display: 'flex',
+      flexDirection: 'column',
       padding: '52vh 5% 1%',
       position: 'absolute',
       top: 0,
@@ -77,7 +81,7 @@ const Home:  FunctionComponent<IAllProps> = props => {
   const displayJobs = chunkedJobs[jobPageIndex] || matchingJobs
 
   return (
-    <div>
+    <div className={classes.lowerHalf}>
       <FilterContainer showJobs={setShowJobs} />
       <div className={classes.row}>
         <Box className={classes.column}>
