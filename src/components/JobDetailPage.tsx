@@ -196,7 +196,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
   // useEffect hook to run on any change to jobName
   useEffect(() => {
     job ? fetchJobRuns(job.name, job.namespace) : null
-  }, [jobs.length])
+  })
 
   if (!job || jobs.length == 0) {
     return (
