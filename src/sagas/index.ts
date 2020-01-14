@@ -1,7 +1,7 @@
 import { all, call, put, take } from 'redux-saga/effects'
 import * as RS from 'redux-saga'
 import _orderBy from 'lodash/orderBy'
-import { INamespaceAPI, INamespacesAPI, IDatasetsAPI, IJobsAPI } from '../types/api'
+import { INamespaceAPI, INamespacesAPI  } from '../types/api'
 import { fetchNamespaces, fetchDatasets, fetchJobs, fetchLatestJobRuns } from '../requests'
 import { createRollbarMessage } from '../helpers'
 import {

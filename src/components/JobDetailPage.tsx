@@ -190,7 +190,29 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
 
   const { jobName } = useParams()
   const history = useHistory()
+
   const job = _find(jobs, j => j.name === jobName)
+
+  // useEffect hook to run on any change to jobs or jobName
+  useEffect(() => {
+    job ? fetchJobRuns(job.name, job.namespace) : null
+  }, [jobs, jobName])
+
+  if (!job || jobs.length == 0) {
+    return (
+      <Box
+      p={4}
+      display='flex'
+      flexDirection='column'
+      justifyContent='space-between'
+      className={classes.root}
+      >
+        <Typography align='center'>
+          No job by the name of <strong>&quot;{jobName}&quot;</strong> found
+        </Typography>
+      </Box>
+    )
+  }
 
   const {
     root,
@@ -219,117 +241,97 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     namespace,
     context = { SQL: '' }
   } = job as IJob
-  
-  useEffect(() => {
-    (fetchJobRuns(name, namespace))
-  }, [])
 
   const latestRuns = job ? job.latestRuns || [] : []
   const { SQL } = context
 
-  if (!job) {
-    return (
-      <Box
+  return (
+    <Box
       p={4}
       display='flex'
       flexDirection='column'
       justifyContent='space-between'
       className={root}
-      >
-        <Typography align='center'>
-          No job by the name of <strong>&quot;{jobName}&quot;</strong> found
+    >
+      <div className={topSection}>
+        <div className={`${_status} ${classes[status]}`} />
+        <Typography color='secondary' variant='h3' className={_name}>
+          <a href={location} className='link' target='_'>
+            {name}
+          </a>
         </Typography>
-      </Box>
-    )
-  } else {
-    return (
+        <StyledTypography color='primary' className={_description}>
+          {description}
+        </StyledTypography>
+        <HowToRegIcon color='secondary' className={_ownerIcon} />
+        <Typography className={_owner}>{namespace}</Typography>
+        <Fab className={closeButton} onClick={() => history.push('/')} size="small" aria-label="edit">
+          <CloseIcon />
+        </Fab>
+      </div>
       <Box
-        p={4}
-        display='flex'
-        flexDirection='column'
-        justifyContent='space-between'
-        className={root}
+        className={_SQL}
+        width='80%'
+        minHeight={200}
+        maxHeight={250}
+        bgcolor='white'
+        boxShadow={1}
+        // using border to create effect of padding, which will not work when there's overflow
+        border='1rem solid white'
+        borderLeft='none'
+        paddingLeft='2rem'
+        mx='auto'
+        my={2}
+        borderRadius='3px'
+        position='relative'
       >
-        <div className={topSection}>
-          <div className={`${_status} ${classes[status]}`} />
-          <Typography color='secondary' variant='h3' className={_name}>
-            <a href={location} className='link' target='_'>
-              {name}
-            </a>
-          </Typography>
-          <StyledTypography color='primary' className={_description}>
-            {description}
-          </StyledTypography>
-          <HowToRegIcon color='secondary' className={_ownerIcon} />
-          <Typography className={_owner}>{namespace}</Typography>
-          <Fab className={closeButton} onClick={() => history.push('/')} size="small" aria-label="edit">
-            <CloseIcon />
-          </Fab>
-        </div>
-        <Box
-          className={_SQL}
-          width='80%'
-          minHeight={200}
-          maxHeight={250}
-          bgcolor='white'
-          boxShadow={1}
-          // using border to create effect of padding, which will not work when there's overflow
-          border='1rem solid white'
-          borderLeft='none'
-          paddingLeft='2rem'
-          mx='auto'
-          my={2}
-          borderRadius='3px'
-          position='relative'
-        >
-          {!!SQL && SQL !== '' && (
-            <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)} />
-          )}
-          {!!SQL && SQL !== '' && (
-            <Modal aria-labelledby='modal-title' open={SQLModalOpen}>
-              <div className={SQLModalContainer}>
-                {/* Need this extra container for the absolutely-positioned elements */}
-                <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)} />
-                <Typography
-                  color='secondary'
-                  className={copyToClipboard}
-                  onClick={() => {
-                    if (SQL) {
-                      navigator.clipboard.writeText(SQL)
-                    }
-                  }}
-                >
-                  copy to clipboard
+        {!!SQL && SQL !== '' && (
+          <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)} />
+        )}
+        {!!SQL && SQL !== '' && (
+          <Modal aria-labelledby='modal-title' open={SQLModalOpen}>
+            <div className={SQLModalContainer}>
+              {/* Need this extra container for the absolutely-positioned elements */}
+              <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)} />
+              <Typography
+                color='secondary'
+                className={copyToClipboard}
+                onClick={() => {
+                  if (SQL) {
+                    navigator.clipboard.writeText(SQL)
+                  }
+                }}
+              >
+                copy to clipboard
+              </Typography>
+              <div className={SQLModal}>
+                <Typography id='modal-title' align='center' gutterBottom className={SQLModalTitle}>
+                  {name}
                 </Typography>
-                <div className={SQLModal}>
-                  <Typography id='modal-title' align='center' gutterBottom className={SQLModalTitle}>
-                    {name}
-                  </Typography>
-                  {/* gutter (because we cannot put margin on the fixed-positioned title)*/}
-                  <Box height='4rem'></Box> {displaySQL(SQL, _SQLComment)}
-                </div>
+                {/* gutter (because we cannot put margin on the fixed-positioned title)*/}
+                <Box height='4rem'></Box> {displaySQL(SQL, _SQLComment)}
               </div>
-            </Modal>
-          )}
-          {displaySQL(SQL, _SQLComment)}
-        </Box>
-        <div style={{display: 'flex'}}>
-          <div className={classes.latestRunContainer}>
-            {
-              latestRuns.map(r => {
-                return <div key={r.runId} className={classes.squareShape} style={{backgroundColor: colorMap[r.runState]}}></div>
-              })
-            }
-          </div>
-          <div>
-            <Typography className={lastUpdated}>
-              {formatUpdatedAt(updatedAt)}
-            </Typography>
-          </div>
-        </div>
+            </div>
+          </Modal>
+        )}
+        {displaySQL(SQL, _SQLComment)}
       </Box>
-    )
-  }
+      <div style={{display: 'flex'}}>
+        <div className={classes.latestRunContainer}>
+          {
+            latestRuns.map(r => {
+              return <div key={r.runId} className={classes.squareShape} style={{backgroundColor: colorMap[r.runState]}}></div>
+            })
+          }
+        </div>
+        <div>
+          <Typography className={lastUpdated}>
+            {formatUpdatedAt(updatedAt)}
+          </Typography>
+        </div>
+      </div>
+    </Box>
+  )
 }
 
 export default withStyles(styles)(JobDetailPage)
