@@ -187,16 +187,16 @@ const displaySQL = (SQL: string, SQLCommentClass: string) => {
 const JobDetailPage: FunctionComponent<IProps> = props => {
   const { jobs, classes, fetchJobRuns } = props
   const [SQLModalOpen, setSQLModalOpen] = useState(false)
-
+  
   const { jobName } = useParams()
   const history = useHistory()
 
   const job = _find(jobs, j => j.name === jobName)
 
-  // useEffect hook to run on any change to jobs or jobName
+  // useEffect hook to run on any change to jobName
   useEffect(() => {
     job ? fetchJobRuns(job.name, job.namespace) : null
-  }, [jobs, jobName])
+  }, [jobs.length])
 
   if (!job || jobs.length == 0) {
     return (
