@@ -236,7 +236,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     name,
     description,
     updatedAt = '',
-    status = 'passed',
+    latestRun,
     location,
     namespace,
     context = { SQL: '' }
@@ -254,7 +254,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       className={root}
     >
       <div className={topSection}>
-        <div className={`${_status} ${classes[status]}`} />
+        <div className={`${_status}`} style={{backgroundColor: colorMap[latestRun.runState]}} />
         <Typography color='secondary' variant='h3' className={_name}>
           <a href={location} className='link' target='_'>
             {name}

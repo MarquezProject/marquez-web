@@ -30,7 +30,7 @@ export interface IJobAPI {
   outputs: string[] // array of dataset urns
   location: string
   description: string
-  status: 'failed' | 'passed'
+  latestRun: IJobRunAPI
   context: {
     SQL: string
   }

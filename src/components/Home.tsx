@@ -106,7 +106,7 @@ class Home extends React.Component<IAllProps, IState> {
                     name={d.name}
                     description={d.description}
                     updatedAt={d.createdAt}
-                    status={d.status}
+                    latestRun={d.latestRun}
                   />
                 ))}
               </Box>
