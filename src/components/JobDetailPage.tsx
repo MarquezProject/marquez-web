@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useState, useEffect } from 'react'
 import {
   withStyles,
   createStyles,
@@ -14,11 +14,18 @@ import { useParams, useHistory } from 'react-router-dom'
 import _find from 'lodash/find'
 
 const globalStyles = require('../global_styles.css')
-const { vibrantGreen } = globalStyles
+const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
 import { formatUpdatedAt } from '../helpers'
 
 import { IJob } from '../types'
-import { fetchJobRuns } from '../actionCreators'
+
+const colorMap = {
+  NEW: jobRunNew,
+  FAILED: jobRunFailed,
+  COMPLETED: jobRunCompleted,
+  ABORTED: jobRunAborted,
+  RUNNING: jobRunRunning
+}
 
 const styles = ({ palette, spacing, shadows }: ITheme) => {
   return createStyles({
@@ -36,20 +43,31 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
       alignItems: 'center',
       margin: '0px 6% 0px 0px'
     },
-    lastUpdated: {
-      color: palette.grey[600]
-    },
     _status: {
       gridArea: 'status',
       width: spacing(2),
       height: spacing(2),
       borderRadius: '50%'
     },
+    squareShape: {
+      width: spacing(2),
+      height: spacing(2),
+      marginLeft: '5px',
+      borderRadius: '50%'
+    },
+    lastUpdated: {
+      color: palette.grey[600],
+      padding: '0px 0px 5px 5px'
+    },
+    latestRunContainer: {
+      float: 'right',
+      display: 'flex'
+    },
     failed: {
-      backgroundColor: palette.error.main
+      backgroundColor: jobRunFailed
     },
     passed: {
-      backgroundColor: vibrantGreen
+      backgroundColor: jobRunCompleted
     },
     _name: {
       gridArea: 'name'
@@ -167,8 +185,13 @@ const displaySQL = (SQL: string, SQLCommentClass: string) => {
   )
 }
 const JobDetailPage: FunctionComponent<IProps> = props => {
-  const [SQLModalOpen, setSQLModalOpen] = useState(false)
   const { jobs, classes, fetchJobRuns } = props
+  const [SQLModalOpen, setSQLModalOpen] = useState(false)
+
+  const { jobName } = useParams()
+  const history = useHistory()
+  const job = _find(jobs, j => j.name === jobName)
+
   const {
     root,
     _status,
@@ -186,11 +209,24 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     copyToClipboard,
     closeButton
   } = classes
-  const { jobName } = useParams()
-  const history = useHistory()
-  const job = _find(jobs, j => j.name === jobName)
 
+  const {
+    name,
+    description,
+    updatedAt = '',
+    status = 'passed',
+    location,
+    namespace,
+    context = { SQL: '' }
+  } = job as IJob
   
+  useEffect(() => {
+    (fetchJobRuns(name, namespace))
+  }, [])
+
+  const latestRuns = job ? job.latestRuns || [] : []
+  const { SQL } = context
+
   if (!job) {
     return (
       <Box
@@ -205,97 +241,95 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
         </Typography>
       </Box>
     )
-  }
-  
-  const {
-    name,
-    description,
-    updatedAt = '',
-    status = 'passed',
-    location,
-    namespace,
-    context = { SQL: '' }
-  } = job
-  
-  fetchJobRuns(name, namespace)
-  const { SQL } = context
-
-  return (
-    <Box
-      p={4}
-      display='flex'
-      flexDirection='column'
-      justifyContent='space-between'
-      className={root}
-    >
-      <div className={topSection}>
-        <div className={`${_status} ${classes[status]}`} />
-        <Typography color='secondary' variant='h3' className={_name}>
-          <a href={location} className='link' target='_'>
-            {name}
-          </a>
-        </Typography>
-        <StyledTypography color='primary' className={_description}>
-          {description}
-        </StyledTypography>
-        <HowToRegIcon color='secondary' className={_ownerIcon} />
-        <Typography className={_owner}>{namespace}</Typography>
-        <Fab className={closeButton} onClick={() => history.push('/')} size="small" aria-label="edit">
-          <CloseIcon />
-        </Fab>
-      </div>
+  } else {
+    return (
       <Box
-        className={_SQL}
-        width='80%'
-        minHeight={200}
-        maxHeight={250}
-        bgcolor='white'
-        boxShadow={1}
-        // using border to create effect of padding, which will not work when there's overflow
-        border='1rem solid white'
-        borderLeft='none'
-        paddingLeft='2rem'
-        mx='auto'
-        my={2}
-        borderRadius='3px'
-        position='relative'
+        p={4}
+        display='flex'
+        flexDirection='column'
+        justifyContent='space-between'
+        className={root}
       >
-        {!!SQL && SQL !== '' && (
-          <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)} />
-        )}
-        {!!SQL && SQL !== '' && (
-          <Modal aria-labelledby='modal-title' open={SQLModalOpen}>
-            <div className={SQLModalContainer}>
-              {/* Need this extra container for the absolutely-positioned elements */}
-              <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)} />
-              <Typography
-                color='secondary'
-                className={copyToClipboard}
-                onClick={() => {
-                  if (SQL) {
-                    navigator.clipboard.writeText(SQL)
-                  }
-                }}
-              >
-                copy to clipboard
-              </Typography>
-              <div className={SQLModal}>
-                <Typography id='modal-title' align='center' gutterBottom className={SQLModalTitle}>
-                  {name}
+        <div className={topSection}>
+          <div className={`${_status} ${classes[status]}`} />
+          <Typography color='secondary' variant='h3' className={_name}>
+            <a href={location} className='link' target='_'>
+              {name}
+            </a>
+          </Typography>
+          <StyledTypography color='primary' className={_description}>
+            {description}
+          </StyledTypography>
+          <HowToRegIcon color='secondary' className={_ownerIcon} />
+          <Typography className={_owner}>{namespace}</Typography>
+          <Fab className={closeButton} onClick={() => history.push('/')} size="small" aria-label="edit">
+            <CloseIcon />
+          </Fab>
+        </div>
+        <Box
+          className={_SQL}
+          width='80%'
+          minHeight={200}
+          maxHeight={250}
+          bgcolor='white'
+          boxShadow={1}
+          // using border to create effect of padding, which will not work when there's overflow
+          border='1rem solid white'
+          borderLeft='none'
+          paddingLeft='2rem'
+          mx='auto'
+          my={2}
+          borderRadius='3px'
+          position='relative'
+        >
+          {!!SQL && SQL !== '' && (
+            <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)} />
+          )}
+          {!!SQL && SQL !== '' && (
+            <Modal aria-labelledby='modal-title' open={SQLModalOpen}>
+              <div className={SQLModalContainer}>
+                {/* Need this extra container for the absolutely-positioned elements */}
+                <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)} />
+                <Typography
+                  color='secondary'
+                  className={copyToClipboard}
+                  onClick={() => {
+                    if (SQL) {
+                      navigator.clipboard.writeText(SQL)
+                    }
+                  }}
+                >
+                  copy to clipboard
                 </Typography>
-                {/* gutter (because we cannot put margin on the fixed-positioned title)*/}
-                <Box height='4rem'></Box> {displaySQL(SQL, _SQLComment)}
+                <div className={SQLModal}>
+                  <Typography id='modal-title' align='center' gutterBottom className={SQLModalTitle}>
+                    {name}
+                  </Typography>
+                  {/* gutter (because we cannot put margin on the fixed-positioned title)*/}
+                  <Box height='4rem'></Box> {displaySQL(SQL, _SQLComment)}
+                </div>
               </div>
-            </div>
-          </Modal>
-        )}
-        {displaySQL(SQL, _SQLComment)}
+            </Modal>
+          )}
+          {displaySQL(SQL, _SQLComment)}
+        </Box>
+        <div style={{display: 'flex'}}>
+          <div className={classes.latestRunContainer}>
+            {
+              latestRuns.map(r => {
+                return <div key={r.runId} className={classes.squareShape} style={{backgroundColor: colorMap[r.runState]}}></div>
+              })
+            }
+          </div>
+          <div>
+            <Typography className={lastUpdated}>
+              {formatUpdatedAt(updatedAt)}
+            </Typography>
+          </div>
+        </div>
       </Box>
-      <Typography className={lastUpdated} align='right'>
-        {formatUpdatedAt(updatedAt)}
-      </Typography>
-    </Box>
-  )
+    )
+  }
 }
 
 export default withStyles(styles)(JobDetailPage)

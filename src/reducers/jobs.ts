@@ -5,8 +5,7 @@ import {
   FETCH_JOBS_SUCCESS,
   FIND_MATCHING_ENTITIES,
   FILTER_JOBS,
-  FETCH_JOB_RUNS_SUCCESS,
-  FETCH_JOB_RUNS
+  FETCH_JOB_RUNS_SUCCESS
 } from '../constants/ActionTypes'
 import {
   fetchJobsSuccess,
@@ -34,15 +33,10 @@ export default (state = initialState, action: IJobsAction): IJobsState => {
       return findMatchingEntities(payload.search, state) as IJobsState
     case FILTER_JOBS:
       return filterEntities(state, payload.filterByKey, payload.filterByValue)
-    case FETCH_JOB_RUNS:
-      console.log('FETCH JOB RUNS listener triggered')
-      return state
     case FETCH_JOB_RUNS_SUCCESS: {
-      console.log('FETCH JOB RUNS SUCCESS listener triggered')
       return state.map((j: IJob) => {
         const isMatching = j.name == payload.jobName
-        const result = payload.lastTenJobRuns || ['this is a test']
-        return isMatching ? { ...j, latestRuns: result } : j
+        return isMatching ? { ...j, latestRuns: payload.lastTenJobRuns } : j
       })
     }
     default:

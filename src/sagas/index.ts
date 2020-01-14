@@ -37,9 +37,7 @@ export function* fetchJobRunsSaga() {
   try {
     const { payload } = yield take(FETCH_JOB_RUNS)
     const { runs } = yield call(fetchLatestJobRuns, payload.jobName, payload.namespaceName)
-
     const runsOrderedByStartTime = _orderBy(runs, ['nominalStartTime'], ['asc'])
-    console.log('Job Runs: ', runsOrderedByStartTime)
     yield put(fetchJobRunsSuccess(payload.jobName, runsOrderedByStartTime))
   } catch (e) {
     createRollbarMessage('fetchJobRuns', e)
@@ -49,7 +47,6 @@ export function* fetchJobRunsSaga() {
 
 export default function* rootSaga(): Generator {
   const sagasThatAreKickedOffImmediately = [fetchNamespacesDatasetsAndJobs()]
-
   const sagasThatWatchForAction = [fetchJobRunsSaga()]
 
   yield all([...sagasThatAreKickedOffImmediately, ...sagasThatWatchForAction])
