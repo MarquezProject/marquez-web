@@ -31,9 +31,6 @@ const styles = (_theme: ITheme) => {
       display: 'flex',
       flexDirection: 'row'
     },
-    filter: {
-      marginLeft: '-4%'
-    },
     lowerHalf: {
       display: 'flex',
       flexDirection: 'column',
@@ -42,6 +39,10 @@ const styles = (_theme: ITheme) => {
       top: 0,
       zIndex: 1,
       width: '100%'
+    },
+    filter: {
+      marginLeft: '-4%',
+      paddingTop: '0px'
     },
     noDatasets: {
       color: '#9e9e9e',
@@ -71,7 +72,7 @@ const Home:  FunctionComponent<IAllProps> = props => {
   const [datasetPageIndex, setDatasetPageIndex] = useState(0)
   const [jobPageIndex, setJobPageIndex] = useState(0)
   
-  const limit = 10
+  const limit = 5
   
   const { datasets, jobs, classes, showJobs, setShowJobs } = props
   const matchingDatasets = datasets.filter(d => d.matches)

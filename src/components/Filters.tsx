@@ -87,7 +87,7 @@ const Filters = (props: IProps): ReactElement => {
   return (
     <Box ml='5%' py={2}>
       <StyledFormControl margin='normal'>
-        <InputLabel id='filter-by-label'>Filter by</InputLabel>
+        {/* <InputLabel id='filter-by-label'>Filter by</InputLabel> */}
         <MUISelect value={currentFilter} renderValue={capitalize} onChange={onPrimaryFilterChange}>
           {Object.keys(filterByOptions).map(o => (
             <MenuItem key={o} value={o}>
@@ -95,13 +95,13 @@ const Filters = (props: IProps): ReactElement => {
             </MenuItem>
           ))}
           <MenuItem key='all' value='all'>
-            All
+            all
           </MenuItem>
         </MUISelect>
       </StyledFormControl>
       {subFilterVisible && (
         <StyledFormControl margin='normal'>
-          <InputLabel id='secondary-filter'>{currentFilter}</InputLabel>
+          {/* <InputLabel id='secondary-filter'>{currentFilter}</InputLabel> */}
           <MUISelect
             value={currentFilterValue}
             renderValue={filterDictionary[currentFilter].accessor}
