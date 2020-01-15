@@ -157,7 +157,7 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
           </Table>
         </Paper>
         <Typography className={updated} color='primary' align='right'>
-          {formatUpdatedAt(updatedAt)}
+          last updated: {formatUpdatedAt(updatedAt)}
         </Typography>
       </Box>
     )
