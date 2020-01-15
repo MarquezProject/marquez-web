@@ -70,6 +70,7 @@ const Filters = (props: IProps): ReactElement => {
       filterJobs(currentFilterKey, currentFilterConfig.accessor(currentFilterValue))
       filterDatasets(currentFilterKey, currentFilterConfig.accessor(currentFilterValue))
     }
+    showJobs(true)
   }
 
   /* Filter jobs & datasets by the selected filter value */
