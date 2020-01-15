@@ -26,7 +26,6 @@ interface IFilterDictionary {
 }
 
 const filterByOptions: { [key: string]: 'namespace' | 'sourceName' } = {
-  /* display name: entitiy name on dataset schema */
   namespace: 'namespace',
   datasource: 'sourceName'
 }
