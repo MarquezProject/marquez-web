@@ -8,11 +8,6 @@ exports[`Filters component renders a snapshot that matches previous 1`] = `
   <WithStyles(WithStyles(ForwardRef(FormControl)))
     margin="normal"
   >
-    <WithStyles(ForwardRef(InputLabel))
-      id="filter-by-label"
-    >
-      Filter by
-    </WithStyles(ForwardRef(InputLabel))>
     <WithStyles(ForwardRef(Select))
       onChange={[Function]}
       renderValue={[Function]}
@@ -34,18 +29,13 @@ exports[`Filters component renders a snapshot that matches previous 1`] = `
         key="all"
         value="all"
       >
-        All
+        all
       </WithStyles(ForwardRef(MenuItem))>
     </WithStyles(ForwardRef(Select))>
   </WithStyles(WithStyles(ForwardRef(FormControl)))>
   <WithStyles(WithStyles(ForwardRef(FormControl)))
     margin="normal"
   >
-    <WithStyles(ForwardRef(InputLabel))
-      id="secondary-filter"
-    >
-      namespace
-    </WithStyles(ForwardRef(InputLabel))>
     <WithStyles(ForwardRef(Select))
       onChange={[Function]}
       renderValue={[Function]}
