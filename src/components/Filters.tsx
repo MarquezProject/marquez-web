@@ -3,7 +3,6 @@ import MUISelect from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Box from '@material-ui/core/Box'
 import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
 import uniq from 'lodash/uniq'
 import { withStyles } from '@material-ui/core/styles'
 import { capitalize } from '../helpers'
@@ -87,7 +86,6 @@ const Filters = (props: IProps): ReactElement => {
   return (
     <Box ml='5%' py={2}>
       <StyledFormControl margin='normal'>
-        <InputLabel id='filter-by-label'>Filter by</InputLabel>
         <MUISelect value={currentFilter} renderValue={capitalize} onChange={onPrimaryFilterChange}>
           {Object.keys(filterByOptions).map(o => (
             <MenuItem key={o} value={o}>
@@ -95,13 +93,12 @@ const Filters = (props: IProps): ReactElement => {
             </MenuItem>
           ))}
           <MenuItem key='all' value='all'>
-            All
+            all
           </MenuItem>
         </MUISelect>
       </StyledFormControl>
       {subFilterVisible && (
         <StyledFormControl margin='normal'>
-          <InputLabel id='secondary-filter'>{currentFilter}</InputLabel>
           <MUISelect
             value={currentFilterValue}
             renderValue={filterDictionary[currentFilter].accessor}
