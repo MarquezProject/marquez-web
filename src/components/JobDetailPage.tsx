@@ -5,7 +5,7 @@ import {
   WithStyles as IWithStyles,
   Theme as ITheme
 } from '@material-ui/core/styles'
-import { Typography, Box, Fab } from '@material-ui/core'
+import { Typography, Box, Fab, Tooltip } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import OpenWithSharpIcon from '@material-ui/icons/OpenWithSharp'
 import Modal from '@material-ui/core/Modal'
@@ -195,7 +195,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
 
   // useEffect hook to run on any change to jobName
   useEffect(() => {
-    job ? fetchJobRuns(job.name, job.namespace) : null
+    job ? fetchJobRuns(jobName, job.namespace) : null
   })
 
   if (!job || jobs.length == 0) {
@@ -254,7 +254,9 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       className={root}
     >
       <div className={topSection}>
-        <div className={`${_status}`} style={{backgroundColor: colorMap[latestRun.runState]}} />
+        <Tooltip title={latestRun.runState} placement="top">
+          <div className={`${_status}`} style={{backgroundColor: colorMap[latestRun.runState]}} />
+        </Tooltip>
         <Typography color='secondary' variant='h3' className={_name}>
           <a href={location} className='link' target='_'>
             {name}
@@ -320,7 +322,11 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
         <div className={classes.latestRunContainer}>
           {
             latestRuns.map(r => {
-              return <div key={r.runId} className={classes.squareShape} style={{backgroundColor: colorMap[r.runState]}}></div>
+              return (
+                <Tooltip key={r.runId} title={r.runState} placement="top">
+                  <div key={r.runId} className={classes.squareShape} style={{backgroundColor: colorMap[r.runState]}}></div>
+                </Tooltip>
+              )
             })
           }
         </div>

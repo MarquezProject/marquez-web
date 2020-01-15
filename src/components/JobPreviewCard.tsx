@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 const globalStyles = require('../global_styles.css')
 const { vibrantGreen } = globalStyles
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box, Tooltip } from '@material-ui/core'
 import { formatUpdatedAt } from '../helpers'
 
 import { IJobAPI } from '../types/api'
@@ -86,7 +86,9 @@ class JobPreviewCard extends React.Component<IProps, IState> {
             alignItems='flex-end'
             justifyContent='space-between'
           >
-            <div className={classes.status} style={{backgroundColor: colorMap[latestRun.runState]}} />
+            <Tooltip className="tagWrapper" title={latestRun.runState} placement="top">
+              <div className={classes.status} style={{backgroundColor: colorMap[latestRun.runState]}} />
+            </Tooltip>
             <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
           </Box>
         </Box>

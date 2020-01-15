@@ -36,9 +36,7 @@ export function* fetchNamespacesDatasetsAndJobs() {
 export function* fetchJobRunsSaga() {
   try {
     const { payload } = yield take(FETCH_JOB_RUNS)
-    console.log('KICKING OFF REQUEST...')
     const { runs } = yield call(fetchLatestJobRuns, payload.jobName, payload.namespaceName)
-    console.log('RUNS: ', runs)
     const runsOrderedByStartTime = _orderBy(runs, ['nominalStartTime'], ['asc'])
     yield put(fetchJobRunsSuccess(payload.jobName, runsOrderedByStartTime))
   } catch (e) {
