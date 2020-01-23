@@ -204,28 +204,6 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
       },
       Object {
         "description": "describes the entire universe",
-        "fields": Array [
-          Object {
-            "name": "uuid",
-            "type": "STRING",
-          },
-          Object {
-            "name": "name",
-            "type": "STRING",
-          },
-          Object {
-            "name": "mass",
-            "type": "INTEGER",
-          },
-          Object {
-            "name": "dimension",
-            "type": "STRING",
-          },
-          Object {
-            "name": "interstellar",
-            "type": "BOOLEAN",
-          },
-        ],
         "name": "environment.universe",
         "namespace": "galactic-data",
         "physicalName": "environment.universe",
@@ -1384,28 +1362,6 @@ exports[`DatasetDetailPage Component when there is a match for the datasetName i
         },
         Object {
           "description": "describes the entire universe",
-          "fields": Array [
-            Object {
-              "name": "uuid",
-              "type": "STRING",
-            },
-            Object {
-              "name": "name",
-              "type": "STRING",
-            },
-            Object {
-              "name": "mass",
-              "type": "INTEGER",
-            },
-            Object {
-              "name": "dimension",
-              "type": "STRING",
-            },
-            Object {
-              "name": "interstellar",
-              "type": "BOOLEAN",
-            },
-          ],
           "name": "environment.universe",
           "namespace": "galactic-data",
           "physicalName": "environment.universe",
@@ -3934,28 +3890,6 @@ exports[`DatasetDetailPage Component when there is no match for the datasetName 
       },
       Object {
         "description": "describes the entire universe",
-        "fields": Array [
-          Object {
-            "name": "uuid",
-            "type": "STRING",
-          },
-          Object {
-            "name": "name",
-            "type": "STRING",
-          },
-          Object {
-            "name": "mass",
-            "type": "INTEGER",
-          },
-          Object {
-            "name": "dimension",
-            "type": "STRING",
-          },
-          Object {
-            "name": "interstellar",
-            "type": "BOOLEAN",
-          },
-        ],
         "name": "environment.universe",
         "namespace": "galactic-data",
         "physicalName": "environment.universe",
@@ -5114,28 +5048,6 @@ exports[`DatasetDetailPage Component when there is no match for the datasetName 
         },
         Object {
           "description": "describes the entire universe",
-          "fields": Array [
-            Object {
-              "name": "uuid",
-              "type": "STRING",
-            },
-            Object {
-              "name": "name",
-              "type": "STRING",
-            },
-            Object {
-              "name": "mass",
-              "type": "INTEGER",
-            },
-            Object {
-              "name": "dimension",
-              "type": "STRING",
-            },
-            Object {
-              "name": "interstellar",
-              "type": "BOOLEAN",
-            },
-          ],
           "name": "environment.universe",
           "namespace": "galactic-data",
           "physicalName": "environment.universe",
