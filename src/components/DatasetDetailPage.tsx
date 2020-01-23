@@ -136,7 +136,7 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
             </Fab>
           </div>
         </Box>
-        {fields.length > 0 ? (
+        {fields && fields.length > 0 ? (
           <Paper className={paper}>
             <Table size="small">
               <TableHead>
