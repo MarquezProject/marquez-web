@@ -1,67 +1,155 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React from "react";
+import PropTypes from "prop-types";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import axios from "axios";
+import MUIDataTable from "mui-datatables";
+import DetailsDialog from "./DetailsDialog";
+import { connect } from "react-redux";
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
+const theme = createMuiTheme({
+  palette: {
+    typography: {
+      useNextVariants: true
+    },
+    primary: {
+      main: "#2B2B33"
+    },
+    secondary: {
+      main: "#006BA0"
+    }
+  }
 });
 
-let id = 0;
-function createData(name, description, createdAt) {
-  id += 1;
-  return { name, description, createdAt };
+class JobTable extends React.Component {
+  handleRowClick = rowData => {
+    var lineageUrl =
+      " /api/v1/namespaces/" +
+      this.props.namespace +
+      "/jobs/" +
+      rowData[0] +
+      "/lineage";
+    this.props.onLineageUrlChange(lineageUrl);
+    axios
+      .get(lineageUrl)
+      .then(response => {
+        console.log(response);
+        this.props.onRowClick(rowData, response.data.result);
+        this.props.onErrorClick(null);
+      })
+      .catch(error => {
+        this.props.onErrorClick({
+          id: rowData[0],
+          label: rowData[0],
+          borderWidth: 3,
+          title: "job",
+          color: { background: "orange", highlight: { border: "black" } }
+        });
+        this.props.onRowClick(rowData, []);
+      });
+  };
+
+  render() {
+    const jobColumns = [
+      "NAME",
+      "DESCRIPTION",
+      "CREATED",
+      {
+        name: "UPDATED",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "INPUT DATASETS",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "OUTPUT DATASETS",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "LOCATION",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "NAMESPACE",
+        options: {
+          display: false
+        }
+      }
+    ];
+
+    const options = {
+      filter: true,
+      filterType: "dropdown",
+      onRowClick: this.handleRowClick,
+      print: false,
+      viewColumns: false,
+      selectableRows: "none",
+      download: false
+    };
+
+    return (
+      <React.Fragment>
+        <div>
+          <MUIDataTable
+            title={"Jobs"}
+            data={this.props.jobs}
+            columns={jobColumns}
+            options={options}
+          />
+        </div>
+        <div>
+          {/* details dialog, hidden by default */}
+          <MuiThemeProvider theme={theme}>
+            <DetailsDialog store={this.props.store} />
+          </MuiThemeProvider>
+        </div>
+      </React.Fragment>
+    );
+  }
 }
 
-const rows = [
-  createData('Job 1', 'Job 1 Description', '2019-01-29T23:19:03+0000'),
-  createData('Job 2', 'Job 2 Description', '2019-01-29T23:19:03+0000'),
-  createData('Job 3', 'Job 3 Description', '2019-01-29T23:19:03+0000')
-];
-
-function SimpleTable(props) {
-  const { classes, jobs } = props;
-
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Created At</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(job => (
-            <TableRow key={job.id}>
-              <TableCell component="th" scope="row">
-                {job.name}
-              </TableCell>
-              <TableCell align="right">{job.description}</TableCell>
-              <TableCell align="right">{job.createdAt}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
-}
-
-SimpleTable.propTypes = {
-  classes: PropTypes.object.isRequired,
+JobTable.propTypes = {
+  namespace: PropTypes.string
 };
 
-export default withStyles(styles)(SimpleTable);
+function mapStateToProps(state) {
+  return {
+    jobs: state.jobs,
+    namespace: state.namespace
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onRowClick: (rowData, newGraphData) => {
+      const action = {
+        type: "RowClick",
+        rowData: rowData,
+        graphData: newGraphData,
+        tableType: "job"
+      };
+      dispatch(action);
+    },
+    onErrorClick: node => {
+      const action = { type: "ErrorClick", node: node };
+      dispatch(action);
+    },
+    onLineageUrlChange: url => {
+      const action = { type: "UrlChange", url: url };
+      dispatch(action);
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(JobTable);

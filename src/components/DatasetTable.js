@@ -1,65 +1,142 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
+import MUIDataTable from "mui-datatables";
+import DetailsDialog from "./DetailsDialog";
+import { connect } from "react-redux";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
   },
-  table: {
-    minWidth: 700,
-  },
+  palette: {
+    primary: {
+      main: "#2B2B33"
+    },
+    secondary: {
+      main: "#006BA0"
+    }
+  }
 });
 
-let id = 0;
-function createData(urn, createdAt) {
-  id += 1;
-  return { urn, createdAt };
+class DatasetTable extends React.Component {
+  handleRowClick = rowData => {
+    var lineageUrl =
+      " /api/v1/namespaces/" +
+      this.props.namespace +
+      "/datasets/" +
+      rowData[3] +
+      "/lineage";
+    this.props.onLineageUrlChange(lineageUrl);
+    axios
+      .get(lineageUrl)
+      .then(response => {
+        this.props.onRowClick(rowData, response.data.result);
+        this.props.onErrorClick(null);
+      })
+      .catch(error => {
+        this.props.onErrorClick({
+          id: rowData[0],
+          label: rowData[0],
+          borderWidth: 3,
+          title: "dataset",
+          color: { background: "cyan", highlight: { border: "black" } }
+        });
+        this.props.onRowClick(rowData, []);
+      });
+  };
+
+  render() {
+    const datasetColumns = [
+      "NAME",
+      "DESCRIPTION",
+      "CREATED",
+      {
+        name: "URN",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "DATASOURCE URN",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "NAMESPACE",
+        options: {
+          display: false
+        }
+      }
+    ];
+
+    const options = {
+      filter: true,
+      filterType: "dropdown",
+      onRowClick: this.handleRowClick,
+      print: false,
+      viewColumns: false,
+      selectableRows: "none",
+      download: false
+    };
+    return (
+      <React.Fragment>
+        <div>
+          <MUIDataTable
+            title={"Datasets"}
+            columns={datasetColumns}
+            data={this.props.datasets}
+            options={options}
+          />
+        </div>
+        <div>
+          {/* details dialog, hidden by default */}
+          <MuiThemeProvider theme={theme}>
+            <DetailsDialog store={this.props.store} />
+          </MuiThemeProvider>
+        </div>
+      </React.Fragment>
+    );
+  }
 }
 
-const rows = [
-  createData(':dwh:foo.x:', '2019-01-29T23:19:03+0000'),
-  createData(':dwh:foo.y:', '2019-01-29T23:19:03+0000'),
-  createData(':dwh:foo.z:', '2019-01-29T23:19:03+0000')
-];
-
-function SimpleTable(props) {
-  const { classes } = props;
-
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>URN</TableCell>
-            <TableCell align="right">Created At</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row">
-                {row.urn}
-              </TableCell>
-              <TableCell align="right">{row.createdAt}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
-}
-
-SimpleTable.propTypes = {
-  classes: PropTypes.object.isRequired,
+DatasetTable.propTypes = {
+  namespace: PropTypes.string
 };
 
-export default withStyles(styles)(SimpleTable);
+function mapStateToProps(state) {
+  return {
+    datasets: state.datasets,
+    tableType: state.tableType,
+    namespace: state.namespace
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onRowClick: (rowData, newGraphData) => {
+      const action = {
+        type: "RowClick",
+        rowData: rowData,
+        graphData: newGraphData,
+        tableType: "dataset"
+      };
+      dispatch(action);
+    },
+    onErrorClick: node => {
+      const action = { type: "ErrorClick", node: node };
+      dispatch(action);
+    },
+    onLineageUrlChange: url => {
+      const action = { type: "UrlChange", url: url };
+      dispatch(action);
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DatasetTable);
