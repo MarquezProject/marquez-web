@@ -153,6 +153,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       const g = svg.append('g')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
+        .attr('transform', `translate(${50}, ${200})`)
         
       g.append('g')
         .attr('fill', 'none')
@@ -241,14 +242,6 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       graph(largestCluster, false)
       graph(reverseCluster, true)
     }
-
-    svg.call(
-      zoom()
-        .scaleExtent([0.5, 3])
-        .on('zoom', () => {
-          svg.attr('transform', (event as any).transform)
-        })
-    )
 
     if (this.props.isLoading !== newProps.isLoading) {
       return true
