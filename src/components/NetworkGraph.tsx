@@ -22,8 +22,9 @@ import { select } from 'd3-selection'
 import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
 
-import { zoom } from 'd3-zoom'
 import Loader from './Loader'
+
+// import { zoom } from 'd3-zoom'
 // import { IDatasetAPI } from '../types/api'
 // const globalStyles = require('../global_styles.css')
 // const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
@@ -78,7 +79,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     }
 
     // const width = +svg.style('width').replace('px', '')
-    // const height = +svg.style('height').replace('px', '')
+    const height = +svg.style('height').replace('px', '')
 
     const isDataset = (node: any) => {
       const name = node.name || node.data.name
@@ -153,7 +154,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       const g = svg.append('g')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
-        .attr('transform', `translate(${50}, ${200})`)
+        .attr('transform', `translate(${200}, ${height/2})`)
         
       g.append('g')
         .attr('fill', 'none')
@@ -174,21 +175,28 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         .join('g')
         .attr('transform', d => `translate(${reverse ? -d.y : d.y},${d.x})`)
     
-      const jobNode = g.append('g')
+      const jobNode = g
+        .append('g')
         .attr('stroke-linejoin', 'round')
         .selectAll('g')
         .data(jobs)
         .join('g')
         .attr('transform', d => `translate(${reverse ? -d.y : d.y},${d.x})`)
         
-      datasetNode.append('rect')
+      datasetNode
+        .append('a')
+        .attr('href', (d: any) => ('/datasets/' + d.data.name))
+        .append('rect')
         .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
         .attr('x', -square/2)
         .attr('y', -square/2)
         .attr('width', square)
         .attr('height', square)
     
-      jobNode.append('circle')
+      jobNode
+        .append('a')
+        .attr('href', (d: any) => ('/jobs/' + d.data.name))
+        .append('circle')
         .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
         .attr('r', radius)
       
