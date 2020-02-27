@@ -19,10 +19,8 @@ import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
 
 import { select } from 'd3-selection'
-import { hierarchy } from 'd3-hierarchy'
-
-// import { tree } from 'd3-hierarchy'
-// import { linkHorizontal } from 'd3-shape'
+import { hierarchy, tree } from 'd3-hierarchy'
+import { linkHorizontal } from 'd3-shape'
 
 import { zoom } from 'd3-zoom'
 import Loader from './Loader'
@@ -82,14 +80,6 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     // const width = +svg.style('width').replace('px', '')
     // const height = +svg.style('height').replace('px', '')
 
-    svg.call(
-      zoom()
-        .scaleExtent([0.5, 3])
-        .on('zoom', () => {
-          svg.attr('transform', (event as any).transform)
-        })
-    )
-
     const isDataset = (node: any) => {
       const name = node.name || node.data.name
       return _find(newProps.datasets, d => d.name == name)
@@ -148,6 +138,93 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       return node
     }
 
+    const circleHighlight = '#ffffff'
+    const linkHighlight = '#b0b0b0'
+    const defaultHighlight = '#575757'
+    const labelHighlight = '#ffffff'
+    const radius = 8
+    const square = 13
+    const strokeWidth = 5
+
+    function graph(cluster: any, reverse: boolean) {
+      
+      cluster = tree().nodeSize([20, 70])(cluster)
+      
+      const g = svg.append('g')
+        .attr('font-family', 'sans-serif')
+        .attr('font-size', 10)
+        
+      g.append('g')
+        .attr('fill', 'none')
+        .attr('stroke-width', strokeWidth)
+        .selectAll('path')
+        .data(cluster.links())
+        .join('path')
+        .attr('d', linkHorizontal().x((d: any) => reverse ? -d.y : d.y).y((d: any) => d.x))
+        .attr('stroke', (d: any) => d.target.data.matches && d.source.data.matches ? linkHighlight : defaultHighlight)
+      
+      const datasets = _filter(cluster.descendants(), d => isDataset(d))
+      const jobs = _filter(cluster.descendants(), d => !isDataset(d))
+      
+      const datasetNode = g.append('g')
+        .attr('stroke-linejoin', 'round')
+        .selectAll('g')
+        .data(datasets)
+        .join('g')
+        .attr('transform', d => `translate(${reverse ? -d.y : d.y},${d.x})`)
+    
+      const jobNode = g.append('g')
+        .attr('stroke-linejoin', 'round')
+        .selectAll('g')
+        .data(jobs)
+        .join('g')
+        .attr('transform', d => `translate(${reverse ? -d.y : d.y},${d.x})`)
+        
+      datasetNode.append('rect')
+        .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
+        .attr('x', -square/2)
+        .attr('y', -square/2)
+        .attr('width', square)
+        .attr('height', square)
+    
+      jobNode.append('circle')
+        .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
+        .attr('r', radius)
+      
+      // Add text to nodes
+      datasetNode.append('text')
+        .text(d => d.data.matches ? d.data.name : null)
+        .attr('dy', 10)
+        .attr('font-size', 8)
+        .attr('font-family', 'sans-serif')
+        .attr('transform', `rotate(45) translate(${-(radius + 4)}, ${-radius})`)
+        .attr('text-anchor', 'end')
+        .attr('fill', labelHighlight)
+      
+      // Add text to nodes
+      jobNode.append('text')
+        .text(d => d.data.matches ? d.data.name : null)
+        .attr('dy', 10)
+        .attr('font-size', 8)
+        .attr('font-family', 'sans-serif')
+        .attr('transform', `rotate(45) translate(${-(radius + 4)}, ${-radius})`)
+        .attr('text-anchor', 'end')
+        .attr('fill', labelHighlight)
+      
+      // jobNode.on("mouseover", focus).on("mouseout", unfocus)
+      // datasetNode.on("mouseover", focus).on("mouseout", unfocus)
+      
+      // function focus(d) {
+      //   d3.select(this).attr('fill', d => circleHighlight)
+      // }
+      
+      // function unfocus(d) {
+      //   d3.select(this).attr('fill', d => isSearched(d.data.name) ? circleHighlight : defaultHighlight)
+      // }
+      
+      return svg.node()
+    }
+    
     // run calculations for network graph
     const lineages = getLineages()
     let clusters = _map(lineages, lineage => hierarchy(lineage))
@@ -161,11 +238,17 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       // remove svg elements
       svg.selectAll('*').remove()
     
-      // graph(largestCluster, false)
-      // graph(reverseCluster, true)
-      console.log(largestCluster)
-      console.log(reverseCluster)
+      graph(largestCluster, false)
+      graph(reverseCluster, true)
     }
+
+    svg.call(
+      zoom()
+        .scaleExtent([0.5, 3])
+        .on('zoom', () => {
+          svg.attr('transform', (event as any).transform)
+        })
+    )
 
     if (this.props.isLoading !== newProps.isLoading) {
       return true
