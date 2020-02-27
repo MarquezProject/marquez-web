@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as d3 from 'd3'
+
 import {
   withStyles,
   createStyles,
@@ -9,17 +10,21 @@ import {
 
 import Legend from './Legend'
 
-import { createNetworkData } from '../helpers'
-import { IDataset, IJob, INodeNetwork, INetworkLink } from '../types/'
-import { select } from 'd3-selection'
-import { forceCenter, forceLink, forceSimulation, forceManyBody, forceY } from 'd3-force'
-import { zoom } from 'd3-zoom'
-import { color } from 'd3-color'
-import Loader from './Loader'
-const globalStyles = require('../global_styles.css')
-const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
+// import { createNetworkData } from '../helpers'
+import { IDataset, IJob } from '../types/'
 
-const fadedOut = (color(jobNodeGrey) as any).darker(1.7).toString()
+import { select } from 'd3-selection'
+// import { tree } from 'd3-hierarchy'
+// import { linkHorizontal } from 'd3-shape'
+
+// import { forceCenter, forceLink, forceSimulation, forceManyBody, forceY } from 'd3-force'
+import { zoom } from 'd3-zoom'
+// import { color } from 'd3-color'
+import Loader from './Loader'
+// const globalStyles = require('../global_styles.css')
+// const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
+
+// const fadedOut = (color(jobNodeGrey) as any).darker(1.7).toString()
 
 const styles = ({ palette }: Theme) => {
   return createStyles({
@@ -63,30 +68,17 @@ type IAllProps = IWithStyles<typeof styles> & IProps
 
 export class NetworkGraph extends React.Component<IAllProps, {}> {
   shouldComponentUpdate(newProps: IProps) {
-    type IDatumCombined = INodeNetwork & d3.SimulationNodeDatum
-    const networkData = createNetworkData(newProps.datasets, newProps.jobs)
-    const { nodes, links } = networkData
+    
+    // const networkData = createNetworkData(newProps.datasets, newProps.jobs)
+    // const { nodes, links } = networkData
 
     const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
 
     if (svg.empty()) {
       return true
     }
-    const width = +svg.style('width').replace('px', '')
-    const height = +svg.style('height').replace('px', '')
-
-    const graphLayout = forceSimulation<IDatumCombined, INetworkLink>(nodes)
-      .force('charge', forceManyBody().strength(-50))
-      .force('center', forceCenter(width / 2, height / 2))
-      .alpha(.2)
-      .force('y', forceY(height / 2))
-      .force(
-        'link',
-        forceLink(links).id((d: any) => {
-          return d.id
-        })
-      )
-      .on('tick', ticked)
+    // const width = +svg.style('width').replace('px', '')
+    // const height = +svg.style('height').replace('px', '')
 
     svg.call(
       zoom()
@@ -96,139 +88,30 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         })
     )
 
-    const linkContainer: d3.Selection<SVGElement, void, HTMLElement, void> = svg.select('#links')
+    // const linkContainer: d3.Selection<SVGElement, void, HTMLElement, void> = svg.select('#links')
 
-    const linkSelection = linkContainer
-      .selectAll('.link')
-      .data(links, (l: INetworkLink) => l.source + l.target)
-      .join(
-        enter =>
-          enter
-            .append('line')
-            .attr('class', 'link')
-            .style('stroke', l => (l.connectsToMatchingNode ? linkGrey : fadedOut))
-            .style('stroke-width', 2),
-        update => update.style('stroke', l => (l.connectsToMatchingNode ? linkGrey : fadedOut)),
-        exit => exit.remove()
-      )
+    
 
-    const jobNodeContainer: d3.Selection<SVGElement, void, HTMLElement, void> = svg.select(
-      '#jobNodes'
-    )
+    // const tooltip = select('#tooltip')
 
-    const jobNodeSelection = jobNodeContainer
-      .selectAll('.jobNode')
-      .data(
-        nodes.filter((d: IDatumCombined) => {
-          return d.tag == 'job'
-        }),
-        (j: any) => j.id
-      )
-      .join(
-        enter =>
-          enter
-            .append('a')
-            .attr('href', d => ('/jobs/' + d.id))
-            .append('circle')
-            .attr('class', 'jobNode')
-            .attr('r', 5)
-            .attr('fill', n => (n.matches ? jobNodeGrey : fadedOut)),
-        update => update
-          .attr('fill', n => (n.matches ? jobNodeGrey : fadedOut)),
-        exit => exit.remove()
-      )
+    // datasetNodeSelection
+    //   .on('mouseover', focus)
+    //   .on('mousemove', move)
+    //   .on('mouseout', unfocus)
 
-    const datasetNodeContainer: d3.Selection<SVGElement, void, HTMLElement, void> = svg.select(
-      '#datasetNodes'
-    )
+    // function focus(d: INodeNetwork) {
+    //   tooltip.text(d.id).style('visibility', 'visible')
+    // }
 
-    const datasetNodeDimension = 10
-    const datasetNodeSelection = datasetNodeContainer
-      .selectAll('.datasetNode')
-      .data(
-        nodes.filter((d: any) => {
-          return d.tag == 'dataset'
-        }),
-        (d: any) => d.id
-      )
-      .join(
-        enter =>
-          enter
-            .append('a')
-            .attr('href', d => ('/datasets/' + d.id))
-            .append('rect')
-            .attr('class', 'datasetNode')
-            .attr('width', datasetNodeDimension)
-            .attr('height', datasetNodeDimension)
-            .attr('fill', n => (n.matches ? datasetNodeWhite : fadedOut)),
-        update => update.attr('fill', n => (n.matches ? datasetNodeWhite : fadedOut)),
-        exit => {
-          return exit.remove()
-        }
-      )
+    // function move() {
+    //   return tooltip
+    //     .style('top', (event as any).pageY - 10 + 'px')
+    //     .style('left', (event as any).pageX + 10 + 'px')
+    // }
 
-    function ticked() {
-      jobNodeSelection.call(updateNode)
-
-      datasetNodeSelection.call(updateNode)
-
-      linkSelection.call(updateLink)
-    }
-
-    const tooltip = select('#tooltip')
-
-    datasetNodeSelection
-      .on('mouseover', focus)
-      .on('mousemove', move)
-      .on('mouseout', unfocus)
-
-    jobNodeSelection
-      .on('mouseover', focus)
-      .on('mousemove', move)
-      .on('mouseout', unfocus)
-
-    function focus(d: INodeNetwork) {
-      tooltip.text(d.id).style('visibility', 'visible')
-    }
-
-    function move() {
-      return tooltip
-        .style('top', (event as any).pageY - 10 + 'px')
-        .style('left', (event as any).pageX + 10 + 'px')
-    }
-
-    function unfocus() {
-      return tooltip.style('visibility', 'hidden')
-    }
-
-    function updateLink(link: d3.Selection<SVGElement, any, any, any>) {
-      const k = 6 * graphLayout.alpha()
-      link
-        .each(function(d) {
-          d.source.x -= k * 7, d.target.x += k * 4
-        })
-        .attr('x1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.offset == 'source' ? d.source.x + datasetNodeDimension / 2 : d.source.x
-        })
-        .attr('y1', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.offset == 'source' ? d.source.y + datasetNodeDimension / 2 : d.source.y
-        })
-        .attr('x2', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.offset == 'target' ? d.target.x + datasetNodeDimension / 2 : d.target.x
-        })
-        .attr('y2', function(d: INetworkLink & d3.SimulationLinkDatum<any>) {
-          return d.offset == 'target' ? d.target.y + datasetNodeDimension / 2 : d.target.y
-        })
-    }
-
-    function updateNode() {
-      jobNodeSelection.attr('transform', (d: any) => {
-        return 'translate(' + d.x + ',' + d.y + ')'
-      })
-      datasetNodeSelection.attr('transform', (d: any) => {
-        return 'translate(' + d.x + ',' + d.y + ')'
-      })
-    }
+    // function unfocus() {
+    //   return tooltip.style('visibility', 'hidden')
+    // }
 
     if (this.props.isLoading !== newProps.isLoading) {
       return true
@@ -242,23 +125,19 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
   render(): React.ReactElement {
     const { classes, isLoading } = this.props
 
-    const { tooltip, networkBackground } = classes
     return (
-      <div className={networkBackground}>
-        <div id='tooltip' className={tooltip}></div>
+      <div className={classes.networkBackground}>
+        <div id='tooltip' className={classes.tooltip}></div>
         <Legend customClassName={classes.legend}></Legend>
         {isLoading ? (
           <Loader />
         ) : (
-          <svg id='network-graph' className={networkBackground}>
+          <svg id='network-graph' className={classes.networkBackground}>
             <g
               ref={node => {
                 this.graph = node as SVGElement
               }}
             >
-              <g id='links'></g>
-              <g id='jobNodes'></g>
-              <g id='datasetNodes'></g>
             </g>
           </svg>
         )}
