@@ -10,6 +10,7 @@ var app = express()
 const path = __dirname + '/dist/'
 app.use(express.static(path))
 app.use(proxy('/api/v1', apiOptions))
+app.use(proxy('/', apiOptions))
 
 app.listen(3000, function() {
   console.log('App listening on port 3000!')
