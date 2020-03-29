@@ -83,6 +83,7 @@ const TITLE = 'Marquez | Data Kit'
 
 const App = ({ classes }: IProps): ReactElement => {
   const [showJobs, setShowJobs] = useState(false)
+
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>

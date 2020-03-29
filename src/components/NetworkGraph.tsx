@@ -71,14 +71,12 @@ type IAllProps = IWithStyles<typeof styles> & IProps
 
 export class NetworkGraph extends React.Component<IAllProps, {}> {
   shouldComponentUpdate(newProps: IProps) {
-    
+
     const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
 
     if (svg.empty()) {
       return true
     }
-
-    // const width = +svg.style('width').replace('px', '')
     const height = +svg.style('height').replace('px', '')
 
     const isDataset = (node: any) => {
@@ -283,5 +281,5 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     )
   }
 }
-
-export default withStyles(styles)(NetworkGraph)
+ 
+export default (withStyles(styles)(NetworkGraph))
