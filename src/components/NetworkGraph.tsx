@@ -23,11 +23,18 @@ import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
 
 import Loader from './Loader'
+import { IJobRunAPI } from '../types/api'
 
-// import { zoom } from 'd3-zoom'
-// import { IDatasetAPI } from '../types/api'
-// const globalStyles = require('../global_styles.css')
-// const { jobNodeGrey, linkGrey, datasetNodeWhite } = globalStyles
+const globalStyles = require('../global_styles.css')
+const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
+
+const colorMap = {
+  NEW: jobRunNew,
+  FAILED: jobRunFailed,
+  COMPLETED: jobRunCompleted,
+  ABORTED: jobRunAborted,
+  RUNNING: jobRunRunning
+}
 
 const styles = ({ palette }: Theme) => {
   return createStyles({
@@ -148,6 +155,13 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     const square = 13
     const strokeWidth = 5
 
+    function findJobColor(job: any) {
+      console.log('Job: ', job)
+      const key = job.data.latestRun.runState as IJobRunAPI['runState']
+      const color = colorMap[key]
+      return color
+    }
+
     function graph(cluster: any, reverse: boolean) {
       
       cluster = tree().nodeSize([20, 70])(cluster)
@@ -198,7 +212,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         .append('a')
         .attr('href', (d: any) => ('/jobs/' + d.data.name))
         .append('circle')
-        .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
+        .attr('fill', d => d.data.matches ? findJobColor(d) : defaultHighlight)
         .attr('r', radius)
       
       // Add text to nodes
