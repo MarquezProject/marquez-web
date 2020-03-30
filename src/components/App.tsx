@@ -93,7 +93,7 @@ const App = ({ classes }: IProps): ReactElement => {
           <CssBaseline />
           <Grid direction='column' alignItems='stretch' classes={classes} justify='space-between'>
             <AppBar />
-            <NetworkGraphContainer history={history}/>
+            <NetworkGraphContainer />
             <CustomSearchBarContainer
               setShowJobs={setShowJobs}
               showJobs={showJobs}
