@@ -83,7 +83,6 @@ const TITLE = 'Marquez | Data Kit'
 
 const App = ({ classes }: IProps): ReactElement => {
   const [showJobs, setShowJobs] = useState(false)
-
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -94,7 +93,7 @@ const App = ({ classes }: IProps): ReactElement => {
           <CssBaseline />
           <Grid direction='column' alignItems='stretch' classes={classes} justify='space-between'>
             <AppBar />
-            <NetworkGraphContainer />
+            <NetworkGraphContainer history={history}/>
             <CustomSearchBarContainer
               setShowJobs={setShowJobs}
               showJobs={showJobs}

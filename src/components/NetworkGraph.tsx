@@ -65,12 +65,15 @@ interface IProps {
   jobs: IJob[]
   datasets: IDataset[]
   isLoading: boolean
+  history: any
 }
 
 type IAllProps = IWithStyles<typeof styles> & IProps
 
 export class NetworkGraph extends React.Component<IAllProps, {}> {
   shouldComponentUpdate(newProps: IProps) {
+    const { history } = newProps
+    console.log('History: ', history)
 
     const svg: d3.Selection<SVGElement, void, HTMLElement, void> = select('#network-graph')
 
