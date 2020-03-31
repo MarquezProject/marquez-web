@@ -18,9 +18,10 @@ import _flatten from 'lodash/flatten'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
 
-import { select } from 'd3-selection'
+import { select, event } from 'd3-selection'
 import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
+import { drag } from 'd3-drag'
 
 import Loader from './Loader'
 import { IJobRunAPI } from '../types/api'
@@ -163,6 +164,22 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       return color
     }
 
+    function dragstarted() {
+        event.sourceEvent.stopPropagation();
+    }
+
+    function dragged() {
+      const x = event.x - (width/2)
+      const y = event.y - (height/2)
+      svg.attr('transform', `translate(${x},${y})`)
+    }
+
+    svg.call(
+      drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+    )
+
     function graph(cluster: any, reverse: boolean) {
 
       cluster = tree().nodeSize([20, 70])(cluster)
@@ -236,17 +253,6 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
         .attr('text-anchor', 'end')
         .attr('fill', labelHighlight)
 
-      // jobNode.on("mouseover", focus).on("mouseout", unfocus)
-      // datasetNode.on("mouseover", focus).on("mouseout", unfocus)
-
-      // function focus(d) {
-      //   d3.select(this).attr('fill', d => circleHighlight)
-      // }
-
-      // function unfocus(d) {
-      //   d3.select(this).attr('fill', d => isSearched(d.data.name) ? circleHighlight : defaultHighlight)
-      // }
-
       return svg.node()
     }
 
@@ -281,7 +287,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     const { classes, isLoading } = this.props
 
     return (
-      <div className={classes.networkBackground}>
+      <div id='network-graph-container' className={classes.networkBackground}>
         <div id='tooltip' className={classes.tooltip}></div>
         <Legend customClassName={classes.legend}></Legend>
         {isLoading ? (
