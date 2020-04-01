@@ -165,7 +165,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     }
 
     function dragstarted() {
-        event.sourceEvent.stopPropagation();
+        event.sourceEvent.stopPropagation()
     }
 
     function dragged() {
@@ -173,18 +173,20 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       const y = event.y - (height/2)
       svg.attr('transform', `translate(${x},${y})`)
     }
-
     svg.call(
       drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
+          .on('start', dragstarted)
+          .on('drag', dragged)
     )
+
+
 
     function graph(cluster: any, reverse: boolean) {
 
       cluster = tree().nodeSize([20, 70])(cluster)
 
       const g = svg.append('g')
+        .attr('id','lineage')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
         .attr('transform', `translate(${width/2}, ${height/2})`)
