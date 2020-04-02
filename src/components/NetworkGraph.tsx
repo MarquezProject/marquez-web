@@ -21,7 +21,6 @@ import _sortBy from 'lodash/sortBy'
 import { select, event } from 'd3-selection'
 import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
-import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
 
 import Loader from './Loader'
