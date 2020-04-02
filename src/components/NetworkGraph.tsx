@@ -22,6 +22,7 @@ import { select, event } from 'd3-selection'
 import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
 import { drag } from 'd3-drag'
+import { zoom } from 'd3-zoom'
 
 import Loader from './Loader'
 import { IJobRunAPI } from '../types/api'
@@ -164,23 +165,6 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       return color
     }
 
-    function dragstarted() {
-        event.sourceEvent.stopPropagation()
-    }
-
-    function dragged() {
-      const x = event.x - (width/2)
-      const y = event.y - (height/2)
-      svg.attr('transform', `translate(${x},${y})`)
-    }
-    svg.call(
-      drag()
-          .on('start', dragstarted)
-          .on('drag', dragged)
-    )
-
-
-
     function graph(cluster: any, reverse: boolean) {
 
       cluster = tree().nodeSize([20, 70])(cluster)
@@ -257,6 +241,12 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
 
       return svg.node()
     }
+
+    svg.call(
+      zoom()
+        .scaleExtent([.8, 1.2])
+        .on("zoom", () => { svg.selectAll("#lineage").attr("transform", event.transform); })
+    )
 
     // run calculations for network graph
     let lineages = getLineages()
