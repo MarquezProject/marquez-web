@@ -21,6 +21,7 @@ import _sortBy from 'lodash/sortBy'
 import { select, event } from 'd3-selection'
 import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
+import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
 
 import Loader from './Loader'
@@ -241,10 +242,20 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
       return svg.node()
     }
 
+    function dragstarted() {
+        event.sourceEvent.stopPropagation()
+    }
+
+    function dragged() {
+      const x = event.x
+      const y = event.y
+      svg.selectAll("#lineage").attr('transform', `translate(${x},${y})`)
+    }
+
     svg.call(
-      zoom()
-        .scaleExtent([.8, 1.2])
-        .on("zoom", () => { svg.selectAll("#lineage").attr("transform", event.transform); })
+      drag()
+          .on('start', dragstarted)
+          .on('drag', dragged)
     )
 
     // run calculations for network graph
