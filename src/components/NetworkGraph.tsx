@@ -22,7 +22,6 @@ import { select, event } from 'd3-selection'
 import { hierarchy, tree } from 'd3-hierarchy'
 import { linkHorizontal } from 'd3-shape'
 import { drag } from 'd3-drag'
-import { zoom } from 'd3-zoom'
 
 import Loader from './Loader'
 import { IJobRunAPI } from '../types/api'
@@ -249,7 +248,7 @@ export class NetworkGraph extends React.Component<IAllProps, {}> {
     function dragged() {
       const x = event.x
       const y = event.y
-      svg.selectAll("#lineage").attr('transform', `translate(${x},${y})`)
+      svg.selectAll('#lineage').attr('transform', `translate(${x},${y})`)
     }
 
     svg.call(
