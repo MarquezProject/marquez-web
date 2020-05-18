@@ -7,12 +7,12 @@ import {
   WithStyles as IWithStyles,
   Theme
 } from '@material-ui/core/styles'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { History } from 'history'
+import {RouteComponentProps, withRouter} from 'react-router-dom'
+import {History} from 'history'
 
 import Legend from './Legend'
 
-import { IDataset, IJob } from '../types/'
+import {IDataset, IJob} from '../types/'
 
 import _find from 'lodash/find'
 import _filter from 'lodash/filter'
@@ -20,16 +20,18 @@ import _flatten from 'lodash/flatten'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
 
-import { select, event } from 'd3-selection'
-import { hierarchy, tree } from 'd3-hierarchy'
-import { linkHorizontal } from 'd3-shape'
-import { drag } from 'd3-drag'
+import {select, event} from 'd3-selection'
+import {hierarchy, tree} from 'd3-hierarchy'
+import {linkHorizontal} from 'd3-shape'
+import {drag} from 'd3-drag'
+import {zoom} from 'd3-zoom'
+import {D3ZoomEvent} from 'd3'
 
 import Loader from './Loader'
-import { IJobRunAPI } from '../types/api'
+import {IJobRunAPI} from '../types/api'
 
 const globalStyles = require('../global_styles.css')
-const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
+const {jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning} = globalStyles
 
 const colorMap = {
   NEW: jobRunNew,
@@ -39,7 +41,7 @@ const colorMap = {
   RUNNING: jobRunRunning
 }
 
-const styles = ({ palette }: Theme) => {
+const styles = ({palette}: Theme) => {
   return createStyles({
     networkBackground: {
       background: palette.common.black,
@@ -174,10 +176,10 @@ export class NetworkGraph extends React.Component<IAllProps> {
       cluster = tree().nodeSize([20, 70])(cluster)
 
       const g = svg.append('g')
-        .attr('id','lineage')
+        .attr('id', 'lineage')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
-        .attr('transform', `translate(${width/2}, ${height/2})`)
+        .attr('transform', `translate(${width / 2}, ${height / 2})`)
 
       g.append('g')
         .attr('fill', 'none')
@@ -210,8 +212,8 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .append('a')
         .append('rect')
         .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
-        .attr('x', -square/2)
-        .attr('y', -square/2)
+        .attr('x', -square / 2)
+        .attr('y', -square / 2)
         .attr('width', square)
         .attr('height', square)
         .on('click', (node: { data: IDataset }) => {
@@ -260,10 +262,17 @@ export class NetworkGraph extends React.Component<IAllProps> {
       svg.selectAll('#lineage').attr('transform', `translate(${x},${y})`)
     }
 
+    function redraw() {
+      const zoomEvent: D3ZoomEvent<any, any> = event
+      svg.attr('transform', 'translate(' + zoomEvent.transform.x + ',' + zoomEvent.transform.y + ')' + ' scale(' + zoomEvent.transform.k + ')')
+    }
+
     svg.call(
       drag()
         .on('start', dragstarted)
         .on('drag', dragged)
+    ).call(
+      zoom().on('zoom', redraw)
     )
 
     // run calculations for network graph
