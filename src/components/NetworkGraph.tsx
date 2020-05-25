@@ -50,7 +50,12 @@ const styles = ({palette}: Theme) => {
       position: 'fixed',
       display: 'flex',
       alignItems: 'center',
-      zIndex: 2
+      zIndex: 2,
+      cursor: 'grab'
+    },
+    network: {
+      width: 'inherit',
+      height: 'inherit',
     },
     tooltip: {
       position: 'absolute',
@@ -62,7 +67,8 @@ const styles = ({palette}: Theme) => {
       font: '12px sans-serif',
       borderRadius: '2px',
       pointerEvents: 'none',
-      opacity: 0.8
+      opacity: 0.8,
+      cursor: 'pointer'
     },
     legend: {
       position: 'fixed',
@@ -214,6 +220,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
       const jobNode = g
         .append('g')
         .attr('stroke-linejoin', 'round')
+        .attr('cursor', 'pointer')
         .selectAll('g')
         .data(jobs)
         .join('g')
@@ -227,6 +234,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .attr('y', -square / 2)
         .attr('width', square)
         .attr('height', square)
+        .attr('cursor', 'pointer')
         .on('click', (node: { data: IDataset }) => {
           history.push(`/datasets/${node.data.name}`)
         })
@@ -319,7 +327,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
         {isLoading ? (
           <Loader />
         ) : (
-          <svg id='network-graph' className={classes.networkBackground}>
+          <svg id='network-graph' className={classes.network}>
             <g
               ref={node => {
                 this.graph = node as SVGElement
