@@ -82,7 +82,10 @@ interface IProps {
 type IAllProps = IWithStyles<typeof styles> & IProps & RouteComponentProps
 
 export class NetworkGraph extends React.Component<IAllProps> {
+
+
   shouldComponentUpdate(newProps: IAllProps) {
+    let dragOffset = {x: 0, y: 0}
     const allNodes = [...newProps.datasets, ...newProps.jobs]
     const matchingNodes = _filter(allNodes, node => node.matches)
     const searchExists = matchingNodes.length != allNodes.length
@@ -181,6 +184,14 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .attr('font-size', 10)
         .attr('transform', `translate(${width / 2}, ${height / 2})`)
 
+      const n = g.node()
+      if (n) {
+        dragOffset = {
+          x: n.getBoundingClientRect().left,
+          y: n.getBoundingClientRect().top
+        }
+      }
+
       g.append('g')
         .attr('fill', 'none')
         .attr('stroke-width', strokeWidth)
@@ -257,9 +268,9 @@ export class NetworkGraph extends React.Component<IAllProps> {
     }
 
     function dragged() {
-      const x = event.x
-      const y = event.y
-      svg.selectAll('#lineage').attr('transform', `translate(${x},${y})`)
+      dragOffset.x += event.dx
+      dragOffset.y += event.dy
+      svg.selectAll('#lineage').attr('transform', `translate(${dragOffset.x},${dragOffset.y})`)
     }
 
     function redraw() {
