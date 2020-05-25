@@ -53,7 +53,7 @@ const styles = ({palette}: Theme) => {
       zIndex: 2,
       cursor: 'grab'
     },
-    network: {
+    networkGraph: {
       width: 'inherit',
       height: 'inherit',
     },
@@ -193,7 +193,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .attr('id', 'lineage')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
-        .attr('transform', `translate(${width / 2}, ${height / 2})`)
+        .attr('transform', `translate(${width/2}, ${height/2})`)
 
       const n = g.node()
       if (n) {
@@ -235,8 +235,8 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .append('a')
         .append('rect')
         .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
-        .attr('x', -square / 2)
-        .attr('y', -square / 2)
+        .attr('x', -square/2)
+        .attr('y', -square/2)
         .attr('width', square)
         .attr('height', square)
         .attr('cursor', 'pointer')
@@ -332,7 +332,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
         {isLoading ? (
           <Loader />
         ) : (
-          <svg id='network-graph' className={classes.network}>
+          <svg id='network-graph' className={classes.networkGraph}>
             <g
               ref={node => {
                 this.graph = node as SVGElement
