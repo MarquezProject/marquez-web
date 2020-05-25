@@ -184,7 +184,12 @@ export class NetworkGraph extends React.Component<IAllProps> {
 
       cluster = tree().nodeSize([20, 70])(cluster)
 
-      const g = svg.append('g')
+      const zoomLayer = svg.append('g')
+        .attr('id', 'zoomLayer')
+        .attr('width', 'inherit')
+        .attr('height', 'inherit')
+
+      const g = zoomLayer.append('g')
         .attr('id', 'lineage')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
@@ -283,7 +288,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
 
     function redraw() {
       const zoomEvent: D3ZoomEvent<any, any> = event
-      svg.attr('transform', 'translate(' + zoomEvent.transform.x + ',' + zoomEvent.transform.y + ')' + ' scale(' + zoomEvent.transform.k + ')')
+      svg.selectAll('#zoomLayer').attr('transform', 'translate(' + zoomEvent.transform.x + ',' + zoomEvent.transform.y + ')' + ' scale(' + zoomEvent.transform.k + ')')
     }
 
     svg.call(
