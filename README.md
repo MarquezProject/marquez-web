@@ -16,7 +16,17 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
 
 ### Status
 
-This project is under active development at [WeWork](https://www.we.co) (in collaboration with many others organizations).
+This project is under active development at [Datakin](https://twitter.com/DatakinHQ) (in collaboration with many others organizations).
+
+### Quickstart
+
+The easiest way to get up and running is with Docker. From the base of the Marquez UI repository run:
+
+```
+$ ./docker/up.sh
+```
+
+Open http://localhost:3000
 
 ### Requirements
 
