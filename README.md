@@ -14,10 +14,6 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
   <img src="./docs/images/preview.png">
 </figure>
 
-### Status
-
-This project is under active development at [Datakin](https://twitter.com/DatakinHQ) (in collaboration with many others organizations).
-
 ### Quickstart
 
 The easiest way to get up and running is with Docker. From the base of the Marquez UI repository run:
@@ -25,6 +21,8 @@ The easiest way to get up and running is with Docker. From the base of the Marqu
 ```
 $ ./docker/up.sh
 ```
+
+> **Note:** Use the `--build` flag to build images from source.
 
 Open http://localhost:3000
 
