@@ -14,6 +14,10 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
   <img src="./docs/images/preview.png">
 </figure>
 
+### Status
+
+This project is in the early stages of development.
+
 ### Quickstart
 
 The easiest way to get up and running is with Docker. From the base of the Marquez UI repository run:
