@@ -12,6 +12,7 @@ export const theme = createMuiTheme({
     },
   },
   typography: {
+    fontFamily: 'Graphik',
     h3: {
       fontSize: '1rem',
       fontWeight: 700,
