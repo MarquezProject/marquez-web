@@ -6,7 +6,6 @@ import {
 
 import { Box, Typography } from '@material-ui/core'
 import {
-  Theme as ITheme,
   WithStyles as IWithStyles,
   createStyles,
   withStyles

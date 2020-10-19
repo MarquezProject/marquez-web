@@ -16,7 +16,6 @@ import React, { ReactElement, useState } from 'react'
 import createSagaMiddleware from 'redux-saga'
 
 import {theme} from '../helpers/theme'
-import CustomSearchBar from './CustomSearchBar'
 import DatasetDetailPage from './DatasetDetailPage'
 import Header from './header/Header'
 import Home from './Home'
@@ -62,13 +61,8 @@ const App = (): ReactElement => {
             <title>{TITLE}</title>
           </Helmet>
           <CssBaseline />
-            <Header               setShowJobs={setShowJobs}
-                                  showJobs={showJobs} />
+            <Header setShowJobs={setShowJobs} showJobs={showJobs} />
             <NetworkGraph />
-            <CustomSearchBar
-              setShowJobs={setShowJobs}
-              showJobs={showJobs}
-            />
             <Switch>
               <Route
                 path='/'
