@@ -48,7 +48,6 @@ const colorMap = {
 const styles = ({palette}: Theme) => {
   return createStyles({
     networkBackground: {
-      background: palette.common.black,
       width: '100%',
       height: '50vh',
       position: 'fixed',
