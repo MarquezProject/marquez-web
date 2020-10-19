@@ -1,10 +1,8 @@
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
 import { CssBaseline } from '@material-ui/core'
-import { Grid } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import {
   Theme as ITheme,
-  WithStyles as IWithStyles,
   createStyles,
   withStyles
 } from '@material-ui/core/styles'
@@ -16,7 +14,6 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { createBrowserHistory } from 'history'
 import React, { ReactElement, useState } from 'react'
 import createSagaMiddleware from 'redux-saga'
-import logger from 'redux-logger'
 
 import {theme} from '../helpers/theme'
 import CustomSearchBar from './CustomSearchBar'
@@ -37,13 +34,9 @@ const sagaMiddleware = createSagaMiddleware({
 const history = createBrowserHistory()
 const historyMiddleware = routerMiddleware(history)
 
-const middleware = __DEVELOPMENT__
-  ? [sagaMiddleware, historyMiddleware, logger]
-  : [sagaMiddleware, historyMiddleware]
-
 const store = createStore(
   createRootReducer(history),
-  composeWithDevTools(applyMiddleware(...middleware))
+  composeWithDevTools(applyMiddleware(sagaMiddleware, historyMiddleware))
 )
 
 sagaMiddleware.run(rootSaga)
@@ -57,11 +50,9 @@ const styles = (_theme: ITheme) => {
   })
 }
 
-type IProps = IWithStyles<typeof styles>
-
 const TITLE = 'Marquez | Data Kit'
 
-const App = ({ classes }: IProps): ReactElement => {
+const App = (): ReactElement => {
   const [showJobs, setShowJobs] = useState(false)
   return (
     <Provider store={store}>
@@ -71,7 +62,8 @@ const App = ({ classes }: IProps): ReactElement => {
             <title>{TITLE}</title>
           </Helmet>
           <CssBaseline />
-            <Header />
+            <Header               setShowJobs={setShowJobs}
+                                  showJobs={showJobs} />
             <NetworkGraph />
             <CustomSearchBar
               setShowJobs={setShowJobs}

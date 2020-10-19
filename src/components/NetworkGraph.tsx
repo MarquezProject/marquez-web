@@ -28,6 +28,7 @@ import {linkHorizontal} from 'd3-shape'
 import {zoom} from 'd3-zoom'
 
 import * as Redux from 'redux'
+import {HEADER_HEIGHT} from '../helpers/theme'
 import {IState} from '../reducers'
 import {Run} from '../types/api'
 import {bindActionCreators} from 'redux'
@@ -54,7 +55,8 @@ const styles = ({palette}: Theme) => {
       display: 'flex',
       alignItems: 'center',
       zIndex: 2,
-      cursor: 'grab'
+      cursor: 'grab',
+      marginTop: HEADER_HEIGHT
     },
     networkGraph: {
       width: 'inherit',

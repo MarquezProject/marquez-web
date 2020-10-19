@@ -16,7 +16,7 @@ import { formatUpdatedAt } from '../helpers'
 import { Dataset } from '../types/api'
 const _  = require('lodash')
 
-const styles = ({ palette }: ITheme) => {
+const styles = () => {
   return createStyles({
     rightCol: {
       textAlign: 'right'

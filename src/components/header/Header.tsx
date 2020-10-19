@@ -24,7 +24,12 @@ const styles = (theme: Theme) => {
   })
 }
 
-type HeaderProps = WithStyles<typeof styles>
+interface OwnProps {
+  setShowJobs: (bool: boolean) => void
+    showJobs: boolean
+}
+
+type HeaderProps = OwnProps & WithStyles<typeof styles>
 
 const Header = (props: HeaderProps): ReactElement => {
   const { classes } = props
@@ -34,7 +39,8 @@ const Header = (props: HeaderProps): ReactElement => {
         <Link to="/">
           <img src={require('../../img/marquez_logo.svg')} height={48} alt='Marquez Logo' />
         </Link>
-        <SearchBar />
+        <SearchBar               setShowJobs={props.setShowJobs}
+                                 showJobs={props.showJobs} />
       </Toolbar>
     </AppBar>
   )

@@ -90,7 +90,6 @@ const Home:  FunctionComponent<IAllProps> = props => {
           ) : (
             <Typography className={classes.noDatasets}>no datasets found!</Typography>
           )}
-          {console.log(displayDatasets)}
           {displayDatasets.map(d => (
             <DatasetPreviewCard
               key={d.name}

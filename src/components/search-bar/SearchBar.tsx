@@ -1,6 +1,10 @@
-import React from 'react'
-import {createStyles, fade, Theme, WithStyles} from '@material-ui/core/styles'
+import * as Redux from 'redux'
+import {Theme, WithStyles, createStyles, fade} from '@material-ui/core/styles'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import { findMatchingEntities } from '../../actionCreators'
 import InputBase from '@material-ui/core/InputBase'
+import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
 import withStyles from '@material-ui/core/styles/withStyles'
 
@@ -48,13 +52,42 @@ const styles = (theme: Theme) => {
   })
 }
 
-type SearchBarProps = WithStyles<typeof styles>
+interface OwnProps {
+  setShowJobs: (bool: boolean) => void
+  showJobs: boolean
+}
 
-class SearchBar extends React.Component<SearchBarProps> {
+interface SearchBarState {
+  search: string
+}
+
+interface DispatchProps {
+  findMatchingEntities: typeof findMatchingEntities
+}
+
+type SearchBarProps = OwnProps & DispatchProps & WithStyles<typeof styles>
+
+class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
+
+  constructor(props: SearchBarProps) {
+    super(props)
+    this.state = {
+      search: ''
+    }
+  }
+
+  onSearch = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    this.setState({ search: event.target.value }, () => {
+      this.props.setShowJobs(this.state.search !== '')
+      this.props.findMatchingEntities(this.state.search)
+    })
+  }
 
   render() {
     const {classes} = this.props
-    return          <div className={classes.search}>
+    return <div className={classes.search}>
       <div className={classes.searchIcon}>
         <SearchIcon />
       </div>
@@ -64,10 +97,18 @@ class SearchBar extends React.Component<SearchBarProps> {
           root: classes.inputRoot,
           input: classes.inputInput,
         }}
+        onChange={this.onSearch}
         inputProps={{ 'aria-label': 'search' }}
       />
     </div>
   }
 }
 
-export default withStyles(styles)(SearchBar)
+const mapDispatchToProps = (dispatch: Redux.Dispatch) =>
+  bindActionCreators({ findMatchingEntities: findMatchingEntities }, dispatch)
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(withStyles(styles)(withStyles(styles)(SearchBar)))
+
