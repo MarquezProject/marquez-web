@@ -21,11 +21,8 @@ import { IJobsState } from '../reducers/jobs'
 import {IState} from '../reducers'
 import {connect} from 'react-redux'
 
-const styles = (_theme: ITheme) => {
+const styles = (theme: ITheme) => {
   return createStyles({
-    header: {
-      padding: '0% 0% 0% 1%'
-    },
     column: {
       flex: 1
     },
@@ -33,26 +30,21 @@ const styles = (_theme: ITheme) => {
       display: 'flex',
       flexDirection: 'row'
     },
-    filter: {
-      marginLeft: '-4%'
-    },
     lowerHalf: {
       display: 'flex',
       flexDirection: 'column',
-      padding: '50vh 5% 1%',
+      padding: `50vh ${theme.spacing(3)}px`,
       position: 'absolute',
       top: 0,
       zIndex: 1,
       width: '100%'
     },
     noDatasets: {
-      color: '#9e9e9e',
       position: 'fixed',
       bottom: '20vh',
       left: '21%'
     },
     noJobs: {
-      color: '#9e9e9e',
       position: 'fixed',
       bottom: '20vh',
       right: '21%'
@@ -88,13 +80,11 @@ const Home:  FunctionComponent<IAllProps> = props => {
 
   return (
     <div className={classes.lowerHalf}>
-      <div className={classes.filter}>
-        <FiltersWrapper showJobs={setShowJobs} />
-      </div>
+      <FiltersWrapper showJobs={setShowJobs} />
       <div className={classes.row}>
         <Box className={classes.column}>
           {matchingDatasets.length > 0 ? (
-            <Typography className={classes.header} color='secondary' variant='h3'>
+            <Typography variant='h3'>
               {!showJobs ? 'Popular Datasets' : 'Matching Datasets'}
             </Typography>
           ) : (
@@ -122,7 +112,7 @@ const Home:  FunctionComponent<IAllProps> = props => {
         {showJobs ? (
           <Box className={classes.column}>
             {matchingJobs.length > 0 ? (
-              <Typography className={classes.header} color='secondary' variant='h3'>
+              <Typography color='secondary' variant='h3'>
                 Matching Jobs
               </Typography>
             ) : (

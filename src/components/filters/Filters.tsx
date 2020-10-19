@@ -85,7 +85,7 @@ const Filters = (props: IProps): ReactElement => {
   }
 
   return (
-    <Box ml='5%' py={2}>
+    <Box py={2}>
       <StyledFormControl margin='normal'>
         <MUISelect value={currentFilter} renderValue={capitalize} onChange={onPrimaryFilterChange}>
           {Object.keys(filterByOptions).map(o => (

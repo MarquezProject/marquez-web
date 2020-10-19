@@ -71,7 +71,6 @@ const App = ({ classes }: IProps): ReactElement => {
             <title>{TITLE}</title>
           </Helmet>
           <CssBaseline />
-          <Grid direction='column' alignItems='stretch' classes={classes} justify='space-between'>
             <Header />
             <NetworkGraph />
             <CustomSearchBar
@@ -90,7 +89,6 @@ const App = ({ classes }: IProps): ReactElement => {
               <Route path='/jobs/:jobName' exact component={JobDetailPage} />
             </Switch>
             <Toast />
-          </Grid>
         </MuiThemeProvider>
       </ConnectedRouter>
     </Provider>

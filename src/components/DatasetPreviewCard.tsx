@@ -21,9 +21,6 @@ const styles = ({ palette }: ITheme) => {
     rightCol: {
       textAlign: 'right'
     },
-    lastUpdated: {
-      color: palette.grey[600]
-    },
     link: {
       textDecoration: 'none'
     }
@@ -46,9 +43,9 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
     const { link } = classes
     return (
       <Link className={link} to={{pathname: `/datasets/${name}`}}>
-        <Box p={2} m={1} bgcolor='white' boxShadow={3} display='flex' justifyContent='space-between'>
+        <Box p={2} my={1} bgcolor='white' boxShadow={3} display='flex' justifyContent='space-between'>
           <div>
-            <Typography color='secondary' variant='h3'>
+            <Typography variant='h3'>
               {name}
             </Typography>
             <StyledTypography color='primary'>{description}</StyledTypography>
@@ -60,7 +57,7 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
             alignItems='flex-end'
             justifyContent='space-between'
           >
-            <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+            <Typography>{formatUpdatedAt(updatedAt)}</Typography>
           </Box>
         </Box>
       </Link>
