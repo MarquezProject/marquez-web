@@ -50,8 +50,7 @@ const styles = ({palette}: Theme) => {
   return createStyles({
     networkBackground: {
       width: '100%',
-      height: '50vh',
-      position: 'fixed',
+      height: `calc(50vh - ${HEADER_HEIGHT}px)`,
       display: 'flex',
       alignItems: 'center',
       zIndex: 2,

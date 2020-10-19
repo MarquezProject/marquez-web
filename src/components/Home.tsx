@@ -1,25 +1,21 @@
 import * as RRD from 'react-router-dom'
 import { Box, Typography } from '@material-ui/core'
-import React, { FunctionComponent, useState } from 'react'
-
-import Pagination from 'material-ui-flat-pagination'
-import _chunk from 'lodash/chunk'
-
+import { IDatasetsState } from '../reducers/datasets'
+import { IJobsState } from '../reducers/jobs'
+import { IState } from '../reducers'
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
   createStyles,
   withStyles
 } from '@material-ui/core/styles'
-
+import { Pagination } from '@material-ui/lab'
+import {connect} from 'react-redux'
 import DatasetPreviewCard from './DatasetPreviewCard'
 import FiltersWrapper from './filters/FiltersWrapper'
 import JobPreviewCard from './JobPreviewCard'
-
-import { IDatasetsState } from '../reducers/datasets'
-import { IJobsState } from '../reducers/jobs'
-import {IState} from '../reducers'
-import {connect} from 'react-redux'
+import React, { FunctionComponent, useState } from 'react'
+import _chunk from 'lodash/chunk'
 
 const styles = (theme: ITheme) => {
   return createStyles({
@@ -33,9 +29,7 @@ const styles = (theme: ITheme) => {
     lowerHalf: {
       display: 'flex',
       flexDirection: 'column',
-      padding: `50vh ${theme.spacing(3)}px`,
-      position: 'absolute',
-      top: 0,
+      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
       zIndex: 1,
       width: '100%'
     },
@@ -99,19 +93,18 @@ const Home:  FunctionComponent<IAllProps> = props => {
               tags={d.tags}
             />
           ))}
-          {matchingDatasets.length > 0 ? (
-          <Pagination
-            limit={limit}
-            offset={datasetPageIndex * limit}
-            total={matchingDatasets.length}
-            onClick={(e, offset, page) => setDatasetPageIndex(page - 1)}
-          />
-          ) : null}
+          {matchingDatasets.length > 0 && (
+            <Pagination color={'standard'}
+                        shape={'rounded'}
+                        onChange={(event, page) => {setDatasetPageIndex(page - 1)}}
+                        count={Math.ceil(matchingDatasets.length / limit)}
+            />
+          )}
         </Box>
-        {showJobs ? (
+        {showJobs && (
           <Box className={classes.column}>
             {matchingJobs.length > 0 ? (
-              <Typography color='secondary' variant='h3'>
+              <Typography variant='h3'>
                 Matching Jobs
               </Typography>
             ) : (
@@ -126,16 +119,15 @@ const Home:  FunctionComponent<IAllProps> = props => {
                 latestRun={d.latestRun}
               />
             ))}
-            {matchingJobs.length > 0 ? (
-              <Pagination
-                limit={limit}
-                offset={jobPageIndex * limit}
-                total={matchingJobs.length}
-                onClick={(e, offset, page) => setJobPageIndex(page - 1)}
+            {matchingJobs.length > 0 && (
+              <Pagination color={'standard'}
+                          shape={'rounded'}
+                          onChange={(event, page) => {setJobPageIndex(page - 1)}}
+                          count={Math.ceil(matchingJobs.length / limit)}
               />
-            ) : null}
+            )}
           </Box>
-        ) : null}
+        )}
       </div>
     </div>
   )
