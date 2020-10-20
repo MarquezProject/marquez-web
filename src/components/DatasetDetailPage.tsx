@@ -1,4 +1,4 @@
-import { Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from '@material-ui/core'
+import { Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@material-ui/core'
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
@@ -21,20 +21,13 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import MqText from './core/text/MqText'
 
-const styles = ({ shadows, spacing }: ITheme) => {
+const styles = ({ spacing }: ITheme) => {
   return createStyles({
     root: {
       padding: `0 ${spacing(2)}px`
     },
     noData: {
       padding: '125px 0 0 0'
-    },
-    noSchema: {
-      boxShadow: shadows[1],
-      padding: '1rem'
-    },
-    noSchemaTitle: {
-      fontSize: '14px'
     },
     infoIcon: {
       paddingLeft: '3px',
@@ -68,20 +61,20 @@ type IProps = IWithStyles<typeof styles> & { datasets: Dataset[] }
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
   const {
-    root, paper, updated, noSchema, noSchemaTitle, infoIcon, tableCell, tableRow
+    root, paper, infoIcon, tableCell, tableRow
   } = classes
   const { datasetName } = useParams()
   const dataset = _find(datasets, d => d.name === datasetName)
   if (!dataset) {
     return (
       <Box
-        mt={10}
         display='flex'
         justifyContent="center"
         className={root}
+        mt={2}
       >
-        <MqText>
-          No dataset by the name of <strong>&quot;{datasetName}&quot;</strong> found
+        <MqText subdued>
+          No dataset by the name of <MqText bold inline>{`"${datasetName}"`}</MqText> found
         </MqText>
       </Box>
     )
@@ -94,10 +87,10 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
     } = dataset
 
     return (
-      <Box mt={10} className={root}>
+      <Box mt={2} className={root}>
         <Box display='flex' justifyContent='space-between'>
           <div>
-            <MqText subheading font={'mono'}>
+            <MqText heading font={'mono'}>
               {name}
             </MqText>
             <MqText subdued>
@@ -135,15 +128,17 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
             </Table>
           </Paper>
         ) : (
-          <div className={noSchema}>
-            <Typography className={noSchemaTitle}>
+          <div>
+            <MqText subdued>
               schema not present
-            </Typography>
+            </MqText>
           </div>
         )}
-        <Typography className={updated} color='primary' align='right'>
-          last updated: {formatUpdatedAt(updatedAt)}
-        </Typography>
+        <Box display={'flex'} justifyContent={'flex-end'} mt={1}>
+          <MqText subdued>
+            last updated: {formatUpdatedAt(updatedAt)}
+          </MqText>
+        </Box>
       </Box>
     )
   }

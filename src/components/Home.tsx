@@ -1,5 +1,5 @@
 import * as RRD from 'react-router-dom'
-import {Box, Typography} from '@material-ui/core'
+import {Box} from '@material-ui/core'
 import {IDatasetsState} from '../reducers/datasets'
 import {IJobsState} from '../reducers/jobs'
 import {IState} from '../reducers'
@@ -106,7 +106,7 @@ const Home: FunctionComponent<IAllProps> = props => {
         {showJobs && (
           <Box className={classes.column} ml={2}>
             {matchingJobs.length > 0 ? (
-              <Box mb={2}>
+              <Box mb={2} height={32}>
                 <MqText heading>
                   Matching Jobs
                 </MqText>

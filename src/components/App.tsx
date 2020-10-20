@@ -1,5 +1,5 @@
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
-import { CssBaseline } from '@material-ui/core'
+import { Container, CssBaseline } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import {
   Theme as ITheme,
@@ -61,6 +61,7 @@ const App = (): ReactElement => {
             <title>{TITLE}</title>
           </Helmet>
           <CssBaseline />
+          <Container maxWidth={'lg'} disableGutters={true}>
             <Header setShowJobs={setShowJobs} showJobs={showJobs} />
             <NetworkGraph />
             <Switch>
@@ -75,6 +76,7 @@ const App = (): ReactElement => {
               <Route path='/jobs/:jobName' exact component={JobDetailPage} />
             </Switch>
             <Toast />
+          </Container>
         </MuiThemeProvider>
       </ConnectedRouter>
     </Provider>

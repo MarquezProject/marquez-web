@@ -1,5 +1,5 @@
 import * as Redux from 'redux'
-import { Box, Fab, Tooltip, Typography } from '@material-ui/core'
+import {Box, Fab, Tooltip, Typography} from '@material-ui/core'
 import {IState} from '../reducers'
 import {
   Theme as ITheme,
@@ -9,19 +9,20 @@ import {
 } from '@material-ui/core/styles'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import { fetchJobRuns } from '../actionCreators'
-import { useHistory, useParams } from 'react-router-dom'
+import {fetchJobRuns} from '../actionCreators'
+import {useHistory, useParams} from 'react-router-dom'
 import CloseIcon from '@material-ui/icons/Close'
 import HowToRegIcon from '@material-ui/icons/HowToReg'
 import Modal from '@material-ui/core/Modal'
 import OpenWithSharpIcon from '@material-ui/icons/OpenWithSharp'
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 import _find from 'lodash/find'
 
 const globalStyles = require('../global_styles.css')
-const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
-import { IJob } from '../types'
-import { formatUpdatedAt } from '../helpers'
+const {jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning} = globalStyles
+import {IJob} from '../types'
+import {formatUpdatedAt} from '../helpers'
+import MqText from './core/text/MqText'
 
 const colorMap = {
   NEW: jobRunNew,
@@ -31,21 +32,10 @@ const colorMap = {
   RUNNING: jobRunRunning
 }
 
-const styles = ({ palette, spacing, shadows }: ITheme) => {
+const styles = ({palette, spacing, shadows}: ITheme) => {
   return createStyles({
     root: {
-      marginTop: '52vh',
-      height: '48vh',
-      padding: '0 6% 1%',
-    },
-    topSection: {
-      display: 'grid',
-      gridTemplateColumns: '40px 3fr 1fr',
-      gridTemplateRows: '1fr 1fr',
-      /* eslint-disable @typescript-eslint/quotes */
-      gridTemplateAreas: `'status name owner-icon' '. description owner'`,
-      alignItems: 'center',
-      margin: '0px 6% 0px 0px'
+      padding: spacing(2),
     },
     _status: {
       gridArea: 'status',
@@ -128,25 +118,19 @@ const styles = ({ palette, spacing, shadows }: ITheme) => {
     closeButton: {
       color: '#7D7D7D',
       backgroundColor: '#ffffff',
-      position: "absolute",
+      position: 'absolute',
       right: '6%',
       marginTop: '12px'
     }
   })
 }
 
-type IProps = IWithStyles<typeof styles> & { jobs: IJob[] } & { fetchJobRuns: any}
-
-const StyledTypography = withStyles({
-  root: {
-    maxWidth: '90%'
-  }
-})(Typography)
+type IProps = IWithStyles<typeof styles> & { jobs: IJob[] } & { fetchJobRuns: any }
 
 const StyledTypographySQL = withStyles({
   root: {
     whiteSpace: 'pre',
-    fontFamily: `'Inconsolata', monospace`
+    fontFamily: '\'Inconsolata\', monospace'
   }
 })(Typography)
 
@@ -189,10 +173,10 @@ const displaySQL = (SQL: string, SQLCommentClass: string) => {
   )
 }
 const JobDetailPage: FunctionComponent<IProps> = props => {
-  const { jobs, classes, fetchJobRuns } = props
+  const {jobs, classes, fetchJobRuns} = props
   const [SQLModalOpen, setSQLModalOpen] = useState(false)
 
-  const { jobName } = useParams()
+  const {jobName} = useParams()
   const history = useHistory()
 
   const job = _find(jobs, j => j.name === jobName)
@@ -205,11 +189,11 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
   if (!job || jobs.length == 0) {
     return (
       <Box
-      p={4}
-      display='flex'
-      flexDirection='column'
-      justifyContent='space-between'
-      className={classes.root}
+        p={4}
+        display='flex'
+        flexDirection='column'
+        justifyContent='space-between'
+        className={classes.root}
       >
         <Typography align='center'>
           No job by the name of <strong>&quot;{jobName}&quot;</strong> found
@@ -221,8 +205,6 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
   const {
     root,
     _status,
-    _name,
-    _description,
     _SQL,
     _SQLComment,
     SQLModalContainer,
@@ -231,7 +213,6 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     _owner,
     _ownerIcon,
     lastUpdated,
-    topSection,
     copyToClipboard,
     closeButton
   } = classes
@@ -243,11 +224,11 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     latestRun,
     location,
     namespace,
-    context = { SQL: '' }
+    context = {SQL: ''}
   } = job as IJob
 
   const latestRuns = job ? job.latestRuns || [] : []
-  const { SQL } = context
+  const {SQL} = context
 
   return (
     <Box
@@ -257,22 +238,22 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
       justifyContent='space-between'
       className={root}
     >
-      <div className={topSection}>
+      <div>
         <Tooltip title={latestRun ? latestRun.state : ''} placement="top">
-          {latestRun ? <div className={`${_status}`} style={{backgroundColor: colorMap[latestRun.state]}} /> : <div></div>}
+          {latestRun && <div className={`${_status}`} style={{backgroundColor: colorMap[latestRun.state]}}/>}
         </Tooltip>
-        <Typography color='secondary' variant='h3' className={_name}>
-          <a href={location} className='link' target='_'>
+        <a href={location} className='link' target='_'>
+          <MqText heading>
             {name}
-          </a>
-        </Typography>
-        <StyledTypography color='primary' className={_description}>
+          </MqText>
+        </a>
+        <MqText subdued>
           {description}
-        </StyledTypography>
-        <HowToRegIcon color='secondary' className={_ownerIcon} />
+        </MqText>
+        <HowToRegIcon color='secondary' className={_ownerIcon}/>
         <Typography className={_owner}>{namespace}</Typography>
         <Fab className={closeButton} onClick={() => history.push('/')} size="small" aria-label="edit">
-          <CloseIcon />
+          <CloseIcon/>
         </Fab>
       </div>
       <Box
@@ -292,13 +273,13 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
         position='relative'
       >
         {!!SQL && SQL !== '' && (
-          <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)} />
+          <StyledExpandButton color='secondary' onClick={() => setSQLModalOpen(true)}/>
         )}
         {!!SQL && SQL !== '' && (
           <Modal aria-labelledby='modal-title' open={SQLModalOpen}>
             <div className={SQLModalContainer}>
               {/* Need this extra container for the absolutely-positioned elements */}
-              <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)} />
+              <StyledCloseIcon fontSize='large' onClick={() => setSQLModalOpen(false)}/>
               <Typography
                 color='secondary'
                 className={copyToClipboard}
