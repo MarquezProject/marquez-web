@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react'
 
-import { Box, Typography } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
   createStyles,
   withStyles
 } from '@material-ui/core/styles'
-
+import MqText from './core/text/MqText'
 
 const styles = ({ spacing, palette }: ITheme) => {
   return createStyles({
@@ -21,7 +21,8 @@ const styles = ({ spacing, palette }: ITheme) => {
     shape: {
       width: spacing(2),
       height: spacing(2),
-      margin: '4px 6px 0px 6px'
+      marginRight: spacing(1),
+      marginLeft: spacing(1)
     },
   })
 }
@@ -37,11 +38,11 @@ class Legend extends React.Component<AllProps, IState> {
   render(): ReactElement {
     const { classes, customClassName } = this.props
     return (
-      <Box className={customClassName} display='flex'>
+      <Box className={customClassName} display='flex' alignItems={'center'}>
         <div className={`${classes.datasetShape} ${classes.shape}`} />
-        <Typography>datasets</Typography>
+        <MqText font={'mono'}>datasets</MqText>
         <div className={`${classes.jobShape} ${classes.shape}`} />
-        <Typography>jobs</Typography>
+        <MqText font={'mono'}>jobs</MqText>
       </Box>
     )
   }

@@ -79,7 +79,7 @@ const styles = ({palette, spacing}: Theme) => {
     legend: {
       position: 'absolute',
       bottom:  `${spacing(1)}px`,
-      right: `${spacing(2)}px`,
+      right: `${spacing(3)}px`,
       zIndex: 3
     }
   })
