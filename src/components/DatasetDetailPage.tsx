@@ -19,13 +19,12 @@ import { Dataset } from '../types/api'
 import {IState} from '../reducers'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import MqText from './core/text/MqText'
 
-const styles = ({ shadows }: ITheme) => {
+const styles = ({ shadows, spacing }: ITheme) => {
   return createStyles({
     root: {
-      marginTop: '52vh',
-      height: '48vh',
-      padding: '0 6% 1%',
+      padding: `0 ${spacing(2)}px`
     },
     noData: {
       padding: '125px 0 0 0'
@@ -69,7 +68,7 @@ type IProps = IWithStyles<typeof styles> & { datasets: Dataset[] }
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
   const {
-    root, paper, updated, noData, noSchema, noSchemaTitle, infoIcon, tableCell, tableRow
+    root, paper, updated, noSchema, noSchemaTitle, infoIcon, tableCell, tableRow
   } = classes
   const { datasetName } = useParams()
   const dataset = _find(datasets, d => d.name === datasetName)
@@ -81,9 +80,9 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
         justifyContent="center"
         className={root}
       >
-        <Typography align='center' className={noData}>
+        <MqText>
           No dataset by the name of <strong>&quot;{datasetName}&quot;</strong> found
-        </Typography>
+        </MqText>
       </Box>
     )
   } else {
@@ -98,12 +97,12 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
       <Box mt={10} className={root}>
         <Box display='flex' justifyContent='space-between'>
           <div>
-            <Typography color='secondary' align='left'>
-              <strong>{name}</strong>
-            </Typography>
-            <Typography color='primary' align='left'>
+            <MqText subheading font={'mono'}>
+              {name}
+            </MqText>
+            <MqText subdued>
               {description}
-            </Typography>
+            </MqText>
           </div>
         </Box>
         {fields && fields.length > 0 ? (

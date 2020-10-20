@@ -13,10 +13,13 @@ export const theme = createMuiTheme({
   },
   typography: {
     fontFamily: 'Graphik',
+    h1: {
+      fontSize: '2.5rem',
+      fontWeight: 600,
+    },
     h3: {
       fontSize: '1rem',
-      fontWeight: 700,
-      lineHeight: 2,
+      fontWeight: 600,
     },
     fontSize: 14
   },
@@ -33,6 +36,13 @@ export const theme = createMuiTheme({
     }
   }
 })
+
+export const THEME_EXTRA = {
+  typography: {
+    subdued: '#abb1bd',
+    disabled: '#8d9499',
+  },
+}
 
 // 1px for bottom border
 export const HEADER_HEIGHT = 96 + 1

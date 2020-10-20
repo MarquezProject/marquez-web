@@ -23,6 +23,7 @@
     "@types/d3": "^5.7.2",
     "@types/react-router-dom": "^5.1.2",
     "autoprefixer": "^9.5.1",
+    "classnames": "^2.2.6",
     "connected-react-router": "^6.4.0",
     "css-loader": "^2.1.0",
     "d3-color": "^1.4.0",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@material-ui/styles": "^4.0.0-rc.0",
+    "@types/classnames": "^2.2.10",
     "@types/d3-color": "^1.2.2",
     "@types/enzyme": "^3.1.16",
     "@types/enzyme-adapter-react-16": "^1.0.3",

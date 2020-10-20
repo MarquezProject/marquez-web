@@ -1,3 +1,5 @@
+import React, { ReactElement } from 'react'
+
 import { Box, Typography } from '@material-ui/core'
 import {
   Theme as ITheme,
@@ -5,27 +7,22 @@ import {
   createStyles,
   withStyles
 } from '@material-ui/core/styles'
-import React, { ReactElement } from 'react'
-const globalStyles = require('../global_styles.css')
-const { datasetNodeWhite } = globalStyles
 
-const styles = ({ spacing }: ITheme) => {
+
+const styles = ({ spacing, palette }: ITheme) => {
   return createStyles({
     datasetShape: {
-      backgroundColor: datasetNodeWhite
+      backgroundColor: palette.common.white
     },
     jobShape: {
       borderRadius: '50%',
-      backgroundColor: datasetNodeWhite
+      backgroundColor: palette.common.white
     },
     shape: {
       width: spacing(2),
       height: spacing(2),
       margin: '4px 6px 0px 6px'
     },
-    text: {
-      color: '#f2f2f2'
-    }
   })
 }
 
@@ -42,9 +39,9 @@ class Legend extends React.Component<AllProps, IState> {
     return (
       <Box className={customClassName} display='flex'>
         <div className={`${classes.datasetShape} ${classes.shape}`} />
-        <Typography className={classes.text}>datasets</Typography>
+        <Typography>datasets</Typography>
         <div className={`${classes.jobShape} ${classes.shape}`} />
-        <Typography className={classes.text}>jobs</Typography>
+        <Typography>jobs</Typography>
       </Box>
     )
   }

@@ -33,6 +33,7 @@ import {IState} from '../reducers'
 import {Run} from '../types/api'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import Box from '@material-ui/core/Box/Box'
 import Loader from './Loader'
 
 const globalStyles = require('../global_styles.css')
@@ -46,7 +47,7 @@ const colorMap = {
   RUNNING: jobRunRunning
 }
 
-const styles = ({palette}: Theme) => {
+const styles = ({palette, spacing}: Theme) => {
   return createStyles({
     networkBackground: {
       width: '100%',
@@ -55,7 +56,8 @@ const styles = ({palette}: Theme) => {
       alignItems: 'center',
       zIndex: 2,
       cursor: 'grab',
-      marginTop: HEADER_HEIGHT
+      marginTop: HEADER_HEIGHT,
+      borderBottom: `1px solid ${palette.secondary.main}`,
     },
     networkGraph: {
       width: 'inherit',
@@ -75,9 +77,9 @@ const styles = ({palette}: Theme) => {
       cursor: 'pointer'
     },
     legend: {
-      position: 'fixed',
-      bottom: '59vh',
-      right: '6%',
+      position: 'absolute',
+      bottom:  `${spacing(1)}px`,
+      right: `${spacing(2)}px`,
       zIndex: 3
     }
   })
@@ -198,7 +200,7 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .attr('id', 'lineage')
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
-        .attr('transform', `translate(${width/2}, ${height/2})`)
+        .attr('transform', `translate(${width / 2}, ${height / 2})`)
 
       const n = g.node()
       if (n) {
@@ -240,8 +242,8 @@ export class NetworkGraph extends React.Component<IAllProps> {
         .append('a')
         .append('rect')
         .attr('fill', d => d.data.matches ? circleHighlight : defaultHighlight)
-        .attr('x', -square/2)
-        .attr('y', -square/2)
+        .attr('x', -square / 2)
+        .attr('y', -square / 2)
         .attr('width', square)
         .attr('height', square)
         .attr('cursor', 'pointer')
@@ -328,25 +330,27 @@ export class NetworkGraph extends React.Component<IAllProps> {
   graph: SVGElement
 
   render(): React.ReactElement {
-    const { classes, isLoading } = this.props
+    const {classes, isLoading} = this.props
 
     return (
-      <div id='network-graph-container' className={classes.networkBackground}>
-        <div id='tooltip' className={classes.tooltip} />
-        <Legend customClassName={classes.legend} />
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <svg id='network-graph' className={classes.networkGraph}>
-            <g
-              ref={node => {
-                this.graph = node as SVGElement
-              }}
-            >
-            </g>
-          </svg>
-        )}
-      </div>
+      <Box position={'relative'}>
+        <div id='network-graph-container' className={classes.networkBackground}>
+          <div id='tooltip' className={classes.tooltip}/>
+          <Legend customClassName={classes.legend}/>
+          {isLoading ? (
+            <Loader/>
+          ) : (
+            <svg id='network-graph' className={classes.networkGraph}>
+              <g
+                ref={node => {
+                  this.graph = node as SVGElement
+                }}
+              >
+              </g>
+            </svg>
+          )}
+        </div>
+      </Box>
     )
   }
 }

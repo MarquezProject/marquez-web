@@ -2,19 +2,22 @@ import {
   Theme as ITheme,
   WithStyles as IWithStyles,
   createStyles,
+  fade,
   withStyles
 } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
-import React, { ReactElement } from 'react'
+import {Link} from 'react-router-dom'
+import React, {ReactElement} from 'react'
 
 const globalStyles = require('../global_styles.css')
-const { vibrantGreen } = globalStyles
-import { Box, Tooltip, Typography } from '@material-ui/core'
-import { formatUpdatedAt } from '../helpers'
+const {vibrantGreen} = globalStyles
+import {Box, Tooltip} from '@material-ui/core'
+import {formatUpdatedAt} from '../helpers'
 
-import { Job } from '../types/api'
+import {Job} from '../types/api'
+import MqText from './core/text/MqText'
+import transitions from '@material-ui/core/styles/transitions'
 
-const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
+const {jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning} = globalStyles
 
 const colorMap = {
   NEW: jobRunNew,
@@ -24,13 +27,10 @@ const colorMap = {
   RUNNING: jobRunRunning
 }
 
-const styles = ({ palette, spacing }: ITheme) => {
+const styles = ({palette, spacing, shape}: ITheme) => {
   return createStyles({
     rightCol: {
       textAlign: 'right'
-    },
-    lastUpdated: {
-      color: palette.grey[600]
     },
     status: {
       width: spacing(2),
@@ -44,38 +44,42 @@ const styles = ({ palette, spacing }: ITheme) => {
       backgroundColor: vibrantGreen
     },
     link: {
-      textDecoration: 'none'
+      textDecoration: 'none',
+      border: `1px solid ${palette.secondary.main}`,
+      display: 'block',
+      marginBottom: spacing(2),
+      borderRadius: shape.borderRadius,
+      transition: transitions.create(['background-color']),
+      '&:hover': {
+        backgroundColor: fade(palette.common.white, 0.1),
+      }
     }
   })
 }
 
 type IProps = IWithStyles<typeof styles> &
   Pick<Job, 'name' | 'description' | 'updatedAt' | 'latestRun'>
-interface IState {}
 
-const StyledTypography = withStyles({
-  root: {
-    maxWidth: '90%'
-  }
-})(Typography)
+interface IState {
+}
+
 class JobPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const { classes, name, description, updatedAt = '', latestRun } = this.props
+    const {classes, name, description, updatedAt = '', latestRun} = this.props
     return (
       <Link to={`/jobs/${name}`} className={classes.link}>
         <Box
           p={2}
-          m={1}
-          bgcolor='white'
-          boxShadow={3}
           display='flex'
           justifyContent='space-between'
         >
           <div>
-            <Typography color='secondary' variant='h3'>
+            <MqText subheading font={'mono'}>
               {name}
-            </Typography>
-            <StyledTypography color='primary'>{description}</StyledTypography>
+            </MqText>
+            <Box mt={1}>
+              <MqText subdued>{description}</MqText>
+            </Box>
           </div>
           <Box
             className={classes.rightCol}
@@ -85,9 +89,11 @@ class JobPreviewCard extends React.Component<IProps, IState> {
             justifyContent='space-between'
           >
             <Tooltip className="tagWrapper" title={latestRun ? latestRun.state : ''} placement="top">
-              {latestRun ? <div className={classes.status} style={{backgroundColor: colorMap[latestRun.state]}} /> : <div></div>}
+              {latestRun && <div className={classes.status} style={{backgroundColor: colorMap[latestRun.state]}}/>}
             </Tooltip>
-            <Typography className={classes.lastUpdated}>{formatUpdatedAt(updatedAt)}</Typography>
+            <Box mt={1}>
+              <MqText subdued>{formatUpdatedAt(updatedAt)}</MqText>
+            </Box>
           </Box>
         </Box>
       </Link>
