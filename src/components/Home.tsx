@@ -30,7 +30,7 @@ const styles = (theme: ITheme) => {
     lowerHalf: {
       display: 'flex',
       flexDirection: 'column',
-      padding: theme.spacing(2),
+      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
       zIndex: 1,
       width: '100%'
     },

@@ -77,7 +77,7 @@ class JobPreviewCard extends React.Component<IProps, IState> {
             <MqText subheading font={'mono'}>
               {name}
             </MqText>
-            <Box mt={1}>
+            <Box mt={1} maxWidth={'80%'}>
               <MqText subdued>{description}</MqText>
             </Box>
           </div>

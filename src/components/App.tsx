@@ -62,21 +62,23 @@ const App = (): ReactElement => {
           </Helmet>
           <CssBaseline />
           <Container maxWidth={'lg'} disableGutters={true}>
-            <Header setShowJobs={setShowJobs} showJobs={showJobs} />
-            <NetworkGraph />
+            <Header setShowJobs={setShowJobs} showJobs={showJobs}/>
+          </Container>
+          <NetworkGraph/>
+          <Container maxWidth={'lg'} disableGutters={true}>
             <Switch>
               <Route
                 path='/'
                 exact
                 render={props => (
-                  <Home {...props} showJobs={showJobs} setShowJobs={setShowJobs} />
-                  )}
+                  <Home {...props} showJobs={showJobs} setShowJobs={setShowJobs}/>
+                )}
               />
-              <Route path='/datasets/:datasetName' exact component={DatasetDetailPage} />
-              <Route path='/jobs/:jobName' exact component={JobDetailPage} />
+              <Route path='/datasets/:datasetName' exact component={DatasetDetailPage}/>
+              <Route path='/jobs/:jobName' exact component={JobDetailPage}/>
             </Switch>
-            <Toast />
           </Container>
+          <Toast/>
         </MuiThemeProvider>
       </ConnectedRouter>
     </Provider>
