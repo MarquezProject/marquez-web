@@ -45,6 +45,7 @@ const styles = (theme: Theme) => {
       paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       transition: theme.transitions.create('width'),
       width: '100%',
+      fontFamily: 'Source Code Pro',
       [theme.breakpoints.up('md')]: {
         width: '30ch',
       },
