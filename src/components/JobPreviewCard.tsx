@@ -66,6 +66,7 @@ interface IState {
 class JobPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
     const {classes, name, description, updatedAt = '', latestRun} = this.props
+    console.log(latestRun)
     return (
       <Link to={`/jobs/${name}`} className={classes.link}>
         <Box
@@ -88,9 +89,11 @@ class JobPreviewCard extends React.Component<IProps, IState> {
             alignItems='flex-end'
             justifyContent='space-between'
           >
-            <Tooltip className="tagWrapper" title={latestRun ? latestRun.state : ''} placement="top">
-              {latestRun && <div className={classes.status} style={{backgroundColor: colorMap[latestRun.state]}}/>}
+            {latestRun &&
+            <Tooltip className="tagWrapper" title={latestRun.state} placement="top">
+              <div className={classes.status} style={{backgroundColor: colorMap[latestRun.state]}} />
             </Tooltip>
+            }
             <Box mt={1}>
               <MqText subdued>{formatUpdatedAt(updatedAt)}</MqText>
             </Box>
