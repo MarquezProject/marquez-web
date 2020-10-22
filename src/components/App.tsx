@@ -1,11 +1,7 @@
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
 import { Container, CssBaseline } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import {
-  Theme as ITheme,
-  createStyles,
-  withStyles
-} from '@material-ui/core/styles'
+import { Theme as ITheme, createStyles, withStyles } from '@material-ui/core/styles'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { Provider } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
@@ -15,7 +11,7 @@ import { createBrowserHistory } from 'history'
 import React, { ReactElement, useState } from 'react'
 import createSagaMiddleware from 'redux-saga'
 
-import {theme} from '../helpers/theme'
+import { theme } from '../helpers/theme'
 import DatasetDetailPage from './DatasetDetailPage'
 import Header from './header/Header'
 import Home from './Home'
@@ -62,23 +58,21 @@ const App = (): ReactElement => {
           </Helmet>
           <CssBaseline />
           <Container maxWidth={'lg'} disableGutters={true}>
-            <Header setShowJobs={setShowJobs} showJobs={showJobs}/>
+            <Header setShowJobs={setShowJobs} showJobs={showJobs} />
           </Container>
-          <NetworkGraph/>
+          <NetworkGraph />
           <Container maxWidth={'lg'} disableGutters={true}>
             <Switch>
               <Route
                 path='/'
                 exact
-                render={props => (
-                  <Home {...props} showJobs={showJobs} setShowJobs={setShowJobs}/>
-                )}
+                render={props => <Home {...props} showJobs={showJobs} setShowJobs={setShowJobs} />}
               />
-              <Route path='/datasets/:datasetName' exact component={DatasetDetailPage}/>
-              <Route path='/jobs/:jobName' exact component={JobDetailPage}/>
+              <Route path='/datasets/:datasetName' exact component={DatasetDetailPage} />
+              <Route path='/jobs/:jobName' exact component={JobDetailPage} />
             </Switch>
           </Container>
-          <Toast/>
+          <Toast />
         </MuiThemeProvider>
       </ConnectedRouter>
     </Provider>

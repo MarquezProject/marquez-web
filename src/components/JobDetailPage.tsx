@@ -1,24 +1,24 @@
-import React, {FunctionComponent, useEffect} from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 
 import * as Redux from 'redux'
-import {Box, Button, Tooltip} from '@material-ui/core'
-import {IState} from '../reducers'
+import { Box, Button, Tooltip } from '@material-ui/core'
+import { IState } from '../reducers'
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
   createStyles,
   withStyles
 } from '@material-ui/core/styles'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
-import {fetchJobRuns} from '../actionCreators'
-import {useHistory, useParams} from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { fetchJobRuns } from '../actionCreators'
+import { useHistory, useParams } from 'react-router-dom'
 import CloseIcon from '@material-ui/icons/Close'
 import _find from 'lodash/find'
 const globalStyles = require('../global_styles.css')
-const {jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning} = globalStyles
-import {IJob} from '../types'
-import {formatUpdatedAt} from '../helpers'
+const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
+import { IJob } from '../types'
+import { formatUpdatedAt } from '../helpers'
 import Code from './core/code/Code'
 import IconButton from '@material-ui/core/IconButton'
 import MqText from './core/text/MqText'
@@ -31,10 +31,10 @@ const colorMap = {
   RUNNING: jobRunRunning
 }
 
-const styles = ({palette, spacing}: ITheme) => {
+const styles = ({ palette, spacing }: ITheme) => {
   return createStyles({
     root: {
-      padding: spacing(2),
+      padding: spacing(2)
     },
     _status: {
       gridArea: 'status',
@@ -67,16 +67,16 @@ const styles = ({palette, spacing}: ITheme) => {
       bottom: '1rem',
       right: '1rem',
       cursor: 'pointer'
-    },
+    }
   })
 }
 
 type IProps = IWithStyles<typeof styles> & { jobs: IJob[] } & { fetchJobRuns: any }
 
 const JobDetailPage: FunctionComponent<IProps> = props => {
-  const {jobs, classes, fetchJobRuns} = props
+  const { jobs, classes, fetchJobRuns } = props
 
-  const {jobName} = useParams()
+  const { jobName } = useParams()
   const history = useHistory()
 
   const job = _find(jobs, j => j.name === jobName)
@@ -102,10 +102,7 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     )
   }
 
-  const {
-    root,
-    _status,
-  } = classes
+  const { root, _status } = classes
 
   const {
     name,
@@ -114,11 +111,11 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     latestRun,
     location,
     namespace,
-    context = {SQL: ''}
+    context = { SQL: '' }
   } = job as IJob
 
   const latestRuns = job ? job.latestRuns || [] : []
-  const {SQL} = context
+  const { SQL } = context
 
   return (
     <Box
@@ -130,46 +127,49 @@ const JobDetailPage: FunctionComponent<IProps> = props => {
     >
       <Box>
         <Box mb={1}>
-          <Tooltip title={latestRun ? latestRun.state : ''} placement="top">
-            {latestRun && <div className={`${_status}`} style={{backgroundColor: colorMap[latestRun.state]}}/>}
+          <Tooltip title={latestRun ? latestRun.state : ''} placement='top'>
+            {latestRun && (
+              <div
+                className={`${_status}`}
+                style={{ backgroundColor: colorMap[latestRun.state] }}
+              />
+            )}
           </Tooltip>
         </Box>
         <Box mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-          <MqText font={'mono'} heading>{namespace} / {name}</MqText>
+          <MqText font={'mono'} heading>
+            {namespace} / {name}
+          </MqText>
           <Box>
-            <Button variant="outlined" color="primary" target={'_blank'} href={location}>
+            <Button variant='outlined' color='primary' target={'_blank'} href={location}>
               Location
             </Button>
             <IconButton onClick={() => history.push('/')}>
-              <CloseIcon/>
+              <CloseIcon />
             </IconButton>
           </Box>
         </Box>
         <Box mb={2}>
-          <MqText subdued>
-            {description}
-          </MqText>
+          <MqText subdued>{description}</MqText>
         </Box>
       </Box>
-      <Code>
-        {SQL}
-      </Code>
+      <Code>{SQL}</Code>
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} mt={1}>
         <div className={classes.latestRunContainer}>
-          {
-            latestRuns.map(r => {
-              return (
-                <Tooltip key={r.id} title={r.state} placement="top">
-                  <div key={r.id} className={classes.squareShape} style={{backgroundColor: colorMap[r.state]}}/>
-                </Tooltip>
-              )
-            })
-          }
+          {latestRuns.map(r => {
+            return (
+              <Tooltip key={r.id} title={r.state} placement='top'>
+                <div
+                  key={r.id}
+                  className={classes.squareShape}
+                  style={{ backgroundColor: colorMap[r.state] }}
+                />
+              </Tooltip>
+            )
+          })}
         </div>
         <Box ml={1}>
-          <MqText subdued>
-            {formatUpdatedAt(updatedAt)}
-          </MqText>
+          <MqText subdued>{formatUpdatedAt(updatedAt)}</MqText>
         </Box>
       </Box>
     </Box>
@@ -180,9 +180,13 @@ const mapStateToProps = (state: IState) => ({
   jobs: state.jobs
 })
 
-const mapDispatchToProps = (dispatch: Redux.Dispatch) => bindActionCreators({
-  fetchJobRuns: fetchJobRuns
-}, dispatch)
+const mapDispatchToProps = (dispatch: Redux.Dispatch) =>
+  bindActionCreators(
+    {
+      fetchJobRuns: fetchJobRuns
+    },
+    dispatch
+  )
 
 export default connect(
   mapStateToProps,

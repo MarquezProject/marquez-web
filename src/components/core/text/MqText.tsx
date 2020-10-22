@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 
 import { Link } from 'react-router-dom'
-import {THEME_EXTRA} from '../../../helpers/theme'
+import { THEME_EXTRA } from '../../../helpers/theme'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { WithStyles, createStyles, fade } from '@material-ui/core'
 import classNames from 'classnames'
@@ -12,63 +12,63 @@ const styles = (theme: Theme) =>
     root: {
       lineHeight: 1.5,
       fontSize: '.875rem',
-      fontFamily: '\'Graphik\', sans-serif',
+      fontFamily: `${'Graphik'}, sans-serif`,
       margin: 0,
       padding: 0,
       color: theme.palette.common.white,
-      fontWeight: 400,
+      fontWeight: 400
     },
     inline: {
-      display: 'inline',
+      display: 'inline'
     },
     heading: {
       fontWeight: 600,
-      fontSize: '1.125rem',
+      fontSize: '1.125rem'
     },
     subheading: {
       fontWeight: 600,
-      fontSize: '.875rem',
+      fontSize: '.875rem'
     },
     mono: {
-      fontFamily: '\'Source Code Pro\', serif',
+      fontFamily: `${'Source Code Pro'}, serif`
     },
     bold: {
-      fontWeight: 600,
+      fontWeight: 600
     },
     subdued: {
-      color: THEME_EXTRA.typography.subdued,
+      color: THEME_EXTRA.typography.subdued
     },
     disabled: {
-      color: THEME_EXTRA.typography.disabled,
+      color: THEME_EXTRA.typography.disabled
     },
     link: {
       color: theme.palette.primary.main,
       cursor: 'pointer',
       textDecoration: 'none',
       '&:hover': {
-        textDecoration: 'underline',
-      },
+        textDecoration: 'underline'
+      }
     },
     label: {
       fontSize: '.625rem',
       textTransform: 'uppercase',
-      lineHeight: 1.4,
+      lineHeight: 1.4
     },
     highlight: {
-      backgroundColor: fade(theme.palette.primary.main, 0.25),
+      backgroundColor: fade(theme.palette.primary.main, 0.25)
     },
     bottomMargin: {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(1)
     },
     inverse: {
-      color: theme.palette.common.white,
+      color: theme.palette.common.white
     },
     small: {
-      fontSize: '.625rem',
+      fontSize: '.625rem'
     },
     paragraph: {
-      marginBottom: theme.spacing(2),
-    },
+      marginBottom: theme.spacing(2)
+    }
   })
 
 interface OwnProps {
@@ -89,14 +89,7 @@ interface OwnProps {
   font?: 'primary' | 'mono'
   small?: boolean
   bottomMargin?: boolean
-  children:
-    | ReactElement
-    | (string | ReactElement)[]
-    | string
-    | string[]
-    | number
-    | undefined
-    | null
+  children: ReactElement | (string | ReactElement)[] | string | string[] | number | undefined | null
 }
 
 type MqTextProps = WithStyles<typeof styles> & OwnProps
@@ -122,7 +115,7 @@ class MqText extends React.Component<MqTextProps> {
       inline,
       highlight,
       color,
-      small,
+      small
     } = this.props
 
     const conditionalClasses = classNames(
@@ -142,19 +135,12 @@ class MqText extends React.Component<MqTextProps> {
     )
 
     const style = {
-      color: color && color,
+      color: color && color
     }
 
     if (heading) {
       return (
-        <h4
-          className={classNames(
-            classes.root,
-            classes.heading,
-            conditionalClasses
-          )}
-          style={style}
-        >
+        <h4 className={classNames(classes.root, classes.heading, conditionalClasses)} style={style}>
           {children}
         </h4>
       )
@@ -173,7 +159,7 @@ class MqText extends React.Component<MqTextProps> {
         <a
           href={href}
           target={'_blank'}
-          rel="noopener noreferrer"
+          rel='noopener noreferrer'
           className={classNames(classes.root, classes.link, conditionalClasses)}
         >
           {children}
@@ -181,10 +167,7 @@ class MqText extends React.Component<MqTextProps> {
       )
     } else {
       return (
-        <div
-          className={classNames(classes.root, conditionalClasses)}
-          style={style}
-        >
+        <div className={classNames(classes.root, conditionalClasses)} style={style}>
           {children}
         </div>
       )

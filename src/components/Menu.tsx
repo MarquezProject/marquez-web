@@ -19,11 +19,13 @@ export default function SimpleMenu() {
 
   const feedBackClicked = () => {
     handleClose()
+    // eslint-disable-next-line no-undef
     const link = __FEEDBACK_FORM_URL__
     window.open(link, '_blank')
   }
   const apiDocsClicked = () => {
     handleClose()
+    // eslint-disable-next-line no-undef
     const link = __API_DOCS_URL__
     window.open(link, '_blank')
   }

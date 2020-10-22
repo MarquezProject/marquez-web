@@ -1,5 +1,4 @@
-
-import {createMuiTheme} from '@material-ui/core/styles'
+import { createMuiTheme } from '@material-ui/core/styles'
 
 export const theme = createMuiTheme({
   overrides: {
@@ -8,18 +7,18 @@ export const theme = createMuiTheme({
         body: {
           color: '#fff'
         }
-      },
-    },
+      }
+    }
   },
   typography: {
     fontFamily: 'Graphik',
     h1: {
       fontSize: '2.5rem',
-      fontWeight: 600,
+      fontWeight: 600
     },
     h3: {
       fontSize: '1rem',
-      fontWeight: 600,
+      fontWeight: 600
     },
     fontSize: 14
   },
@@ -40,8 +39,8 @@ export const theme = createMuiTheme({
 export const THEME_EXTRA = {
   typography: {
     subdued: '#abb1bd',
-    disabled: '#8d9499',
-  },
+    disabled: '#8d9499'
+  }
 }
 
 // 1px for bottom border

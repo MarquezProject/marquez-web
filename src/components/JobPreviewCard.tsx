@@ -5,19 +5,19 @@ import {
   fade,
   withStyles
 } from '@material-ui/core/styles'
-import {Link} from 'react-router-dom'
-import React, {ReactElement} from 'react'
+import { Link } from 'react-router-dom'
+import React, { ReactElement } from 'react'
 
 const globalStyles = require('../global_styles.css')
-const {vibrantGreen} = globalStyles
-import {Box, Tooltip} from '@material-ui/core'
-import {formatUpdatedAt} from '../helpers'
+const { vibrantGreen } = globalStyles
+import { Box, Tooltip } from '@material-ui/core'
+import { formatUpdatedAt } from '../helpers'
 
-import {Job} from '../types/api'
+import { Job } from '../types/api'
 import MqText from './core/text/MqText'
 import transitions from '@material-ui/core/styles/transitions'
 
-const {jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning} = globalStyles
+const { jobRunNew, jobRunFailed, jobRunCompleted, jobRunAborted, jobRunRunning } = globalStyles
 
 const colorMap = {
   NEW: jobRunNew,
@@ -27,7 +27,7 @@ const colorMap = {
   RUNNING: jobRunRunning
 }
 
-const styles = ({palette, spacing, shape}: ITheme) => {
+const styles = ({ palette, spacing, shape }: ITheme) => {
   return createStyles({
     rightCol: {
       textAlign: 'right'
@@ -51,7 +51,7 @@ const styles = ({palette, spacing, shape}: ITheme) => {
       borderRadius: shape.borderRadius,
       transition: transitions.create(['background-color']),
       '&:hover': {
-        backgroundColor: fade(palette.common.white, 0.1),
+        backgroundColor: fade(palette.common.white, 0.1)
       }
     }
   })
@@ -60,20 +60,15 @@ const styles = ({palette, spacing, shape}: ITheme) => {
 type IProps = IWithStyles<typeof styles> &
   Pick<Job, 'name' | 'description' | 'updatedAt' | 'latestRun'>
 
-interface IState {
-}
+interface IState {}
 
 class JobPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const {classes, name, description, updatedAt = '', latestRun} = this.props
+    const { classes, name, description, updatedAt = '', latestRun } = this.props
     console.log(latestRun)
     return (
       <Link to={`/jobs/${name}`} className={classes.link}>
-        <Box
-          p={2}
-          display='flex'
-          justifyContent='space-between'
-        >
+        <Box p={2} display='flex' justifyContent='space-between'>
           <div>
             <MqText subheading font={'mono'}>
               {name}
@@ -89,11 +84,14 @@ class JobPreviewCard extends React.Component<IProps, IState> {
             alignItems='flex-end'
             justifyContent='space-between'
           >
-            {latestRun &&
-            <Tooltip className="tagWrapper" title={latestRun.state} placement="top">
-              <div className={classes.status} style={{backgroundColor: colorMap[latestRun.state]}} />
-            </Tooltip>
-            }
+            {latestRun && (
+              <Tooltip className='tagWrapper' title={latestRun.state} placement='top'>
+                <div
+                  className={classes.status}
+                  style={{ backgroundColor: colorMap[latestRun.state] }}
+                />
+              </Tooltip>
+            )}
             <Box mt={1}>
               <MqText subdued>{formatUpdatedAt(updatedAt)}</MqText>
             </Box>

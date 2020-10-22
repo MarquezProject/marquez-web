@@ -1,15 +1,9 @@
 import React, { ReactElement } from 'react'
 
-import {Box, Theme} from '@material-ui/core'
+import { Box, Theme } from '@material-ui/core'
 import { Dataset } from '../types/api'
-import {
-  WithStyles as IWithStyles,
-  createStyles,
-  fade, withStyles
-} from '@material-ui/core/styles'
-import {
-  Link
-} from 'react-router-dom'
+import { WithStyles as IWithStyles, createStyles, fade, withStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import { formatUpdatedAt } from '../helpers'
 import MqText from './core/text/MqText'
 
@@ -23,12 +17,11 @@ const styles = (theme: Theme) => {
       borderRadius: theme.shape.borderRadius,
       transition: theme.transitions.create(['background-color']),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.1),
+        backgroundColor: fade(theme.palette.common.white, 0.1)
       }
     }
   })
 }
-
 
 type IProps = IWithStyles<typeof styles> &
   Pick<Dataset, 'name' | 'description' | 'updatedAt' | 'tags'>
@@ -39,7 +32,7 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
     const { classes, name, description, updatedAt } = this.props
     const { link } = classes
     return (
-      <Link className={link} to={{pathname: `/datasets/${name}`}}>
+      <Link className={link} to={{ pathname: `/datasets/${name}` }}>
         <Box p={2}>
           <Box display='flex' justifyContent='space-between' alignItems={'center'} mb={1}>
             <MqText subheading font={'mono'}>
@@ -49,7 +42,9 @@ class DatasetPreviewCard extends React.Component<IProps, IState> {
               <MqText subdued>{formatUpdatedAt(updatedAt)}</MqText>
             </Box>
           </Box>
-          <MqText subdued>{description || 'There is no description available for this dataset'}</MqText>
+          <MqText subdued>
+            {description || 'There is no description available for this dataset'}
+          </MqText>
         </Box>
       </Link>
     )

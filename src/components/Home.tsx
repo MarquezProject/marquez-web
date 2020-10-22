@@ -1,27 +1,27 @@
 import * as RRD from 'react-router-dom'
-import {Box} from '@material-ui/core'
-import {IDatasetsState} from '../reducers/datasets'
-import {IJobsState} from '../reducers/jobs'
-import {IState} from '../reducers'
+import { Box } from '@material-ui/core'
+import { IDatasetsState } from '../reducers/datasets'
+import { IJobsState } from '../reducers/jobs'
+import { IState } from '../reducers'
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
   createStyles,
   withStyles
 } from '@material-ui/core/styles'
-import {Pagination} from '@material-ui/lab'
-import {connect} from 'react-redux'
+import { Pagination } from '@material-ui/lab'
+import { connect } from 'react-redux'
 import DatasetPreviewCard from './DatasetPreviewCard'
 import FiltersWrapper from './filters/FiltersWrapper'
 import JobPreviewCard from './JobPreviewCard'
 import MqText from './core/text/MqText'
-import React, {FunctionComponent, useState} from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import _chunk from 'lodash/chunk'
 
 const styles = (theme: ITheme) => {
   return createStyles({
     column: {
-      flex: 1,
+      flex: 1
     },
     row: {
       display: 'flex',
@@ -57,7 +57,7 @@ const Home: FunctionComponent<IAllProps> = props => {
 
   const limit = 5
 
-  const {datasets, jobs, classes, showJobs, setShowJobs} = props
+  const { datasets, jobs, classes, showJobs, setShowJobs } = props
 
   const matchingDatasets = datasets.filter(d => d.matches)
   const matchingJobs = jobs.filter(j => j.matches)
@@ -74,10 +74,8 @@ const Home: FunctionComponent<IAllProps> = props => {
         <Box className={classes.column}>
           {matchingDatasets.length > 0 ? (
             <Box mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-              <MqText heading>
-                {!showJobs ? 'Popular Datasets' : 'Matching Datasets'}
-              </MqText>
-              <FiltersWrapper showJobs={setShowJobs}/>
+              <MqText heading>{!showJobs ? 'Popular Datasets' : 'Matching Datasets'}</MqText>
+              <FiltersWrapper showJobs={setShowJobs} />
             </Box>
           ) : (
             <Box textAlign={'center'}>
@@ -94,12 +92,13 @@ const Home: FunctionComponent<IAllProps> = props => {
             />
           ))}
           {matchingDatasets.length > 0 && (
-            <Pagination color={'standard'}
-                        shape={'rounded'}
-                        onChange={(event, page) => {
-                          setDatasetPageIndex(page - 1)
-                        }}
-                        count={Math.ceil(matchingDatasets.length / limit)}
+            <Pagination
+              color={'standard'}
+              shape={'rounded'}
+              onChange={(event, page) => {
+                setDatasetPageIndex(page - 1)
+              }}
+              count={Math.ceil(matchingDatasets.length / limit)}
             />
           )}
         </Box>
@@ -107,9 +106,7 @@ const Home: FunctionComponent<IAllProps> = props => {
           <Box className={classes.column} ml={2}>
             {matchingJobs.length > 0 ? (
               <Box mb={2} height={32}>
-                <MqText heading>
-                  Matching Jobs
-                </MqText>
+                <MqText heading>Matching Jobs</MqText>
               </Box>
             ) : (
               <Box textAlign={'center'}>
@@ -126,12 +123,13 @@ const Home: FunctionComponent<IAllProps> = props => {
               />
             ))}
             {matchingJobs.length > 0 && (
-              <Pagination color={'standard'}
-                          shape={'rounded'}
-                          onChange={(event, page) => {
-                            setJobPageIndex(page - 1)
-                          }}
-                          count={Math.ceil(matchingJobs.length / limit)}
+              <Pagination
+                color={'standard'}
+                shape={'rounded'}
+                onChange={(event, page) => {
+                  setJobPageIndex(page - 1)
+                }}
+                count={Math.ceil(matchingJobs.length / limit)}
               />
             )}
           </Box>
@@ -153,6 +151,4 @@ interface IInjectedProps {
 
 type IStateProps = ReturnType<typeof mapStateToProps>
 
-export default connect<IStateProps, IInjectedProps>(
-  mapStateToProps
-)(withStyles(styles)(Home))
+export default connect<IStateProps, IInjectedProps>(mapStateToProps)(withStyles(styles)(Home))

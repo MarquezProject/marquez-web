@@ -1,7 +1,7 @@
 import * as Redux from 'redux'
-import {Theme, WithStyles, createStyles, fade} from '@material-ui/core/styles'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import { Theme, WithStyles, createStyles, fade } from '@material-ui/core/styles'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { findMatchingEntities } from '../../actionCreators'
 import InputBase from '@material-ui/core/InputBase'
 import React from 'react'
@@ -15,14 +15,14 @@ const styles = (theme: Theme) => {
       transition: theme.transitions.create(['background-color']),
       backgroundColor: fade(theme.palette.common.white, 0.15),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+        backgroundColor: fade(theme.palette.common.white, 0.25)
       },
       marginRight: theme.spacing(2),
       marginLeft: 0,
       width: '100%',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
-        width: 'auto',
+        width: 'auto'
       },
       borderRadius: theme.spacing(3),
       border: `1px solid ${theme.palette.secondary.main}`
@@ -34,10 +34,10 @@ const styles = (theme: Theme) => {
       pointerEvents: 'none',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     inputRoot: {
-      color: 'inherit',
+      color: 'inherit'
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
@@ -46,9 +46,9 @@ const styles = (theme: Theme) => {
       width: '100%',
       fontFamily: 'Source Code Pro',
       [theme.breakpoints.up('md')]: {
-        width: '30ch',
-      },
-    },
+        width: '30ch'
+      }
+    }
   })
 }
 
@@ -68,7 +68,6 @@ interface DispatchProps {
 type SearchBarProps = OwnProps & DispatchProps & WithStyles<typeof styles>
 
 class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
-
   constructor(props: SearchBarProps) {
     super(props)
     this.state = {
@@ -76,9 +75,7 @@ class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
     }
   }
 
-  onSearch = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ search: event.target.value }, () => {
       this.props.setShowJobs(this.state.search !== '')
       this.props.findMatchingEntities(this.state.search)
@@ -86,21 +83,23 @@ class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
   }
 
   render() {
-    const {classes} = this.props
-    return <div className={classes.search}>
-      <div className={classes.searchIcon}>
-        <SearchIcon />
+    const { classes } = this.props
+    return (
+      <div className={classes.search}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+        <InputBase
+          placeholder='Search…'
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput
+          }}
+          onChange={this.onSearch}
+          inputProps={{ 'aria-label': 'search' }}
+        />
       </div>
-      <InputBase
-        placeholder="Search…"
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput,
-        }}
-        onChange={this.onSearch}
-        inputProps={{ 'aria-label': 'search' }}
-      />
-    </div>
+    )
   }
 }
 
@@ -111,4 +110,3 @@ export default connect(
   null,
   mapDispatchToProps
 )(withStyles(styles)(withStyles(styles)(SearchBar)))
-

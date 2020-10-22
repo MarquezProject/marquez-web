@@ -1,4 +1,13 @@
-import { Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@material-ui/core'
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip
+} from '@material-ui/core'
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
@@ -16,9 +25,9 @@ import _find from 'lodash/find'
 
 import * as Redux from 'redux'
 import { Dataset } from '../types/api'
-import {IState} from '../reducers'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
+import { IState } from '../reducers'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import MqText from './core/text/MqText'
 
 const styles = ({ spacing }: ITheme) => {
@@ -52,7 +61,7 @@ const styles = ({ spacing }: ITheme) => {
     },
     updated: {
       marginTop: '10px'
-    },
+    }
   })
 }
 
@@ -60,31 +69,19 @@ type IProps = IWithStyles<typeof styles> & { datasets: Dataset[] }
 
 const DatasetDetailPage: FunctionComponent<IProps> = props => {
   const { datasets, classes } = props
-  const {
-    root, paper, infoIcon, tableCell, tableRow
-  } = classes
+  const { root, paper, infoIcon, tableCell, tableRow } = classes
   const { datasetName } = useParams()
   const dataset = _find(datasets, d => d.name === datasetName)
   if (!dataset) {
     return (
-      <Box
-        display='flex'
-        justifyContent="center"
-        className={root}
-        mt={2}
-      >
+      <Box display='flex' justifyContent='center' className={root} mt={2}>
         <MqText subdued>
           No dataset by the name of <MqText bold inline>{`"${datasetName}"`}</MqText> found
         </MqText>
       </Box>
     )
   } else {
-    const {
-      name,
-      description,
-      updatedAt,
-      fields
-    } = dataset
+    const { name, description, updatedAt, fields } = dataset
 
     return (
       <Box mt={2} className={root}>
@@ -93,35 +90,36 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
             <MqText heading font={'mono'}>
               {name}
             </MqText>
-            <MqText subdued>
-              {description}
-            </MqText>
+            <MqText subdued>{description}</MqText>
           </div>
         </Box>
         {fields && fields.length > 0 ? (
           <Paper className={paper}>
-            <Table size="small">
+            <Table size='small'>
               <TableHead>
                 <TableRow className={tableRow}>
-                  {
-                    fields.map((field) => {
-                      return (
-                      <TableCell className={tableCell} key={field.name} align="center"><strong>{field.name}</strong>
-                        <Tooltip title={field.type} placement="top">
+                  {fields.map(field => {
+                    return (
+                      <TableCell className={tableCell} key={field.name} align='center'>
+                        <strong>{field.name}</strong>
+                        <Tooltip title={field.type} placement='top'>
                           <div className={infoIcon}>
                             <InfoIcon color='disabled' fontSize='small' />
                           </div>
                         </Tooltip>
                       </TableCell>
-                      )
-                    })
-                  }
+                    )
+                  })}
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow className={tableRow}>
-                  {fields.map((field) => {
-                    return <TableCell className={tableCell} key={field.name} align="left">{field.description || 'no description'}</TableCell>
+                  {fields.map(field => {
+                    return (
+                      <TableCell className={tableCell} key={field.name} align='left'>
+                        {field.description || 'no description'}
+                      </TableCell>
+                    )
                   })}
                 </TableRow>
               </TableBody>
@@ -129,15 +127,11 @@ const DatasetDetailPage: FunctionComponent<IProps> = props => {
           </Paper>
         ) : (
           <div>
-            <MqText subdued>
-              schema not present
-            </MqText>
+            <MqText subdued>schema not present</MqText>
           </div>
         )}
         <Box display={'flex'} justifyContent={'flex-end'} mt={1}>
-          <MqText subdued>
-            last updated: {formatUpdatedAt(updatedAt)}
-          </MqText>
+          <MqText subdued>last updated: {formatUpdatedAt(updatedAt)}</MqText>
         </Box>
       </Box>
     )

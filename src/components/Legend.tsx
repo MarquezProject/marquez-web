@@ -23,7 +23,7 @@ const styles = ({ spacing, palette }: ITheme) => {
       height: spacing(2),
       marginRight: spacing(1),
       marginLeft: spacing(1)
-    },
+    }
   })
 }
 
