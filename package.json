@@ -11,7 +11,7 @@
     "pretest": "eslint src/**/*[x]",
     "test": "jest",
     "test-watch": "jest --watch",
-    "eslint-fix": "eslint . --ext .ts,.tsx --fix"
+    "eslint-fix": "eslint . --ext .ts,.tsx --fix --ignore-pattern \"src/__tests__/*\""
   },
   "engines": {
     "node": "10.16.3"
