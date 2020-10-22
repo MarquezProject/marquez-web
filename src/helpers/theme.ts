@@ -11,7 +11,7 @@ export const theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: 'Graphik',
+    fontFamily: 'Karla',
     h1: {
       fontSize: '2.5rem',
       fontWeight: 600

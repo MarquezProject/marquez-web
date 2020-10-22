@@ -12,7 +12,7 @@ const styles = (theme: Theme) =>
     root: {
       lineHeight: 1.5,
       fontSize: '.875rem',
-      fontFamily: `${'Graphik'}, sans-serif`,
+      fontFamily: `${'Karla'}, sans-serif`,
       margin: 0,
       padding: 0,
       color: theme.palette.common.white,
@@ -22,18 +22,18 @@ const styles = (theme: Theme) =>
       display: 'inline'
     },
     heading: {
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: '1.125rem'
     },
     subheading: {
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: '.875rem'
     },
     mono: {
       fontFamily: `${'Source Code Pro'}, serif`
     },
     bold: {
-      fontWeight: 600
+      fontWeight: 700
     },
     subdued: {
       color: THEME_EXTRA.typography.subdued
