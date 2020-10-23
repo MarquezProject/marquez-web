@@ -16,7 +16,7 @@ import DatasetDetailPage from './DatasetDetailPage'
 import Header from './header/Header'
 import Home from './Home'
 import JobDetailPage from './JobDetailPage'
-import NetworkGraph from './NetworkGraph'
+import Lineage from './lineage/Lineage'
 import Toast from './Toast'
 import createRootReducer from '../reducers'
 import rootSaga from '../sagas'
@@ -60,7 +60,7 @@ const App = (): ReactElement => {
           <Container maxWidth={'lg'} disableGutters={true}>
             <Header setShowJobs={setShowJobs} showJobs={showJobs} />
           </Container>
-          <NetworkGraph />
+          <Lineage />
           <Container maxWidth={'lg'} disableGutters={true}>
             <Switch>
               <Route
