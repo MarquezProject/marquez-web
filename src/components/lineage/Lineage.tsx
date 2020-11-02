@@ -4,12 +4,14 @@ import { Box, Theme } from '@material-ui/core'
 import { DAGRE_CONFIG, INITIAL_TRANSFORM, NODE_SIZE } from './config'
 import { GraphEdge, Node as GraphNode, graphlib, layout } from 'dagre'
 import { HEADER_HEIGHT } from '../../helpers/theme'
-import { IJob } from '../../types'
+import { IDataset, IJob } from '../../types'
 import { IState } from '../../reducers'
 import { LineageGraph } from './types'
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles'
 import { Zoom } from '@visx/zoom'
 import { connect } from 'react-redux'
+import { localPoint } from '@visx/event'
+import Edge from './components/edge/Edge'
 import ParentSize from '@visx/responsive/lib/components/ParentSize'
 
 const styles = (theme: Theme) => {
@@ -24,9 +26,12 @@ const styles = (theme: Theme) => {
 
 const MIN_ZOOM = 1 / 4
 const MAX_ZOOM = 4
+const DOUBLE_CLICK_MAGNIFICATION = 1.1
+const RADIUS = 14
 
 interface StateProps {
   jobs: IJob[]
+  datasets: IDataset[]
 }
 
 interface LineageState {
@@ -39,7 +44,7 @@ type LineageProps = WithStyles<typeof styles> & StateProps
 
 let g: graphlib.Graph<LineageGraph>
 
-class Lineage extends React.Component<LineageProps> {
+class Lineage extends React.Component<LineageProps, LineageState> {
   constructor(props: LineageProps) {
     super(props)
     this.state = {
@@ -65,10 +70,18 @@ class Lineage extends React.Component<LineageProps> {
   }
 
   buildGraph = () => {
+    // jobs
     for (let i = 0; i < this.props.jobs.length; i++) {
-      console.log(this.props.jobs[i])
       g.setNode(this.props.jobs[i].id.name, {
-        ...this.props.jobs[i],
+        // ...this.props.jobs[i],
+        width: NODE_SIZE,
+        height: NODE_SIZE
+      })
+    }
+
+    // datasets
+    for (let i = 0; i < this.props.datasets.length; i++) {
+      g.setNode(this.props.datasets[i].id.name, {
         width: NODE_SIZE,
         height: NODE_SIZE
       })
@@ -78,60 +91,109 @@ class Lineage extends React.Component<LineageProps> {
       for (let j = 0; j < this.props.jobs[i].outputs.length; j++) {
         g.setEdge(this.props.jobs[i].id.name, this.props.jobs[i].outputs[j].name)
       }
+      for (let j = 0; j < this.props.jobs[i].inputs.length; j++) {
+        g.setEdge(this.props.jobs[i].inputs[j].name, this.props.jobs[i].id.name)
+      }
     }
     layout(g)
 
-    this.setState(
-      {
-        graph: g,
-        edges: g.edges().map(e => g.edge(e)),
-        nodes: g.nodes().map(v => g.node(v))
-      },
-      () => {
-        console.log(this.state)
-      }
-    )
+    this.setState({
+      graph: g,
+      edges: g.edges().map(e => g.edge(e)),
+      nodes: g.nodes().map(v => g.node(v))
+    })
   }
 
   render() {
     const { classes } = this.props
+
     return (
       <Box className={classes.lineageContainer}>
-        <ParentSize>
-          {parent => (
-            <Zoom
-              width={parent.width}
-              height={parent.height}
-              scaleXMin={MIN_ZOOM}
-              scaleXMax={MAX_ZOOM}
-              scaleYMin={MIN_ZOOM}
-              scaleYMax={MAX_ZOOM}
-              transformMatrix={INITIAL_TRANSFORM}
-            >
-              {zoom => {
-                return (
-                  <Box position='relative'>
-                    <svg
-                      id={'GRAPH'}
-                      width={parent.width}
-                      height={parent.height}
-                      style={{
-                        cursor: zoom.isDragging ? 'grabbing' : 'grab'
-                      }}
-                    ></svg>
-                  </Box>
-                )
-              }}
-            </Zoom>
-          )}
-        </ParentSize>
+        {this.state.graph && (
+          <ParentSize>
+            {parent => (
+              <Zoom
+                width={parent.width}
+                height={parent.height}
+                scaleXMin={MIN_ZOOM}
+                scaleXMax={MAX_ZOOM}
+                scaleYMin={MIN_ZOOM}
+                scaleYMax={MAX_ZOOM}
+                transformMatrix={INITIAL_TRANSFORM}
+              >
+                {zoom => {
+                  return (
+                    <Box position='relative'>
+                      <svg
+                        id={'GRAPH'}
+                        width={parent.width}
+                        height={parent.height}
+                        style={{
+                          cursor: zoom.isDragging ? 'grabbing' : 'grab'
+                        }}
+                      >
+                        <g transform={zoom.toString()}>
+                          {this.state.nodes.map((node, index) => {
+                            if (node) {
+                              return (
+                                <circle
+                                  key={index}
+                                  cx={node.x}
+                                  cy={node.y}
+                                  r={RADIUS}
+                                  fill={'white'}
+                                  stroke={'white'}
+                                />
+                              )
+                            } else return null
+                          })}
+                        </g>
+                        <g transform={zoom.toString()}>
+                          <Edge edgePoints={this.state.edges} />
+                        </g>
+                        <rect
+                          width={parent.width}
+                          height={parent.height}
+                          fill={'transparent'}
+                          onTouchStart={zoom.dragStart}
+                          onTouchMove={zoom.dragMove}
+                          onTouchEnd={zoom.dragEnd}
+                          onMouseDown={event => {
+                            zoom.dragStart(event)
+                          }}
+                          onMouseMove={zoom.dragMove}
+                          onMouseUp={zoom.dragEnd}
+                          onMouseLeave={() => {
+                            if (zoom.isDragging) zoom.dragEnd()
+                          }}
+                          onDoubleClick={event => {
+                            const point = localPoint(event) || {
+                              x: 0,
+                              y: 0
+                            }
+                            zoom.scale({
+                              scaleX: DOUBLE_CLICK_MAGNIFICATION,
+                              scaleY: DOUBLE_CLICK_MAGNIFICATION,
+                              point
+                            })
+                          }}
+                        />
+                      </svg>
+                    </Box>
+                  )
+                }}
+              </Zoom>
+            )}
+          </ParentSize>
+        )}
       </Box>
     )
   }
 }
 
 const mapStateToProps = (state: IState) => ({
-  jobs: state.jobs
+  jobs: state.jobs,
+  datasets: state.datasets
 })
 
 export default withStyles(styles)(connect(mapStateToProps)(Lineage))

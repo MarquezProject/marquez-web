@@ -48,7 +48,7 @@ export interface LineageEdge {
 }
 
 export interface LineageGraph {
-  id: string
+  id: { namespace: string; name: string }
   type: JobOrDataset
   data: LineageDataset | LineageJob
   inEdges: LineageEdge[]
