@@ -54,3 +54,7 @@ export interface LineageGraph {
   inEdges: LineageEdge[]
   outEdges: LineageEdge[]
 }
+
+export interface MqNode {
+  data: LineageDataset | LineageJob
+}

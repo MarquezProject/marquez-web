@@ -6,7 +6,8 @@ import { GraphEdge, Node as GraphNode, graphlib, layout } from 'dagre'
 import { HEADER_HEIGHT } from '../../helpers/theme'
 import { IDataset, IJob } from '../../types'
 import { IState } from '../../reducers'
-import { LineageGraph } from './types'
+import { MqNode } from './types'
+import { NodeText } from './components/node/NodeText'
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles'
 import { Zoom } from '@visx/zoom'
 import { connect } from 'react-redux'
@@ -35,14 +36,16 @@ interface StateProps {
 }
 
 interface LineageState {
-  graph: graphlib.Graph<LineageGraph>
+  graph: graphlib.Graph<MqNode>
   edges: GraphEdge[]
-  nodes: GraphNode<LineageGraph>[]
+  nodes: GraphNode<MqNode>[]
 }
+
+type JorD = IJob | IDataset | undefined
 
 type LineageProps = WithStyles<typeof styles> & StateProps
 
-let g: graphlib.Graph<LineageGraph>
+let g: graphlib.Graph<MqNode>
 
 class Lineage extends React.Component<LineageProps, LineageState> {
   constructor(props: LineageProps) {
@@ -57,44 +60,50 @@ class Lineage extends React.Component<LineageProps, LineageState> {
   componentDidUpdate(prevProps: Readonly<LineageProps>) {
     if (JSON.stringify(prevProps.jobs) !== JSON.stringify(this.props.jobs)) {
       this.initGraph()
-      this.buildGraphNode()
-      this.buildGraphAll()
+      const attachedNodes = this.findNodesFromOrigin()
+      this.buildGraphAll(
+        attachedNodes.filter(jobOrDataset => jobOrDataset && 'outputs' in jobOrDataset) as IJob[],
+        attachedNodes.filter(
+          jobOrDataset => jobOrDataset && 'sourceName' in jobOrDataset
+        ) as IDataset[]
+      )
     }
   }
 
   initGraph = () => {
-    g = new graphlib.Graph<LineageGraph>({ directed: true })
+    g = new graphlib.Graph<MqNode>({ directed: true })
     g.setGraph(DAGRE_CONFIG)
     g.setDefaultEdgeLabel(() => {
       return {}
     })
   }
 
-  buildGraphAll = () => {
+  buildGraphAll = (jobs: IJob[], datasets: IDataset[]) => {
     // jobs
-    for (let i = 0; i < this.props.jobs.length; i++) {
-      g.setNode(this.props.jobs[i].id.name, {
-        ...this.props.jobs[i],
+    for (let i = 0; i < jobs.length; i++) {
+      g.setNode(jobs[i].id.name, {
+        data: jobs[i],
         width: NODE_SIZE,
         height: NODE_SIZE
       })
     }
 
     // datasets
-    for (let i = 0; i < this.props.datasets.length; i++) {
-      g.setNode(this.props.datasets[i].id.name, {
-        ...this.props.jobs[i],
+    for (let i = 0; i < datasets.length; i++) {
+      g.setNode(datasets[i].id.name, {
+        data: jobs[i],
         width: NODE_SIZE,
         height: NODE_SIZE
       })
     }
 
-    for (let i = 0; i < this.props.jobs.length; i++) {
-      for (let j = 0; j < this.props.jobs[i].outputs.length; j++) {
-        g.setEdge(this.props.jobs[i].id.name, this.props.jobs[i].outputs[j].name)
+    // edges
+    for (let i = 0; i < jobs.length; i++) {
+      for (let j = 0; j < jobs[i].outputs.length; j++) {
+        g.setEdge(jobs[i].id.name, jobs[i].outputs[j].name)
       }
-      for (let j = 0; j < this.props.jobs[i].inputs.length; j++) {
-        g.setEdge(this.props.jobs[i].inputs[j].name, this.props.jobs[i].id.name)
+      for (let j = 0; j < jobs[i].inputs.length; j++) {
+        g.setEdge(jobs[i].inputs[j].name, jobs[i].id.name)
       }
     }
     layout(g)
@@ -106,9 +115,13 @@ class Lineage extends React.Component<LineageProps, LineageState> {
     })
   }
 
-  buildGraphNode = (node = 'delivery_times_7_days') => {
-    const stack: (IJob | IDataset | undefined)[] = []
-    const items: (IJob | IDataset | undefined)[] = []
+  /**
+   * Runs a bidirectional depth first search on an origin node
+   * It has some defensive practices which will protect against inf loops for some graphs
+   */
+  findNodesFromOrigin = (node = 'delivery_times_7_days'): JorD[] => {
+    const stack: JorD[] = []
+    const items: JorD[] = []
 
     const job = this.props.jobs.find(job => job.name === node)
     if (job) {
@@ -147,7 +160,6 @@ class Lineage extends React.Component<LineageProps, LineageState> {
 
   render() {
     const { classes } = this.props
-
     return (
       <Box className={classes.lineageContainer}>
         {this.state.graph && (
@@ -177,14 +189,16 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                           {this.state.nodes.map((node, index) => {
                             if (node) {
                               return (
-                                <circle
-                                  key={index}
-                                  cx={node.x}
-                                  cy={node.y}
-                                  r={RADIUS}
-                                  fill={'white'}
-                                  stroke={'white'}
-                                />
+                                <g key={index}>
+                                  <circle
+                                    cx={node.x}
+                                    cy={node.y}
+                                    r={RADIUS}
+                                    fill={'white'}
+                                    stroke={'white'}
+                                  />
+                                  <NodeText node={node} />
+                                </g>
                               )
                             } else return null
                           })}
