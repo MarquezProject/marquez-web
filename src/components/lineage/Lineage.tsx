@@ -57,7 +57,8 @@ class Lineage extends React.Component<LineageProps, LineageState> {
   componentDidUpdate(prevProps: Readonly<LineageProps>) {
     if (JSON.stringify(prevProps.jobs) !== JSON.stringify(this.props.jobs)) {
       this.initGraph()
-      this.buildGraph()
+      this.buildGraphNode()
+      this.buildGraphAll()
     }
   }
 
@@ -69,11 +70,11 @@ class Lineage extends React.Component<LineageProps, LineageState> {
     })
   }
 
-  buildGraph = () => {
+  buildGraphAll = () => {
     // jobs
     for (let i = 0; i < this.props.jobs.length; i++) {
       g.setNode(this.props.jobs[i].id.name, {
-        // ...this.props.jobs[i],
+        ...this.props.jobs[i],
         width: NODE_SIZE,
         height: NODE_SIZE
       })
@@ -82,6 +83,7 @@ class Lineage extends React.Component<LineageProps, LineageState> {
     // datasets
     for (let i = 0; i < this.props.datasets.length; i++) {
       g.setNode(this.props.datasets[i].id.name, {
+        ...this.props.jobs[i],
         width: NODE_SIZE,
         height: NODE_SIZE
       })
@@ -102,6 +104,45 @@ class Lineage extends React.Component<LineageProps, LineageState> {
       edges: g.edges().map(e => g.edge(e)),
       nodes: g.nodes().map(v => g.node(v))
     })
+  }
+
+  buildGraphNode = (node = 'delivery_times_7_days') => {
+    const stack: (IJob | IDataset | undefined)[] = []
+    const items: (IJob | IDataset | undefined)[] = []
+
+    const job = this.props.jobs.find(job => job.name === node)
+    if (job) {
+      stack.push(job)
+      items.push(job)
+    }
+    while (stack.length > 0) {
+      const n = stack.pop()
+      // job node
+      if (n && 'outputs' in n) {
+        const outputDatasets = n.outputs.map(output =>
+          this.props.datasets.find(d => d.name === output.name)
+        )
+        const inputDatasets = n.inputs.map(output =>
+          this.props.datasets.find(d => d.name === output.name)
+        )
+        const merged = [...inputDatasets, ...outputDatasets]
+        const filtered = merged.filter(inputOrOutput => !items.includes(inputOrOutput))
+        items.push(...filtered)
+        stack.push(...filtered)
+      }
+      // dataset node
+      else if (n && 'sourceName' in n) {
+        const inputDatasets = this.props.jobs.filter(job => job.inputs.some(e => e.name === n.name))
+        const outputDatasets = this.props.jobs.filter(job =>
+          job.outputs.some(e => e.name === n.name)
+        )
+        const merged = [...inputDatasets, ...outputDatasets]
+        const filtered = merged.filter(inputOrOutput => !items.includes(inputOrOutput))
+        items.push(...filtered)
+        stack.push(...filtered)
+      }
+    }
+    return items
   }
 
   render() {
