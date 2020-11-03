@@ -7,12 +7,12 @@ import { HEADER_HEIGHT } from '../../helpers/theme'
 import { IDataset, IJob } from '../../types'
 import { IState } from '../../reducers'
 import { MqNode } from './types'
-import { NodeText } from './components/node/NodeText'
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles'
 import { Zoom } from '@visx/zoom'
 import { connect } from 'react-redux'
 import { localPoint } from '@visx/event'
 import Edge from './components/edge/Edge'
+import Node from './components/node/Node'
 import ParentSize from '@visx/responsive/lib/components/ParentSize'
 
 const styles = (theme: Theme) => {
@@ -28,7 +28,6 @@ const styles = (theme: Theme) => {
 const MIN_ZOOM = 1 / 4
 const MAX_ZOOM = 4
 const DOUBLE_CLICK_MAGNIFICATION = 1.1
-const RADIUS = 14
 
 interface StateProps {
   jobs: IJob[]
@@ -188,18 +187,7 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                         <g transform={zoom.toString()}>
                           {this.state.nodes.map((node, index) => {
                             if (node) {
-                              return (
-                                <g key={index}>
-                                  <circle
-                                    cx={node.x}
-                                    cy={node.y}
-                                    r={RADIUS}
-                                    fill={'white'}
-                                    stroke={'white'}
-                                  />
-                                  <NodeText node={node} />
-                                </g>
-                              )
+                              return <Node key={index} node={node} />
                             } else return null
                           })}
                         </g>
