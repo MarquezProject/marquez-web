@@ -187,7 +187,15 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                         <g transform={zoom.toString()}>
                           {this.state.nodes.map((node, index) => {
                             if (node) {
-                              return <Node key={index} node={node} />
+                              return (
+                                <Node
+                                  key={index}
+                                  node={node}
+                                  edgeEnds={this.state.edges.map(
+                                    edge => edge.points[edge.points.length - 1]
+                                  )}
+                                />
+                              )
                             } else return null
                           })}
                         </g>
