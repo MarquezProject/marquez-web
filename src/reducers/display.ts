@@ -1,5 +1,4 @@
 import { APPLICATION_ERROR, DIALOG_TOGGLE } from '../constants/ActionTypes'
-import { Nullable } from '../types/util/Nullable'
 
 interface IToggleExpandAction {
   type: string

@@ -65,21 +65,24 @@ class Lineage extends React.Component<LineageProps, LineageState> {
   }
 
   componentDidUpdate(prevProps: Readonly<LineageProps>) {
-    if (this.props.datasets.length > 0 && this.props.datasets !== prevProps.datasets) {
+    if (
+      this.props.datasets.length > 0 &&
+      this.props.datasets !== prevProps.datasets &&
+      !this.props.selectedNode
+    ) {
       this.props.setSelectedNode(this.props.datasets[0].name)
     }
-    if (
-      JSON.stringify(prevProps.jobs) !== JSON.stringify(this.props.jobs) &&
-      this.props.selectedNode
-    ) {
-      this.initGraph()
-      const attachedNodes = this.findNodesFromOrigin(this.props.selectedNode)
-      this.buildGraphAll(
-        attachedNodes.filter(jobOrDataset => jobOrDataset && 'outputs' in jobOrDataset) as IJob[],
-        attachedNodes.filter(
-          jobOrDataset => jobOrDataset && 'sourceName' in jobOrDataset
-        ) as IDataset[]
-      )
+    if (this.props.selectedNode !== prevProps.selectedNode && this.props.selectedNode) {
+      if (this.props.jobs.length > 0 || this.props.datasets.length > 0) {
+        this.initGraph()
+        const attachedNodes = this.findNodesFromOrigin(this.props.selectedNode)
+        this.buildGraphAll(
+          attachedNodes.filter(jobOrDataset => jobOrDataset && 'outputs' in jobOrDataset) as IJob[],
+          attachedNodes.filter(
+            jobOrDataset => jobOrDataset && 'sourceName' in jobOrDataset
+          ) as IDataset[]
+        )
+      }
     }
   }
 
