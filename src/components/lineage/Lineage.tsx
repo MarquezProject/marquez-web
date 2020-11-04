@@ -1,5 +1,6 @@
 import React from 'react'
 
+import * as Redux from 'redux'
 import { Box, Theme } from '@material-ui/core'
 import { DAGRE_CONFIG, INITIAL_TRANSFORM, NODE_SIZE } from './config'
 import { GraphEdge, Node as GraphNode, graphlib, layout } from 'dagre'
@@ -9,8 +10,10 @@ import { IState } from '../../reducers'
 import { MqNode } from './types'
 import { WithStyles, createStyles, withStyles } from '@material-ui/core/styles'
 import { Zoom } from '@visx/zoom'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { localPoint } from '@visx/event'
+import { setSelectedNode } from '../../actionCreators'
 import Edge from './components/edge/Edge'
 import Node from './components/node/Node'
 import ParentSize from '@visx/responsive/lib/components/ParentSize'
@@ -32,6 +35,7 @@ const DOUBLE_CLICK_MAGNIFICATION = 1.1
 interface StateProps {
   jobs: IJob[]
   datasets: IDataset[]
+  selectedNode: string
 }
 
 interface LineageState {
@@ -40,9 +44,13 @@ interface LineageState {
   nodes: GraphNode<MqNode>[]
 }
 
+interface DispatchProps {
+  setSelectedNode: typeof setSelectedNode
+}
+
 type JorD = IJob | IDataset | undefined
 
-type LineageProps = WithStyles<typeof styles> & StateProps
+type LineageProps = WithStyles<typeof styles> & StateProps & DispatchProps
 
 let g: graphlib.Graph<MqNode>
 
@@ -57,9 +65,15 @@ class Lineage extends React.Component<LineageProps, LineageState> {
   }
 
   componentDidUpdate(prevProps: Readonly<LineageProps>) {
-    if (JSON.stringify(prevProps.jobs) !== JSON.stringify(this.props.jobs)) {
+    if (this.props.datasets.length > 0 && this.props.datasets !== prevProps.datasets) {
+      this.props.setSelectedNode(this.props.datasets[0].name)
+    }
+    if (
+      JSON.stringify(prevProps.jobs) !== JSON.stringify(this.props.jobs) &&
+      this.props.selectedNode
+    ) {
       this.initGraph()
-      const attachedNodes = this.findNodesFromOrigin()
+      const attachedNodes = this.findNodesFromOrigin(this.props.selectedNode)
       this.buildGraphAll(
         attachedNodes.filter(jobOrDataset => jobOrDataset && 'outputs' in jobOrDataset) as IJob[],
         attachedNodes.filter(
@@ -78,6 +92,7 @@ class Lineage extends React.Component<LineageProps, LineageState> {
   }
 
   buildGraphAll = (jobs: IJob[], datasets: IDataset[]) => {
+    console.log(jobs, datasets)
     // jobs
     for (let i = 0; i < jobs.length; i++) {
       g.setNode(jobs[i].id.name, {
@@ -118,14 +133,17 @@ class Lineage extends React.Component<LineageProps, LineageState> {
    * Runs a bidirectional depth first search on an origin node
    * It has some defensive practices which will protect against inf loops for some graphs
    */
-  findNodesFromOrigin = (node = 'delivery_times_7_days'): JorD[] => {
+  findNodesFromOrigin = (node: string): JorD[] => {
+    console.log(node)
     const stack: JorD[] = []
     const items: JorD[] = []
 
-    const job = this.props.jobs.find(job => job.name === node)
-    if (job) {
-      stack.push(job)
-      items.push(job)
+    const root =
+      this.props.jobs.find(job => job.name === node) ||
+      this.props.datasets.find(dataset => dataset.name === node)
+    if (root) {
+      stack.push(root)
+      items.push(root)
     }
     while (stack.length > 0) {
       const n = stack.pop()
@@ -192,6 +210,7 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                               edgeEnds={this.state.edges.map(
                                 edge => edge.points[edge.points.length - 1]
                               )}
+                              selectedNode={this.props.selectedNode}
                             />
                           ))}
                           <Edge edgePoints={this.state.edges} />
@@ -238,7 +257,21 @@ class Lineage extends React.Component<LineageProps, LineageState> {
 
 const mapStateToProps = (state: IState) => ({
   jobs: state.jobs,
-  datasets: state.datasets
+  datasets: state.datasets,
+  selectedNode: state.lineage.selectedNode
 })
 
-export default withStyles(styles)(connect(mapStateToProps)(Lineage))
+const mapDispatchToProps = (dispatch: Redux.Dispatch) =>
+  bindActionCreators(
+    {
+      setSelectedNode: setSelectedNode
+    },
+    dispatch
+  )
+
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Lineage)
+)

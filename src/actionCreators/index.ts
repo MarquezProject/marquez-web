@@ -76,3 +76,8 @@ export const dialogToggle = (field: string) => ({
     field
   }
 })
+
+export const setSelectedNode = (node: string) => ({
+  type: actionTypes.SET_SELECTED_NODE,
+  payload: node
+})

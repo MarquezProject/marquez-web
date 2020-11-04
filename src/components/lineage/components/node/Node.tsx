@@ -23,11 +23,12 @@ const BORDER = 2
 interface NodeProps {
   node: GraphNode<MqNode>
   edgeEnds: Vertex[]
+  selectedNode: string
 }
 
 class Node extends React.Component<NodeProps> {
   render() {
-    const { node, edgeEnds } = this.props
+    const { node, edgeEnds, selectedNode } = this.props
     const job = isJob(node)
     return (
       <g>
@@ -37,7 +38,11 @@ class Node extends React.Component<NodeProps> {
               style={{ cursor: 'pointer' }}
               r={RADIUS}
               fill={theme.palette.common.white}
-              stroke={theme.palette.secondary.main}
+              stroke={
+                selectedNode === node.data.name
+                  ? theme.palette.primary.main
+                  : theme.palette.secondary.dark
+              }
               strokeWidth={BORDER}
               cx={node.x}
               cy={node.y}
@@ -58,7 +63,11 @@ class Node extends React.Component<NodeProps> {
               height={ICON_SIZE}
               x={node.x - ICON_SIZE / 2}
               y={node.y - ICON_SIZE / 2}
-              color={theme.palette.secondary.main}
+              color={
+                selectedNode === node.data.name
+                  ? theme.palette.primary.main
+                  : theme.palette.secondary.dark
+              }
             />
           </g>
         ) : (
@@ -68,7 +77,11 @@ class Node extends React.Component<NodeProps> {
               x={node.x - RADIUS}
               y={node.y - RADIUS}
               fill={theme.palette.common.white}
-              stroke={theme.palette.secondary.dark}
+              stroke={
+                selectedNode === node.data.name
+                  ? theme.palette.primary.main
+                  : theme.palette.secondary.dark
+              }
               strokeWidth={BORDER}
               width={RADIUS * 2}
               height={RADIUS * 2}
@@ -91,7 +104,11 @@ class Node extends React.Component<NodeProps> {
               height={ICON_SIZE}
               x={node.x - ICON_SIZE / 2}
               y={node.y - ICON_SIZE / 2}
-              color={theme.palette.secondary.dark}
+              color={
+                selectedNode === node.data.name
+                  ? theme.palette.primary.main
+                  : theme.palette.secondary.dark
+              }
             />
           </g>
         )}
