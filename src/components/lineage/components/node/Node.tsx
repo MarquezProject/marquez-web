@@ -4,47 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Node as GraphNode } from 'dagre'
 import { MqNode } from '../../types'
 import { NodeText } from './NodeText'
-import { Theme } from '@material-ui/core'
-import { createStyles } from '@material-ui/styles'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight'
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog'
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase'
 import { isJob } from '../../../../helpers/nodes'
 import { theme } from '../../../../helpers/theme'
-
-const styles = (theme: Theme) =>
-  createStyles({
-    pulseContainer: {
-      overflow: 'visible'
-    },
-    pulse: {
-      animation: '$pulseAnimation 3s linear infinite'
-    },
-    pulse1: {
-      animation: '$pulseAnimation 3s linear infinite',
-      animationDelay: '1s'
-    },
-    pulse2: {
-      animation: '$pulseAnimation 3s linear infinite',
-      animationDelay: '2s'
-    },
-    '@keyframes pulseAnimation': {
-      '0%': {
-        opacity: 0,
-        transform: 'scale(0)'
-      },
-      '50%': {
-        opacity: 0.1
-      },
-      '70%': {
-        opacity: 0.09
-      },
-      '100%': {
-        opacity: 0,
-        transform: 'scale(15)'
-      }
-    }
-  })
 
 export type Vertex = {
   x: number
@@ -65,7 +29,6 @@ class Node extends React.Component<NodeProps> {
   render() {
     const { node, edgeEnds } = this.props
     const job = isJob(node)
-
     return (
       <g>
         {job ? (

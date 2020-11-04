@@ -79,8 +79,6 @@ class Lineage extends React.Component<LineageProps, LineageState> {
 
   buildGraphAll = (jobs: IJob[], datasets: IDataset[]) => {
     // jobs
-    // console.log(jobs)
-    // console.log(datasets)
     for (let i = 0; i < jobs.length; i++) {
       g.setNode(jobs[i].id.name, {
         data: jobs[i],
@@ -187,21 +185,15 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                         }}
                       >
                         <g transform={zoom.toString()}>
-                          {this.state.nodes.map((node, index) => {
-                            if (node) {
-                              return (
-                                <Node
-                                  key={index}
-                                  node={node}
-                                  edgeEnds={this.state.edges.map(
-                                    edge => edge.points[edge.points.length - 1]
-                                  )}
-                                />
-                              )
-                            } else return null
-                          })}
-                        </g>
-                        <g transform={zoom.toString()}>
+                          {this.state.nodes.map(node => (
+                            <Node
+                              key={node.data.name}
+                              node={node}
+                              edgeEnds={this.state.edges.map(
+                                edge => edge.points[edge.points.length - 1]
+                              )}
+                            />
+                          ))}
                           <Edge edgePoints={this.state.edges} />
                         </g>
                         <rect
