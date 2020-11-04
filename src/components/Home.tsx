@@ -124,6 +124,7 @@ const Home: FunctionComponent<IAllProps> = props => {
                 description={d.description}
                 updatedAt={d.createdAt}
                 latestRun={d.latestRun}
+                setSelectedNode={setSelectedNode}
               />
             ))}
             {matchingJobs.length > 0 && (

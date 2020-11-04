@@ -58,16 +58,17 @@ const styles = ({ palette, spacing, shape }: ITheme) => {
 }
 
 type IProps = IWithStyles<typeof styles> &
-  Pick<Job, 'name' | 'description' | 'updatedAt' | 'latestRun'>
+  Pick<Job, 'name' | 'description' | 'updatedAt' | 'latestRun'> & {
+    setSelectedNode: (payload: string) => void
+  }
 
 interface IState {}
 
 class JobPreviewCard extends React.Component<IProps, IState> {
   render(): ReactElement {
-    const { classes, name, description, updatedAt = '', latestRun } = this.props
-    console.log(latestRun)
+    const { classes, name, description, updatedAt = '', latestRun, setSelectedNode } = this.props
     return (
-      <Link to={`/jobs/${name}`} className={classes.link}>
+      <Link to={`/jobs/${name}`} className={classes.link} onClick={() => setSelectedNode(name)}>
         <Box p={2} display='flex' justifyContent='space-between'>
           <div>
             <MqText subheading font={'mono'}>

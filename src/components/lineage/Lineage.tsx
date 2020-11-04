@@ -95,7 +95,6 @@ class Lineage extends React.Component<LineageProps, LineageState> {
   }
 
   buildGraphAll = (jobs: IJob[], datasets: IDataset[]) => {
-    console.log(jobs, datasets)
     // jobs
     for (let i = 0; i < jobs.length; i++) {
       g.setNode(jobs[i].id.name, {
@@ -137,7 +136,6 @@ class Lineage extends React.Component<LineageProps, LineageState> {
    * It has some defensive practices which will protect against inf loops for some graphs
    */
   findNodesFromOrigin = (node: string): JorD[] => {
-    console.log(node)
     const stack: JorD[] = []
     const items: JorD[] = []
 
