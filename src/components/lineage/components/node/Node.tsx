@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GraphEdge, Node as GraphNode } from 'dagre'
+import { Node as GraphNode } from 'dagre'
 import { MqNode } from '../../types'
 import { NodeText } from './NodeText'
 import { Theme } from '@material-ui/core'
@@ -65,84 +65,86 @@ class Node extends React.Component<NodeProps> {
   render() {
     const { node, edgeEnds } = this.props
     const job = isJob(node)
-    if (job) {
-      return (
-        <g>
-          {edgeEnds.find(edge => edge.x === node.x && edge.y === node.y) && (
+
+    return (
+      <g>
+        {job ? (
+          <g>
+            <circle
+              style={{ cursor: 'pointer' }}
+              r={RADIUS}
+              fill={theme.palette.common.white}
+              stroke={theme.palette.secondary.main}
+              strokeWidth={BORDER}
+              cx={node.x}
+              cy={node.y}
+            />
+            <circle
+              style={{ cursor: 'pointer' }}
+              r={RADIUS - 2}
+              fill={theme.palette.common.white}
+              stroke={theme.palette.common.white}
+              strokeWidth={2}
+              cx={node.x}
+              cy={node.y}
+            />
             <FontAwesomeIcon
-              icon={faCaretRight}
-              x={node.x - OUTER_RADIUS - ICON_SIZE / 2}
-              y={node.y - ICON_SIZE / 2}
+              style={{ transformOrigin: `${node.x}px ${node.y}px` }}
+              icon={faCog}
               width={ICON_SIZE}
               height={ICON_SIZE}
+              x={node.x - ICON_SIZE / 2}
+              y={node.y - ICON_SIZE / 2}
               color={theme.palette.secondary.main}
             />
-          )}
-          <circle
-            style={{ cursor: 'pointer' }}
-            r={RADIUS}
-            fill={theme.palette.common.white}
-            stroke={theme.palette.secondary.main}
-            strokeWidth={BORDER}
-            cx={node.x}
-            cy={node.y}
-          />
-          <circle
-            style={{ cursor: 'pointer' }}
-            r={RADIUS - 2}
-            fill={theme.palette.common.white}
-            stroke={theme.palette.common.white}
-            strokeWidth={2}
-            cx={node.x}
-            cy={node.y}
-          />
+          </g>
+        ) : (
+          <g>
+            <rect
+              style={{ cursor: 'pointer' }}
+              x={node.x - RADIUS}
+              y={node.y - RADIUS}
+              fill={theme.palette.common.white}
+              stroke={theme.palette.secondary.dark}
+              strokeWidth={BORDER}
+              width={RADIUS * 2}
+              height={RADIUS * 2}
+              rx={4}
+            />
+            <rect
+              style={{ cursor: 'pointer' }}
+              x={node.x - (RADIUS - 2)}
+              y={node.y - (RADIUS - 2)}
+              fill={theme.palette.common.white}
+              stroke={theme.palette.common.white}
+              strokeWidth={BORDER}
+              width={(RADIUS - 2) * 2}
+              height={(RADIUS - 2) * 2}
+              rx={4}
+            />
+            <FontAwesomeIcon
+              icon={faDatabase}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+              x={node.x - ICON_SIZE / 2}
+              y={node.y - ICON_SIZE / 2}
+              color={theme.palette.secondary.dark}
+            />
+          </g>
+        )}
+        {edgeEnds.find(edge => edge.x === node.x && edge.y === node.y) && (
           <FontAwesomeIcon
-            style={{ transformOrigin: `${node.x}px ${node.y}px` }}
-            icon={faCog}
+            icon={faCaretRight}
+            x={node.x - OUTER_RADIUS - ICON_SIZE / 2}
+            y={node.y - ICON_SIZE / 2}
             width={ICON_SIZE}
             height={ICON_SIZE}
-            x={node.x - ICON_SIZE / 2}
-            y={node.y - ICON_SIZE / 2}
             color={theme.palette.secondary.main}
           />
-          <NodeText node={node} />
-        </g>
-      )
-    } else
-      return (
-        <g>
-          <rect
-            style={{ cursor: 'pointer' }}
-            x={node.x - RADIUS}
-            y={node.y - RADIUS}
-            fill={theme.palette.common.white}
-            stroke={theme.palette.secondary.dark}
-            strokeWidth={BORDER}
-            width={RADIUS * 2}
-            height={RADIUS * 2}
-            rx={4}
-          />
-          <rect
-            style={{ cursor: 'pointer' }}
-            x={node.x - (RADIUS - 2)}
-            y={node.y - (RADIUS - 2)}
-            fill={theme.palette.common.white}
-            stroke={theme.palette.common.white}
-            strokeWidth={BORDER}
-            width={(RADIUS - 2) * 2}
-            height={(RADIUS - 2) * 2}
-            rx={4}
-          />
-          <FontAwesomeIcon
-            icon={faDatabase}
-            width={ICON_SIZE}
-            height={ICON_SIZE}
-            x={node.x - ICON_SIZE / 2}
-            y={node.y - ICON_SIZE / 2}
-            color={theme.palette.secondary.dark}
-          />
-        </g>
-      )
+        )}
+        <NodeText node={node} />
+      </g>
+    )
   }
 }
 
