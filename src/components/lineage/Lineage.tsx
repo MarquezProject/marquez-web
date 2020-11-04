@@ -19,7 +19,7 @@ const styles = (theme: Theme) => {
   return createStyles({
     lineageContainer: {
       marginTop: HEADER_HEIGHT,
-      height: 800,
+      height: 600,
       borderBottom: `1px solid ${theme.palette.secondary.main}`
     }
   })
@@ -79,6 +79,8 @@ class Lineage extends React.Component<LineageProps, LineageState> {
 
   buildGraphAll = (jobs: IJob[], datasets: IDataset[]) => {
     // jobs
+    // console.log(jobs)
+    // console.log(datasets)
     for (let i = 0; i < jobs.length; i++) {
       g.setNode(jobs[i].id.name, {
         data: jobs[i],
@@ -90,7 +92,7 @@ class Lineage extends React.Component<LineageProps, LineageState> {
     // datasets
     for (let i = 0; i < datasets.length; i++) {
       g.setNode(datasets[i].id.name, {
-        data: jobs[i],
+        data: datasets[i],
         width: NODE_SIZE,
         height: NODE_SIZE
       })
