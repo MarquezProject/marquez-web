@@ -1,3 +1,5 @@
+import React, { ReactElement } from 'react'
+
 import {
   Theme as ITheme,
   WithStyles as IWithStyles,
@@ -6,14 +8,11 @@ import {
   withStyles
 } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
-import React, { ReactElement } from 'react'
-
 const globalStyles = require('../global_styles.css')
 const { vibrantGreen } = globalStyles
 import { Box, Tooltip } from '@material-ui/core'
-import { formatUpdatedAt } from '../helpers'
-
 import { Job } from '../types/api'
+import { formatUpdatedAt } from '../helpers'
 import MqText from './core/text/MqText'
 import transitions from '@material-ui/core/styles/transitions'
 
