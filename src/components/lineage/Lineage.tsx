@@ -32,6 +32,8 @@ const MIN_ZOOM = 1 / 4
 const MAX_ZOOM = 4
 const DOUBLE_CLICK_MAGNIFICATION = 1.1
 
+const MAX_ITERATIONS = 1000
+
 interface StateProps {
   jobs: IJob[]
   datasets: IDataset[]
@@ -146,7 +148,8 @@ class Lineage extends React.Component<LineageProps, LineageState> {
       stack.push(root)
       items.push(root)
     }
-    while (stack.length > 0) {
+    let i = 0
+    while (stack.length > 0 && i < MAX_ITERATIONS) {
       const n = stack.pop()
       // job node
       if (n && 'outputs' in n) {
@@ -172,6 +175,7 @@ class Lineage extends React.Component<LineageProps, LineageState> {
         items.push(...filtered)
         stack.push(...filtered)
       }
+      i++
     }
     return items
   }
