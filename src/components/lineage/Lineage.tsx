@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as Redux from 'redux'
-import { Box, Theme } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { DAGRE_CONFIG, INITIAL_TRANSFORM, NODE_SIZE } from './config'
 import { GraphEdge, Node as GraphNode, graphlib, layout } from 'dagre'
 import { HEADER_HEIGHT } from '../../helpers/theme'
@@ -18,12 +18,13 @@ import Edge from './components/edge/Edge'
 import Node from './components/node/Node'
 import ParentSize from '@visx/responsive/lib/components/ParentSize'
 
-const styles = (theme: Theme) => {
+const BOTTOM_OFFSET = 8
+
+const styles = () => {
   return createStyles({
     lineageContainer: {
       marginTop: HEADER_HEIGHT,
-      height: 600,
-      borderBottom: `1px solid ${theme.palette.secondary.main}`
+      height: `calc(100vh - ${HEADER_HEIGHT}px - ${BOTTOM_OFFSET}px)`
     }
   })
 }
