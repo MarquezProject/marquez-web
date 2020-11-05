@@ -15,6 +15,8 @@ const initialState: ILineageState = {
 
 type ILineageActions = ReturnType<typeof setSelectedNode> & ReturnType<typeof setBottomBarHeight>
 
+const DRAG_BAR_HEIGHT = 8
+
 export default (state = initialState, action: ILineageActions) => {
   switch (action.type) {
     case SET_SELECTED_NODE:
@@ -22,7 +24,10 @@ export default (state = initialState, action: ILineageActions) => {
     case SET_BOTTOM_BAR_HEIGHT:
       return {
         ...state,
-        bottomBarHeight: Math.min(window.innerHeight - HEADER_HEIGHT, Math.max(2, action.payload))
+        bottomBarHeight: Math.min(
+          window.innerHeight - HEADER_HEIGHT - DRAG_BAR_HEIGHT,
+          Math.max(2, action.payload)
+        )
       }
     default:
       return state
