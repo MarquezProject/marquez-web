@@ -1,13 +1,18 @@
 import React from 'react'
 
+import * as Redux from 'redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Node as GraphNode } from 'dagre'
+import { Link } from 'react-router-dom'
 import { MqNode } from '../../types'
 import { NodeText } from './NodeText'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight'
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog'
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase'
-import { isJob } from '../../../../helpers/nodes'
+import { isDataset, isJob } from '../../../../helpers/nodes'
+import { setSelectedNode } from '../../../../actionCreators'
 import { theme } from '../../../../helpers/theme'
 
 export type Vertex = {
@@ -20,18 +25,36 @@ const OUTER_RADIUS = RADIUS + 8
 const ICON_SIZE = 16
 const BORDER = 2
 
-interface NodeProps {
+interface DispatchProps {
+  setSelectedNode: (payload: string) => void
+}
+
+interface OwnProps {
   node: GraphNode<MqNode>
   edgeEnds: Vertex[]
   selectedNode: string
 }
 
+type NodeProps = DispatchProps & OwnProps
+
 class Node extends React.Component<NodeProps> {
+  determineLink = (node: GraphNode<MqNode>) => {
+    if (isJob(node)) {
+      return `/jobs/${node.data.name}`
+    } else if (isDataset(node)) {
+      return `/datasets/${node.data.name}`
+    }
+    return '/'
+  }
+
   render() {
     const { node, edgeEnds, selectedNode } = this.props
     const job = isJob(node)
     return (
-      <g>
+      <Link
+        to={this.determineLink(node)}
+        onClick={() => this.props.setSelectedNode(node.data.name)}
+      >
         {job ? (
           <g>
             <circle
@@ -123,9 +146,20 @@ class Node extends React.Component<NodeProps> {
           />
         )}
         <NodeText node={node} />
-      </g>
+      </Link>
     )
   }
 }
 
-export default Node
+const mapDispatchToProps = (dispatch: Redux.Dispatch) =>
+  bindActionCreators(
+    {
+      setSelectedNode: setSelectedNode
+    },
+    dispatch
+  )
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Node)

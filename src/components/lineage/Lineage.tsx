@@ -208,19 +208,6 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                           cursor: zoom.isDragging ? 'grabbing' : 'grab'
                         }}
                       >
-                        <g transform={zoom.toString()}>
-                          {this.state.nodes.map(node => (
-                            <Node
-                              key={node.data.name}
-                              node={node}
-                              edgeEnds={this.state.edges.map(
-                                edge => edge.points[edge.points.length - 1]
-                              )}
-                              selectedNode={this.props.selectedNode}
-                            />
-                          ))}
-                          <Edge edgePoints={this.state.edges} />
-                        </g>
                         <rect
                           width={parent.width}
                           height={parent.height}
@@ -248,6 +235,19 @@ class Lineage extends React.Component<LineageProps, LineageState> {
                             })
                           }}
                         />
+                        <g transform={zoom.toString()}>
+                          {this.state.nodes.map(node => (
+                            <Node
+                              key={node.data.name}
+                              node={node}
+                              edgeEnds={this.state.edges.map(
+                                edge => edge.points[edge.points.length - 1]
+                              )}
+                              selectedNode={this.props.selectedNode}
+                            />
+                          ))}
+                          <Edge edgePoints={this.state.edges} />
+                        </g>
                       </svg>
                     </Box>
                   )
