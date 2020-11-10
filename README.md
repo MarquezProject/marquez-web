@@ -11,7 +11,7 @@ Marquez is an open source **metadata service** for the **collection**, **aggrega
 This web UI is used to view metadata collected and cataloged by [Marquez](https://github.com/MarquezProject/marquez).
 
 <figure align="center">
-  <img src="./docs/images/preview.png">
+  <img src="./docs/demo.gif">
 </figure>
 
 ### Status
