@@ -1,10 +1,7 @@
 # Marquez Web UI
 
-[![CircleCI](https://circleci.com/gh/MarquezProject/marquez-web/tree/master.svg?style=shield)](https://circleci.com/gh/MarquezProject/marquez-web/tree/master)
-[![status](https://img.shields.io/badge/status-WIP-yellow.svg)](#status)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/marquez-project/community)
-[![license](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](https://raw.githubusercontent.com/MarquezProject/marquez/master/LICENSE)
-[![docker](https://img.shields.io/badge/docker-hub-blue.svg?style=flat)](https://hub.docker.com/r/marquezproject/marquez-web)
+
+[![Project status](https://img.shields.io/badge/status-deprecated-orange.svg)](#status)
 
 Marquez is an open source **metadata service** for the **collection**, **aggregation**, and **visualization** of a data ecosystem's metadata.
 
@@ -16,7 +13,7 @@ This web UI is used to view metadata collected and cataloged by [Marquez](https:
 
 ### Status
 
-This project is in the early stages of development.
+This project is **deprecated.** Please migrate to [`marquez/web`](https://github.com/MarquezProject/marquez/tree/main/web).
 
 ### Quickstart
 
